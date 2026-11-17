@@ -52,28 +52,52 @@ class LinkedInCopywriter:
             logger.info("No Gemini API key provided. Offline fallback copy generator will be used if needed.")
 
     def _read_project_context(self, project_config: Dict[str, Any]) -> Dict[str, str]:
-        """Extract README and main script contents for context."""
-        project_folder = Path(project_config.get("folder_path", "."))
-        readme_path = project_config.get("readme_path", "README.md")
-        script_path = project_config.get("main_script_path", "app.py")
-
-        full_readme = project_folder / readme_path
-        full_script = project_folder / script_path
+        """Extract README, code, or live website text for project context."""
+        has_local_folder = "folder_path" in project_config and project_config["folder_path"]
+        live_url = project_config.get("live_url") or (project_config.get("url") if "http" in project_config.get("url", "") and "localhost" not in project_config.get("url", "") else None)
 
         readme_text = ""
         script_text = ""
 
-        if full_readme.exists():
-            try:
-                readme_text = full_readme.read_text(encoding="utf-8", errors="ignore")[:4000]
-            except Exception as e:
-                logger.warning(f"Error reading README at {full_readme}: {e}")
+        # 1. If local folder is configured, read local files
+        if has_local_folder:
+            project_folder = Path(project_config["folder_path"])
+            readme_path = project_config.get("readme_path", "README.md")
+            script_path = project_config.get("main_script_path", "app.py")
 
-        if full_script.exists():
+            full_readme = project_folder / readme_path
+            full_script = project_folder / script_path
+
+            if full_readme.exists() and full_readme.is_file():
+                try:
+                    readme_text = full_readme.read_text(encoding="utf-8", errors="ignore")[:4000]
+                except Exception as e:
+                    logger.warning(f"Error reading README at {full_readme}: {e}")
+
+            if full_script.exists() and full_script.is_file():
+                try:
+                    script_text = full_script.read_text(encoding="utf-8", errors="ignore")[:3000]
+                except Exception as e:
+                    logger.warning(f"Error reading script at {full_script}: {e}")
+
+        # 2. If live URL is present (e.g. Vercel deployment), extract rich text from live site
+        if live_url:
             try:
-                script_text = full_script.read_text(encoding="utf-8", errors="ignore")[:3000]
+                import requests
+                resp = requests.get(live_url, timeout=12, headers={"User-Agent": "Mozilla/5.0"})
+                if resp.status_code == 200:
+                    raw_html = resp.text
+                    clean_text = re.sub(r"<(script|style|head|noscript)[^>]*>.*?</\1>", "", raw_html, flags=re.DOTALL | re.IGNORECASE)
+                    clean_text = re.sub(r"<[^>]+>", " ", clean_text)
+                    clean_text = " ".join(clean_text.split())
+                    live_summary = f"Live Project Content from {live_url}:\n{clean_text[:4000]}"
+                    if readme_text:
+                        readme_text += f"\n\n{live_summary}"
+                    else:
+                        readme_text = live_summary
+                    logger.info(f"Extracted {len(clean_text[:4000])} chars of context from live URL: {live_url}")
             except Exception as e:
-                logger.warning(f"Error reading script at {full_script}: {e}")
+                logger.warning(f"Could not fetch live context from {live_url}: {e}")
 
         return {
             "title": project_config.get("title", project_config.get("name", "Data Science Project")),

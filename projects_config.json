@@ -1,6 +1,15 @@
 {
   "projects": [
     {
+      "name": "urban_heat_islands",
+      "title": "Urban Heat Island (UHI) AI Mitigation & Satellite Analysis Platform",
+      "live_url": "https://urban-heat-islands.vercel.app",
+      "url": "https://urban-heat-islands.vercel.app",
+      "record_duration_seconds": 22,
+      "trim_start_sec": 2.0,
+      "speed_factor": 1.25
+    },
+    {
       "name": "churn_prediction_platform",
       "title": "Customer Churn Prediction & Retention Platform",
       "folder_path": "sample_projects/churn_dashboard",
