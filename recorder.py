@@ -416,29 +416,7 @@ class ProjectRecorder:
                                 page.wait_for_timeout(350)
                                 page.mouse.click(x, y)
                                 page.wait_for_timeout(wait_ms)
-                            elif action in ("type", "input") and selector:
-                            try:
-                                text_to_type = str(step.get("text", step.get("value", "")))
-                                page.wait_for_selector(selector, timeout=6000)
-                                el = page.query_selector(selector)
-                                if el:
-                                    try:
-                                        el.scroll_into_view_if_needed(timeout=2000)
-                                    except Exception:
-                                        pass
-                                    box = el.bounding_box()
-                                    if box:
-                                        page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=10)
-                                        page.wait_for_timeout(200)
-                                    el.click()
-                                    page.keyboard.press("Control+A")
-                                    page.keyboard.press("Backspace")
-                                    page.keyboard.type(text_to_type, delay=45)
-                            except Exception as te:
-                                logger.debug(f"Input/type error ({selector}): {te}")
-                            page.wait_for_timeout(wait_ms)
-
-                        elif action == "scroll":
+                            elif action == "scroll":
                                 delta = step.get("delta_y", 300)
                                 for _ in range(3):
                                     page.mouse.wheel(0, delta // 3)
