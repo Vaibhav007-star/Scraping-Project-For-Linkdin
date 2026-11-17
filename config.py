@@ -35,5 +35,5 @@ DRY_RUN = os.getenv("DRY_RUN", "True").strip().lower() in ("true", "1", "yes")
 
 # Default Video Processing Settings
 DEFAULT_TRIM_START_SEC = float(os.getenv("TRIM_START_SEC", "2.0"))
-DEFAULT_SPEED_FACTOR = float(os.getenv("SPEED_FACTOR", "1.25"))
-DEFAULT_RECORD_DURATION_SEC = int(os.getenv("RECORD_DURATION_SEC", "15"))
+DEFAULT_SPEED_FACTOR = float(os.getenv("SPEED_FACTOR", "1.18"))
+DEFAULT_RECORD_DURATION_SEC = int(os.getenv("RECORD_DURATION_SEC", "40"))

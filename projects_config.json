@@ -5,9 +5,9 @@
       "title": "Urban Heat Island (UHI) AI Mitigation & Satellite Analysis Platform",
       "live_url": "https://urban-heat-islands.vercel.app",
       "url": "https://urban-heat-islands.vercel.app",
-      "record_duration_seconds": 22,
+      "record_duration_seconds": 40,
       "trim_start_sec": 2.0,
-      "speed_factor": 1.25
+      "speed_factor": 1.18
     },
     {
       "name": "churn_prediction_platform",

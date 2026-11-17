@@ -37,9 +37,9 @@ BANNED_BUZZWORDS = [
 
 
 class LinkedInCopywriter:
-    def __init__(self, api_key: Optional[str] = None, model: str = "gemini-2.5-flash"):
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
         self.api_key = api_key or os.getenv("GEMINI_API_KEY", "")
-        self.model = model
+        self.model = model or os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
         self.client = None
 
         if self.api_key and genai is not None:
@@ -172,18 +172,27 @@ Write the LinkedIn post now following the exact required structure.
 """
 
         try:
-            logger.info(f"Calling Gemini API ({self.model}) for '{project_name}'...")
-            response = self.client.models.generate_content(
-                model=self.model,
-                contents=[system_instruction, user_prompt]
-            )
+            post_text = None
+            models_to_try = [self.model, "gemini-3.1-flash-lite", "gemini-3.8-flash"]
+            # Deduplicate while preserving order
+            seen = set()
+            unique_models = [m for m in models_to_try if not (m in seen or seen.add(m))]
 
-            if response and response.text:
-                post_text = self._clean_and_validate_copy(response.text)
-                logger.info(f"Generated copy for '{project_name}' ({len(post_text)} chars).")
-                return post_text
-            else:
-                logger.warning("Empty response from Gemini API, falling back to local copy.")
+            for model_name in unique_models:
+                try:
+                    logger.info(f"Calling Gemini API ({model_name}) for '{project_name}'...")
+                    response = self.client.models.generate_content(
+                        model=model_name,
+                        contents=[system_instruction, user_prompt]
+                    )
+                    if response and response.text:
+                        post_text = self._clean_and_validate_copy(response.text)
+                        logger.info(f"Generated copy for '{project_name}' ({len(post_text)} chars) using {model_name}.")
+                        return post_text
+                except Exception as me:
+                    logger.warning(f"Model {model_name} error: {me}. Trying next model if available...")
+
+            if not post_text:
                 return self._generate_fallback_copy(project_config, context)
 
         except Exception as e:
