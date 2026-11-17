@@ -24,7 +24,7 @@ for directory in [RECORDINGS_DIR, OUTPUT_DIR, READY_TO_POST_DIR, LOGS_DIR]:
 
 # Google Gemini API Settings
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
 
 # LinkedIn API Settings
 LINKEDIN_ACCESS_TOKEN = os.getenv("LINKEDIN_ACCESS_TOKEN", "")
