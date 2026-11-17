@@ -5,9 +5,20 @@
       "title": "Urban Heat Island (UHI) AI Mitigation & Satellite Analysis Platform",
       "live_url": "https://urban-heat-islands.vercel.app",
       "url": "https://urban-heat-islands.vercel.app",
-      "record_duration_seconds": 40,
+      "record_duration_seconds": 42,
       "trim_start_sec": 2.0,
-      "speed_factor": 1.18
+      "speed_factor": 1.18,
+      "interactions": [
+        { "action": "hover", "selector": "h1, header", "wait_ms": 1800, "description": "Highlight Platform Title & Scientific Context" },
+        { "action": "click", "selector": "button:has-text('Predicted Land-Cover Mask')", "wait_ms": 3200, "description": "Trigger U-Net Semantic Land-Cover Mask" },
+        { "action": "click", "selector": "button:has-text('Blended Overlay')", "wait_ms": 3200, "description": "Switch to Multi-Spectral Blended Overlay" },
+        { "action": "click", "selector": "button:has-text('Optical Satellite Scene')", "wait_ms": 2800, "description": "Inspect Raw Optical Satellite Scene" },
+        { "action": "click", "selector": "button:has-text('Isometric')", "wait_ms": 2800, "description": "Toggle 3D Isometric Elevation Perspective" },
+        { "action": "scroll", "delta_y": 350, "wait_ms": 2500, "description": "Smooth scroll to Noida Sector-106 NCR heat-zone analysis" },
+        { "action": "scroll", "delta_y": 400, "wait_ms": 3000, "description": "Smooth scroll to U-Net & MLP Neural Network pipeline" },
+        { "action": "scroll", "delta_y": 450, "wait_ms": 3000, "description": "Smooth scroll to Counterfactual Greening Simulations & LST charts" },
+        { "action": "scroll", "delta_y": -1200, "wait_ms": 2500, "description": "Smooth return pan to Top Interactive Dashboard" }
+      ]
     },
     {
       "name": "churn_prediction_platform",

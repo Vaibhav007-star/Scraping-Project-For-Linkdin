@@ -263,44 +263,100 @@ class ProjectRecorder:
                 except Exception:
                     pass
 
-                # 3. Capture screenshot for Gemini Vision Director
+                # 3. Check for explicitly defined interaction rules or use Gemini Vision Director
                 start_time = time.time()
-                initial_screenshot = page.screenshot(type="jpeg", quality=85)
+                custom_interactions = project_config.get("interactions", [])
 
-                # 4. Request AI Vision Tour Plan
-                ai_steps = self._get_vision_tour_plan(initial_screenshot, project_name, custom_duration)
-
-                # 5. Execute Vision Tour Plan
-                if ai_steps:
-                    logger.info(f"Executing AI Vision Director Tour ({len(ai_steps)} steps)...")
-                    for step in ai_steps:
-                        if time.time() - start_time >= (custom_duration - 4):
+                if custom_interactions:
+                    logger.info(f"Executing {len(custom_interactions)} curated SCRAPING_RULES interactions for '{project_name}'...")
+                    for idx, step in enumerate(custom_interactions, start=1):
+                        if time.time() - start_time >= (custom_duration - 3):
                             break
-                        action = step.get("action", "hover")
-                        desc = step.get("description", action)
-                        x = min(1260, max(20, step.get("x", 640)))
-                        y = min(700, max(20, step.get("y", 360)))
+                        action = step.get("action")
+                        selector = step.get("selector")
                         wait_ms = step.get("wait_ms", 2000)
+                        desc = step.get("description", selector or action)
 
-                        logger.info(f"AI Vision Action: {desc} (action={action})")
+                        logger.info(f"Interaction {idx}/{len(custom_interactions)}: {action} -> {desc}")
 
-                        if action in ("hover", "move"):
-                            page.mouse.move(x, y, steps=10)
+                        if action == "click" and selector:
+                            try:
+                                page.wait_for_selector(selector, timeout=5000)
+                                el = page.query_selector(selector)
+                                if el and el.is_visible():
+                                    box = el.bounding_box()
+                                    if box:
+                                        cx = box["x"] + box["width"] / 2
+                                        cy = box["y"] + box["height"] / 2
+                                        page.mouse.move(cx, cy, steps=10)
+                                        page.wait_for_timeout(250)
+                                        page.mouse.click(cx, cy)
+                            except Exception as ce:
+                                logger.debug(f"Selector click notice ({selector}): {ce}")
                             page.wait_for_timeout(wait_ms)
-                        elif action == "click":
-                            page.mouse.move(x, y, steps=10)
-                            page.wait_for_timeout(350)
-                            page.mouse.click(x, y)
+
+                        elif action == "hover" and selector:
+                            try:
+                                el = page.query_selector(selector)
+                                if el and el.is_visible():
+                                    box = el.bounding_box()
+                                    if box:
+                                        page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=10)
+                            except Exception:
+                                pass
                             page.wait_for_timeout(wait_ms)
+
                         elif action == "scroll":
-                            delta = step.get("delta_y", 300)
-                            for _ in range(3):
-                                page.mouse.wheel(0, delta // 3)
-                                page.wait_for_timeout(300)
+                            delta = step.get("delta_y", 350)
+                            steps_count = 4
+                            sub_delta = delta // steps_count
+                            for _ in range(steps_count):
+                                page.mouse.wheel(0, sub_delta)
+                                page.wait_for_timeout(250)
                             page.wait_for_timeout(wait_ms)
 
-                # 6. Deep DOM Feature Explorer (Explores all remaining tabs, controls & charts)
-                self._explore_remaining_features(page, project_config, start_time, custom_duration)
+                    # Ensure full duration budget is satisfied with smooth inspection
+                    elapsed = time.time() - start_time
+                    remaining = custom_duration - elapsed
+                    if remaining > 0:
+                        page.wait_for_timeout(int(remaining * 1000))
+
+                else:
+                    # 4. Multimodal Gemini Vision Director Mode
+                    initial_screenshot = page.screenshot(type="jpeg", quality=85)
+                    ai_steps = self._get_vision_tour_plan(initial_screenshot, project_name, custom_duration)
+
+                    # 5. Execute Vision Tour Plan
+                    if ai_steps:
+                        logger.info(f"Executing AI Vision Director Tour ({len(ai_steps)} steps)...")
+                        for step in ai_steps:
+                            if time.time() - start_time >= (custom_duration - 4):
+                                break
+                            action = step.get("action", "hover")
+                            desc = step.get("description", action)
+                            x = min(1260, max(20, step.get("x", 640)))
+                            y = min(700, max(20, step.get("y", 360)))
+                            wait_ms = step.get("wait_ms", 2000)
+
+                            logger.info(f"AI Vision Action: {desc} (action={action})")
+
+                            if action in ("hover", "move"):
+                                page.mouse.move(x, y, steps=10)
+                                page.wait_for_timeout(wait_ms)
+                            elif action == "click":
+                                page.mouse.move(x, y, steps=10)
+                                page.wait_for_timeout(350)
+                                page.mouse.click(x, y)
+                                page.wait_for_timeout(wait_ms)
+                            elif action == "scroll":
+                                delta = step.get("delta_y", 300)
+                                for _ in range(3):
+                                    page.mouse.wheel(0, delta // 3)
+                                    page.wait_for_timeout(300)
+                                page.wait_for_timeout(wait_ms)
+
+                    # 6. Deep DOM Feature Explorer (Explores all remaining tabs, controls & charts)
+                    self._explore_remaining_features(page, project_config, start_time, custom_duration)
 
             except Exception as e:
                 logger.error(f"Recording interaction error: {e}")
