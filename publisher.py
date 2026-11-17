@@ -32,7 +32,7 @@ class LinkedInPublisher:
         self.ready_to_post_dir = Path(ready_to_post_dir or "ready_to_post")
         self.ready_to_post_dir.mkdir(parents=True, exist_ok=True)
 
-        self.api_version = "202401"
+        self.api_version = os.getenv("LINKEDIN_API_VERSION", "202611")
         self.base_headers = {
             "Authorization": f"Bearer {self.access_token}",
             "LinkedIn-Version": self.api_version,
