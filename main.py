@@ -82,13 +82,15 @@ def process_single_project(
     final_video_path = None
 
     try:
-        # Stage 1: Spin up local server & Record Screen
-        logger.info("[1/4] Launching local project server...")
-        server_process = recorder.start_server(project)
+        # Stage 1: Spin up local server (if needed) & Record Screen
+        url = project.get("live_url") or project.get("vercel_url") or project.get("url", "http://localhost:8501")
+        if recorder.is_live_url(url):
+            logger.info(f"[1/4] Project has a live cloud/Vercel URL: {url}. Recording directly without local server.")
+        else:
+            logger.info("[1/4] Launching local project server...")
+            server_process = recorder.start_server(project)
 
-        url = project.get("url", "http://localhost:8501")
         timeout = project.get("wait_timeout_seconds", 30)
-
         server_ready = recorder.wait_for_server(url, timeout_sec=timeout)
         if not server_ready:
             raise TimeoutError(f"Server at {url} failed to become responsive within {timeout} seconds.")
