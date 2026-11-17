@@ -177,6 +177,34 @@ class LinkedInPublisher:
 
         logger.info("Video binary upload completed successfully.")
 
+        # Step 2.5: Poll video status until AVAILABLE (LinkedIn video processing transcode)
+        logger.info("Waiting for LinkedIn to finalize video processing (checking status)...")
+        import time
+        from urllib.parse import quote
+        encoded_urn = quote(video_urn, safe="")
+        video_status_url = f"https://api.linkedin.com/rest/videos/{encoded_urn}"
+        max_poll_sec = 60
+        poll_start = time.time()
+        is_available = False
+
+        while time.time() - poll_start < max_poll_sec:
+            try:
+                status_resp = requests.get(video_status_url, headers=self.base_headers, timeout=15)
+                if status_resp.status_code == 200:
+                    v_status = status_resp.json().get("status", "")
+                    logger.info(f"Video processing status: {v_status}")
+                    if v_status == "AVAILABLE":
+                        is_available = True
+                        break
+                    elif v_status in ("PROCESSING_FAILED", "FAILED"):
+                        raise RuntimeError(f"LinkedIn video processing failed: {status_resp.text}")
+            except Exception as pe:
+                logger.debug(f"Status poll exception: {pe}")
+            time.sleep(3)
+
+        if not is_available:
+            logger.info("Proceeding to create post after wait period...")
+
         # Step 3: Create Post referencing the uploaded Video URN
         logger.info("Step 3/3: Publishing post via LinkedIn Posts API...")
         posts_url = "https://api.linkedin.com/rest/posts"
