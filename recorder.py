@@ -268,20 +268,18 @@ class ProjectRecorder:
                 custom_interactions = project_config.get("interactions", [])
 
                 if custom_interactions:
-                    logger.info(f"Executing {len(custom_interactions)} curated SCRAPING_RULES interactions for '{project_name}'...")
+                    logger.info(f"Executing ALL {len(custom_interactions)} curated SCRAPING_RULES interactions for '{project_name}' (Zero Time Limit)...")
                     for idx, step in enumerate(custom_interactions, start=1):
-                        if time.time() - start_time >= (custom_duration - 3):
-                            break
                         action = step.get("action")
                         selector = step.get("selector")
-                        wait_ms = step.get("wait_ms", 2000)
+                        wait_ms = step.get("wait_ms", 3000)
                         desc = step.get("description", selector or action)
 
-                        logger.info(f"Interaction {idx}/{len(custom_interactions)}: {action} -> {desc}")
+                        logger.info(f"Interaction {idx}/{len(custom_interactions)}: {action} -> {desc} ({wait_ms}ms dwell)")
 
                         if action == "click" and selector:
                             try:
-                                page.wait_for_selector(selector, timeout=5000)
+                                page.wait_for_selector(selector, timeout=6000)
                                 el = page.query_selector(selector)
                                 if el and el.is_visible():
                                     box = el.bounding_box()
@@ -289,7 +287,7 @@ class ProjectRecorder:
                                         cx = box["x"] + box["width"] / 2
                                         cy = box["y"] + box["height"] / 2
                                         page.mouse.move(cx, cy, steps=10)
-                                        page.wait_for_timeout(250)
+                                        page.wait_for_timeout(300)
                                         page.mouse.click(cx, cy)
                             except Exception as ce:
                                 logger.debug(f"Selector click notice ({selector}): {ce}")
@@ -308,18 +306,14 @@ class ProjectRecorder:
 
                         elif action == "scroll":
                             delta = step.get("delta_y", 350)
-                            steps_count = 4
+                            steps_count = 5
                             sub_delta = delta // steps_count
                             for _ in range(steps_count):
                                 page.mouse.wheel(0, sub_delta)
-                                page.wait_for_timeout(250)
+                                page.wait_for_timeout(200)
                             page.wait_for_timeout(wait_ms)
 
-                    # Ensure full duration budget is satisfied with smooth inspection
-                    elapsed = time.time() - start_time
-                    remaining = custom_duration - elapsed
-                    if remaining > 0:
-                        page.wait_for_timeout(int(remaining * 1000))
+                    logger.info(f"All {len(custom_interactions)} interactions completed. Total recording elapsed: {time.time() - start_time:.2f}s")
 
                 else:
                     # 4. Multimodal Gemini Vision Director Mode
