@@ -13,8 +13,9 @@ Every recording must serve as a **comprehensive, unhurried, production-grade vid
 
 ## 2. Mandatory Exploration Rules
 
-### Rule 1: Sequential One-by-One Feature & Model Traversal
-- **Exhaustive Navigation**: Sequentially click through every single tab, sub-page, model selector, and navigation view on the platform (`.stTabs`, `[role="tab"]`, `.tab-btn`, `nav a`).
+### Rule 1: Sequential One-by-One Feature & Model Traversal (All Navigation Options)
+- **Zero Overview-Only Traps**: The recorder must never remain confined to the default `Overview` or home tab. If a navigation bar, sidebar, or tabbed container contains multiple options (e.g., *Satellite Vision*, *3D Digital Twin*, *Thermal Predictor*, *Mitigation Simulator*, *Model Analytics*, *Geospatial Grid*), **every single navigation option must be clicked and explored in turn**.
+- **Exhaustive Navigation**: Sequentially click through every single tab, sub-page, model selector, and navigation view on the platform (`button[data-tab]`, `.stTabs`, `[role="tab"]`, `.tab-btn`, `nav a`).
 - **Dedicated Demonstration Dwell**: Spend **3.0 to 5.0 seconds** on each individual view or model state so viewers, recruiters, and engineering leaders can absorb the layout, read the metrics, and observe data changes.
 - **Never Cut Corners**: Do not skip secondary or technical tabs (such as SHAP feature importance, model architectures, confusion matrices, or raw data views). Every section must be shown.
 

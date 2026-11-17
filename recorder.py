@@ -279,24 +279,35 @@ class ProjectRecorder:
 
                         if action == "click" and selector:
                             try:
-                                page.wait_for_selector(selector, timeout=6000)
+                                page.wait_for_selector(selector, timeout=7000)
                                 el = page.query_selector(selector)
-                                if el and el.is_visible():
+                                if el:
+                                    try:
+                                        el.scroll_into_view_if_needed(timeout=3000)
+                                    except Exception:
+                                        pass
                                     box = el.bounding_box()
                                     if box:
                                         cx = box["x"] + box["width"] / 2
                                         cy = box["y"] + box["height"] / 2
-                                        page.mouse.move(cx, cy, steps=10)
-                                        page.wait_for_timeout(300)
+                                        page.mouse.move(cx, cy, steps=12)
+                                        page.wait_for_timeout(350)
                                         page.mouse.click(cx, cy)
+                                    else:
+                                        el.click()
                             except Exception as ce:
                                 logger.debug(f"Selector click notice ({selector}): {ce}")
                             page.wait_for_timeout(wait_ms)
 
                         elif action == "hover" and selector:
                             try:
+                                page.wait_for_selector(selector, timeout=5000)
                                 el = page.query_selector(selector)
-                                if el and el.is_visible():
+                                if el:
+                                    try:
+                                        el.scroll_into_view_if_needed(timeout=2000)
+                                    except Exception:
+                                        pass
                                     box = el.bounding_box()
                                     if box:
                                         page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=10)
@@ -304,13 +315,54 @@ class ProjectRecorder:
                                 pass
                             page.wait_for_timeout(wait_ms)
 
+                        elif action == "slider" and selector:
+                            try:
+                                target_val = step.get("value", "35")
+                                page.wait_for_selector(selector, timeout=6000)
+                                el = page.query_selector(selector)
+                                if el:
+                                    try:
+                                        el.scroll_into_view_if_needed(timeout=2000)
+                                    except Exception:
+                                        pass
+                                    box = el.bounding_box()
+                                    if box:
+                                        page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=12)
+                                        page.wait_for_timeout(250)
+                                    page.eval_on_selector(
+                                        selector,
+                                        f"(el) => {{ el.value = '{target_val}'; el.dispatchEvent(new Event('input', {{ bubbles: true }})); el.dispatchEvent(new Event('change', {{ bubbles: true }})); }}"
+                                    )
+                            except Exception as se:
+                                logger.debug(f"Slider error ({selector}): {se}")
+                            page.wait_for_timeout(wait_ms)
+
+                        elif action == "select" and selector:
+                            try:
+                                opt_val = step.get("value")
+                                page.wait_for_selector(selector, timeout=6000)
+                                el = page.query_selector(selector)
+                                if el:
+                                    try:
+                                        el.scroll_into_view_if_needed(timeout=2000)
+                                    except Exception:
+                                        pass
+                                    box = el.bounding_box()
+                                    if box:
+                                        page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=10)
+                                        page.wait_for_timeout(250)
+                                    page.select_option(selector, opt_val)
+                            except Exception as se:
+                                logger.debug(f"Select error ({selector}): {se}")
+                            page.wait_for_timeout(wait_ms)
+
                         elif action == "scroll":
                             delta = step.get("delta_y", 350)
-                            steps_count = 5
+                            steps_count = 6
                             sub_delta = delta // steps_count
                             for _ in range(steps_count):
                                 page.mouse.wheel(0, sub_delta)
-                                page.wait_for_timeout(200)
+                                page.wait_for_timeout(180)
                             page.wait_for_timeout(wait_ms)
 
                     logger.info(f"All {len(custom_interactions)} interactions completed. Total recording elapsed: {time.time() - start_time:.2f}s")
