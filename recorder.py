@@ -356,6 +356,28 @@ class ProjectRecorder:
                                 logger.debug(f"Select error ({selector}): {se}")
                             page.wait_for_timeout(wait_ms)
 
+                        elif action in ("type", "input") and selector:
+                            try:
+                                text_to_type = str(step.get("text", step.get("value", "")))
+                                page.wait_for_selector(selector, timeout=6000)
+                                el = page.query_selector(selector)
+                                if el:
+                                    try:
+                                        el.scroll_into_view_if_needed(timeout=2000)
+                                    except Exception:
+                                        pass
+                                    box = el.bounding_box()
+                                    if box:
+                                        page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=10)
+                                        page.wait_for_timeout(200)
+                                    el.click()
+                                    page.keyboard.press("Control+A")
+                                    page.keyboard.press("Backspace")
+                                    page.keyboard.type(text_to_type, delay=45)
+                            except Exception as te:
+                                logger.debug(f"Input/type error ({selector}): {te}")
+                            page.wait_for_timeout(wait_ms)
+
                         elif action == "scroll":
                             delta = step.get("delta_y", 350)
                             steps_count = 6
@@ -394,7 +416,29 @@ class ProjectRecorder:
                                 page.wait_for_timeout(350)
                                 page.mouse.click(x, y)
                                 page.wait_for_timeout(wait_ms)
-                            elif action == "scroll":
+                            elif action in ("type", "input") and selector:
+                            try:
+                                text_to_type = str(step.get("text", step.get("value", "")))
+                                page.wait_for_selector(selector, timeout=6000)
+                                el = page.query_selector(selector)
+                                if el:
+                                    try:
+                                        el.scroll_into_view_if_needed(timeout=2000)
+                                    except Exception:
+                                        pass
+                                    box = el.bounding_box()
+                                    if box:
+                                        page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=10)
+                                        page.wait_for_timeout(200)
+                                    el.click()
+                                    page.keyboard.press("Control+A")
+                                    page.keyboard.press("Backspace")
+                                    page.keyboard.type(text_to_type, delay=45)
+                            except Exception as te:
+                                logger.debug(f"Input/type error ({selector}): {te}")
+                            page.wait_for_timeout(wait_ms)
+
+                        elif action == "scroll":
                                 delta = step.get("delta_y", 300)
                                 for _ in range(3):
                                     page.mouse.wheel(0, delta // 3)
@@ -450,6 +494,49 @@ class ProjectRecorder:
             except Exception:
                 pass
             return False
+
+        # Phase 0: Exhaustive Navigation Tab Traversal (Zero Overview-Only Trap)
+        tab_selectors = [
+            "button[data-tab]",
+            "nav button",
+            ".nav-links button",
+            ".stTabs [data-baseweb='tab']",
+            "[role='tab']",
+            ".tab-btn"
+        ]
+        visited_tabs = set()
+        for t_sel in tab_selectors:
+            tab_elements = page.query_selector_all(t_sel)
+            if tab_elements and len(tab_elements) > 1:
+                logger.info(f"Discovered {len(tab_elements)} navigation tabs via '{t_sel}'. Traversing one by one...")
+                for tab_el in tab_elements:
+                    if time.time() - start_time >= (total_sec - 10):
+                        break
+                    tab_text = tab_el.inner_text().strip().replace('\n', ' ')
+                    if tab_text and tab_text not in visited_tabs:
+                        visited_tabs.add(tab_text)
+                        logger.info(f"Navigating to tab: '{tab_text}'")
+                        human_click(tab_el)
+                        page.wait_for_timeout(3000)
+
+                        # Trigger any action button on this newly revealed tab
+                        action_btns = page.query_selector_all("button:has-text('Run'), button:has-text('Predict'), button:has-text('Simulate'), button:has-text('Generate'), button:has-text('Mask'), button:has-text('Overlay')")
+                        for ab in action_btns[:2]:
+                            if ab.is_visible() and ab.is_enabled():
+                                human_click(ab)
+                                page.wait_for_timeout(3000)
+
+                        # If there are sliders, adjust one
+                        sliders = page.query_selector_all("input[type='range']:visible")
+                        if sliders:
+                            sl = sliders[0]
+                            box = sl.bounding_box()
+                            if box:
+                                page.mouse.move(box["x"] + box["width"] * 0.7, box["y"] + box["height"] / 2, steps=8)
+                                page.mouse.click(box["x"] + box["width"] * 0.7, box["y"] + box["height"] / 2)
+                                page.wait_for_timeout(2000)
+
+                break
 
         # Phase 1: Interactive buttons & views
         button_selectors = [
