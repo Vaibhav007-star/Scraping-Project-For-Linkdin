@@ -1,134 +1,278 @@
 # Universal UI Scraping, Exploration & Screen Recording Specification
+**The General Standard for Automated Showcase Recording across All Future Projects**
 
-This specification defines the universal, battle-tested standard governing automated UI exploration, dynamic user simulation, and high-definition video recording across all 20+ Data Science, Machine Learning, and AI project showcases in this pipeline (supporting both Localhost servers and live Vercel/Cloud deployments).
+> **Battle-Tested Standard**: This specification defines the universal, hardened standard for automated UI exploration, dynamic user simulation, and broadcast-quality Full HD / 4K video recording. It has been refined, validated, and proven on complex deep-learning applications featuring PyTorch models, local FastAPI backends, reactive Streamlit interfaces, and hardware-accelerated 3D WebGL digital twins.
+>
+> Any future project added to this pipeline—whether running on a local development port or deployed to cloud platforms (Vercel, AWS, HuggingFace)—must adhere to these universal rules.
 
 ---
 
 ## 1. Core Mission & Foundational Principles
 
 ### 1.1 Zero Artificial Time Limits
-Every showcase video must be **unhurried, thorough, and exhaustive**. 
+Every showcase video must be **unhurried, thorough, and exhaustive**.
 - There is **no arbitrary cap** (e.g., 15s or 30s).
 - The recording length is determined strictly by the project's complexity: whether a project requires **60 seconds, 90 seconds, or 2.5 minutes** to showcase every single model and view, it is granted the full duration needed.
+- Pacing must feel like an expert senior engineer giving a live, confident product walkthrough to prospective employers and technical leads.
 
 ### 1.2 100% Feature Inventory Coverage
-A project demonstration must never be a shallow skim:
-- Every tab, navigation sub-view, model toggle, input slider, dropdown selector, visual canvas, and technical metric table must be visited and demonstrated **sequentially one by one**.
+A project demonstration must **never** be a shallow skim:
+- Every navigation tab, sub-view, model toggle, input slider, dropdown selector, visual canvas, and technical metric table must be visited and demonstrated **sequentially one by one**.
+- If a project includes 7 tabs, all 7 tabs must be opened and explored. If it includes 3D simulations, the 3D viewport must be centered and interacted with.
 
 ---
 
-## 2. Mandatory Scraping & Exploration Protocols
+## 2. Localhost Server Lifecycle & Process Management Rules
 
-### Protocol 1: Navigation Hierarchy & The "Zero Overview-Only" Rule
-- **The Overview Trap Prohibition**: The recorder must **never** remain confined to the default `Overview` or Home landing screen.
-- **Universal Multi-Tab Traversal**: When an application provides top-level navigation, every tab must be systematically clicked:
-  - **Next.js / React Apps**: `button[data-tab]`, `.nav-links button`, `nav a`, `[role="tab"]`, `.tab-item`
-  - **Streamlit Apps**: `.stTabs [data-baseweb="tab"]`, `.stTabs button`, `[data-testid="stSidebarNav"] li`
-  - **Gradio Apps**: `button.tab-nav`, `.tabs button`
-  - **FastAPI / Swagger UI**: `.opblock-tag-section`, `.opblock-summary`, `button.try-out__btn`
-- **Demonstration Dwell**: Spend **3.0 to 4.5 seconds** per tab or sub-view to allow video viewers to read headings, inspect the layout, and absorb visual telemetry.
+When recording projects hosted locally on the user's laptop (FastAPI, Streamlit, Flask, Node.js, Next.js, Gradio):
 
-### Protocol 2: Multi-Action Dynamic Interaction Types
-The pipeline supports five discrete, humanized interaction types defined in `projects_config.json`:
+### Rule 2.1: The "No-Pipe-Buffer" Rule (Zero Deadlocks)
+- **Windows Buffer Limitation**: Never use `subprocess.Popen(..., stdout=subprocess.PIPE, stderr=subprocess.PIPE)` on Windows for long-running servers. Windows pipe buffers are limited to 4 KB to 64 KB; once full, the child process hangs indefinitely and never responds.
+- **Persistent Log Redirection**: Server `stdout` and `stderr` must always be directed to a dedicated log file:
+  ```python
+  log_file = open(f"logs/server_{project_name}.log", "w", encoding="utf-8")
+  process = subprocess.Popen(cmd, stdout=log_file, stderr=log_file, cwd=project_dir)
+  ```
+- This ensures zero pipe deadlock, fast server initialization (< 8 seconds), and a persistent log audit trail for troubleshooting.
 
-| Action Type | Parameters | Behavior & Visual Execution |
+### Rule 2.2: Port Health-Checking Before Browser Launch
+- The automation must poll `http://127.0.0.1:<PORT>` (or `http://localhost:<PORT>`) using lightweight HTTP socket or `urllib.request` pings with an exponential backoff before launching Playwright.
+- Only when an HTTP `200 OK` is returned does Playwright open the browser context.
+
+### Rule 2.3: Virtual Environment Isolation
+- Always prioritize the project's own virtual environment (`.\venv\Scripts\python.exe` or `.\env\Scripts\python.exe`) over the global system Python to guarantee PyTorch, CUDA, and library dependencies match the project's runtime requirements.
+
+### Rule 2.4: Clean Server Teardown
+- Upon recording completion (or on error), the runner must terminate the server process tree cleanly, releasing the bound port so future runs never encounter `Errno 10048 (Address already in use)`.
+
+---
+
+## 3. The 6-Phase Golden Interaction Blueprint
+
+Every future project should structure its user journey across these six consecutive phases:
+
+```mermaid
+flowchart LR
+    P1["1. Hero & Problem Framing"] --> P2["2. Deep Learning Inference"]
+    P2 --> P3["3. Multi-Layer Visual Inspection"]
+    P3 --> P4["4. Interactive Simulation & Sliders"]
+    P4 --> P5["5. 3D Twin & Advanced Visuals"]
+    P5 --> P6["6. Verification Metrics & Hero Loop"]
+```
+
+### Phase 1: Header & Problem Framing (0s – 15s)
+- **Hover on Brand / Header**: Glide cursor to the title badge and research headline (dwell 2.5s).
+- **Executive Scroll**: Smoothly scroll down 350px to display problem framing, architecture diagrams, and system context.
+- **Return to Nav**: Smoothly scroll back to the navigation bar.
+
+### Phase 2: Live Deep Learning / ML Model Inference (15s – 40s)
+- **Navigate to Core Model Tab**: Switch to the primary computer vision, NLP, or predictive modeling view.
+- **Trigger Inference**: Click the primary action button (`"Run U-Net Segmentation"`, `"Predict Churn"`, `"Generate Embeddings"`, `"Classify Image"`).
+- **Inference Dwell**: Allow **4.0 to 5.0 seconds** for loading spinners to resolve and the output to materialize on screen.
+
+### Phase 3: Multi-Layer / Multimodal Inspection (40s – 65s)
+- **Cycle Output Layers**: For computer vision and geospatial models, click through:
+  - Raw Input Scene / Optical Image
+  - Predicted Segmentation Mask / Heatmap
+  - Blended Overlay (Alpha blending input with predictions)
+  - Anomaly Heatmap / Gradient Attribution (Grad-CAM)
+- **Dwell**: Spend **3.5 seconds** per layer so viewers inspect the boundary precision.
+
+### Phase 4: Interactive Simulation & What-If Sliders (65s – 90s)
+- **Adjust Parameters**: Glide cursor to dynamic sliders (`input[type='range']`) or dropdowns.
+- **Value Modulation**: Modify values (e.g., Solar Radiation $\rightarrow$ 850 W/m², Greening Target $\rightarrow$ 35%, Threshold $\rightarrow$ 0.75).
+- **Inspect Counterfactuals**: Scroll down to display live recalculations, delta curves, and cooling/saving metrics.
+
+### Phase 5: 3D Digital Twin, WebGL & Advanced Visualizations (90s – 115s)
+- **Navigate to 3D Viewport**: Switch to 3D / WebGL / Spatial tab.
+- **Center Canvas**: Execute targeted scroll (`delta_y: 380px`) so the 3D model is vertically centered in the 1080p viewport.
+- **Activate 3D Modes**: Toggle Isometric view, drape satellite imagery, or project heat relief domes.
+- **Scale Extrusion**: Adjust building/terrain height extrusion slider (e.g., 2.3x).
+- **Cinematic Orbit**: Enable auto-rotate or perform a smooth orbital mouse drag across the canvas for 5.0 seconds.
+
+### Phase 6: Quantitative Performance Analytics & Clean Loop (115s – 130s)
+- **Metrics & Benchmarks Tab**: Switch to verification analytics.
+- **Display Telemetry**: Scroll down to showcase loss curves, confusion matrix, ROC-AUC curves, and F1/IoU benchmark scores.
+- **Hero Wrap-Up**: Return to the **Overview / Hero** dashboard, center the cursor, and hold for 3.0 seconds to produce a seamless loop for LinkedIn autoplay.
+
+---
+
+## 4. Hardware-Accelerated 3D WebGL & Canvas Scraping Protocol
+
+Modern AI projects increasingly incorporate 3D digital twins, Deck.gl geospatial decks, Three.js meshes, and Mapbox visualizers. The following rules are mandatory for 3D exploration:
+
+### 4.1 WebGL Hardware Acceleration Flags
+The Playwright browser instance must always launch with GPU acceleration flags:
+```python
+browser = playwright.chromium.launch(
+    headless=True,
+    args=[
+        "--enable-webgl",
+        "--ignore-gpu-blocklist",
+        "--use-gl=angle",
+        "--enable-gpu-rasterization",
+        "--enable-zero-copy"
+    ]
+)
+```
+
+### 4.2 Viewport Vertical Centering
+- **The Fold Problem**: In standard dashboards, navigation bars, control buttons, and metric ribbons consume the top 400px–500px, pushing 3D canvases partially below the viewport fold.
+- **The Centering Scroll Rule**: Before interacting with a 3D canvas, always dispatch a smooth downward scroll of **350px to 400px**:
+  ```json
+  { "action": "scroll", "delta_y": 380, "wait_ms": 2500, "description": "Center 3D Canvas in Viewport" }
+  ```
+- After 3D exploration is complete, scroll back up with an identical negative scroll (`delta_y: -380`) before clicking navigation tabs.
+
+### 4.3 3D Shader Compilation & Stabilization Buffers
+- Three.js, Babylon.js, and WebGL scenes compile shaders and initialize texture buffers on the first frame.
+- Always provide a **3.5 to 4.5 second dwell time** immediately after switching into a 3D tab before attempting interactions.
+
+### 4.4 3D Manipulation Primitives
+- **Isometric Perspective**: Trigger camera projection toggles (`button:has-text('Isometric')`, `#btn-cam-iso`).
+- **Mesh Extrusion Scaling**: Modulate depth/height scale sliders (`#slider-height-scale`, `input[name='slider-height-scale']`).
+- **Camera Orbit**: Trigger cinematic auto-rotation or dispatch synthetic drag events (`mousedown` $\rightarrow$ arc `mousemove` $\rightarrow$ `mouseup`).
+
+---
+
+## 5. Humanized Cursor Physics & Visual Telemetry
+
+Mechanical cursor movements destroy viewer engagement. Every recording must simulate an expert human user through mathematical kinematics.
+
+### 5.1 Cubic Bézier Trajectory Math
+Every cursor translation between point $\mathbf{P}_0 = (x_0, y_0)$ and target $\mathbf{P}_3 = (x_3, y_3)$ is interpolated along a Cubic Bézier Curve:
+$$\mathbf{B}(t) = (1-t)^3 \mathbf{P}_0 + 3(1-t)^2 t \mathbf{P}_1 + 3(1-t) t^2 \mathbf{P}_2 + t^3 \mathbf{P}_3, \quad t \in [0, 1]$$
+- **Control Points ($\mathbf{P}_1, \mathbf{P}_2$)**: Computed dynamically by displacing perpendicular to the direct travel vector by a random human deflection factor ($15\%$ to $30\%$ of Euclidean distance).
+- **Sinusoidal Velocity Easing**: Step interpolation follows an ease-in-out S-curve:
+  $$t = \frac{1 - \cos(\pi \cdot u)}{2}, \quad u = \frac{i}{\text{total\_steps}}$$
+
+### 5.2 Visual Cursor Design
+- **Radial Depth Styling**: 20px circular pointer styled with radial gradient depth (`#ff4b4b` $\rightarrow$ `#d90429`), 2.5px crisp white border, and a 12px glowing drop-shadow.
+- **Animated Click Wave Ripple**: Every click dispatches an expanding emerald green wave (`#10b981`) scaling from $1.0\times$ to $2.8\times$ with opacity decay over 650ms, giving viewers immediate visual confirmation of the interaction.
+
+### 5.3 Hardware Momentum Scrolling
+- **Dual-Mode Fluidity**: Combines `window.scrollBy({ top: delta_y, behavior: 'smooth' })` with sinusoidal deceleration wheel sub-steps:
+  $$w_i = \sin\left(\frac{i+1}{\text{steps}} \cdot \pi\right)$$
+- Eliminates mechanical page jumps and ensures smooth scrolling across custom `div` containers and virtualized data grids.
+
+---
+
+## 6. Broadcast Resolution, DPI & Video Encoding Standard
+
+### 6.1 Recording Viewport & High-DPI Supersampling
+- **Default Resolution**: **Full HD 1080p** (`1920 x 1080`).
+- **High-DPI Subpixel Density**: Configured with `device_scale_factor=1.5`.
+  - Charts, math equations, small numerical table text, and 3D polygon wireframes render with $1.5\times$ supersampling.
+  - Guarantees zero jagged edges or blurry text when viewed on 4K monitors or mobile screens.
+- **4K Ultra HD Mode**: Set `RECORDING_RESOLUTION=4k` in `.env` to record at native `3840 x 2160`.
+
+### 6.2 Broadcast-Quality Video Encoding Parameters
+Exported via MoviePy with explicit broadcast-grade flags:
+| Parameter | Setting | Impact |
 | :--- | :--- | :--- |
-| **`click`** | `selector`, `wait_ms` | Pre-scrolls element into view, glides the animated cursor with Bézier curves, holds 300ms, and clicks with an animated green pulse. |
-| **`slider`** | `selector`, `value`, `wait_ms` | Glides cursor to the range slider track, smoothly sets the target numeric value, and dispatches real `input` and `change` DOM events so reactive frameworks (React, Vue, Streamlit) immediately update. |
-| **`select`** | `selector`, `value`, `wait_ms` | Moves pointer to the `<select>` or dropdown, picks the target option, and dispatches change events to trigger downstream model updates. |
-| **`input` / `type`**| `selector`, `text`, `wait_ms` | Focuses the input element, clears previous text, and types character-by-character at a natural human typing cadence (45ms per keystroke). |
-| **`scroll`** | `delta_y`, `wait_ms` | Executes multi-step, incremental mouse wheel scrolls (6 sub-steps, 180ms delay) to showcase vertical page depth without jarring page jumps. |
-| **`hover`** | `selector`, `wait_ms` | Glides the cursor to highlight an essential visual badge, architecture node, or telemetry metric card. |
-
-### Protocol 3: Real Model Inference & Visual Layer Cycling
-Every AI capability on screen must be triggered live:
-1. **Trigger Computation**: Click primary action buttons (`"Run U-Net Segmentation"`, `"Predict"`, `"Calculate"`, `"Simulate Greening"`, `"Generate Zones"`).
-2. **Cycle Multi-Spectral / Multi-Class Layers**: If the UI offers visual layers (e.g., *Raw Image*, *Predicted Mask*, *Blended Overlay*, *Thermal Heatmap*), click through each layer sequentially so recruiters see the computer vision pipeline in action.
-3. **Multi-Dimensional Views**: When 3D, WebGL, or isometric options exist, activate them (`"3D Digital Twin"`, `"Thermal Heat Dome"`, `"Isometric View"`).
-
-### Protocol 4: Hardware-Accelerated Smooth Momentum Scrolling
-- **Dual-Layer Fluid Movement**: Scrolling never abruptly jumps across the screen. The recorder combines two synchronization layers:
-  1. **Native Window Smooth Behavior**: Dispatches hardware-accelerated `window.scrollBy({ top: delta_y, behavior: 'smooth' })` to trigger CSS momentum easing.
-  2. **Sinusoidal Deceleration Wheel Sub-Steps**: Evaluates a bell-curve deceleration formula ($w_i = \sin\left(\frac{i+1}{\text{steps}} \cdot \pi\right)$) over 7 sub-frames to smoothly drive non-standard scroll containers, canvas elements, and virtual tables.
-- **Dedicated Inspection Dwell**: When charts, maps, confusion matrices, or model architecture diagrams are scrolled into view, pause scrolling for at least **3.5 seconds** so viewers can read labels and metrics.
-- **Graceful Bi-Directional Return**: Before switching to subsequent tabs, smoothly scroll back up to the top navigation header.
-
-### Protocol 5: Cinematic Cubic Bézier Cursor & Click Ripple Physics
-- **Humanized Trajectory Math**: Mouse movements strictly avoid mechanical straight lines. Every trajectory is computed via a **Cubic Bézier Curve**:
-  $$\mathbf{B}(t) = (1-t)^3 \mathbf{P}_0 + 3(1-t)^2 t \mathbf{P}_1 + 3(1-t) t^2 \mathbf{P}_2 + t^3 \mathbf{P}_3, \quad t \in [0, 1]$$
-  where control points $\mathbf{P}_1$ and $\mathbf{P}_2$ introduce a natural perpendicular arc proportional to travel distance, driven by sinusoidal ease-in-out velocity (slow acceleration, fast mid-flight, gentle deceleration).
-- **Radial 3D Cursor Design**: A 20px pointer styled with radial gradient depth (`#ff4b4b` $\rightarrow$ `#d90429`), crisp 2.5px white border, and glowing drop-shadow aura (`#playwright-demo-cursor`).
-- **Expanding Click Wave Ripple**: On every click, an expanding circular ripple wave (`#playwright-demo-ripple`) smoothly expands from $1.0\times$ to $2.8\times$ scale with emerald green feedback (`#10b981`), providing unmistakable visual confirmation of user interaction.
-
-### Protocol 6: Heavy Canvas, WebGL & Plotly Rendering Buffers
-- Deep learning visualizers, Mapbox tiles, Leaflet maps, and Three.js scenes require GPU / canvas stabilization.
-- Always allocate a **3.0 to 4.0 second stabilization dwell** after switching to heavy WebGL or map views before moving the cursor or scrolling.
-
-### Protocol 7: Destructive Selector Exclusion
-- The automated recorder is strictly prohibited from clicking:
-  - Action labels containing `"Delete"`, `"Drop"`, `"Sign Out"`, `"Log Out"`, `"Purge"`, `"Clear All"`.
-  - External social links, third-party GitHub stars, or external URLs that take the browser away from the project deployment.
-
-### Protocol 8: Universal Closing & Hero Wrap-Up
-- Always end every demonstration by navigating back to the main **Overview / Hero** screen, letting the cursor rest naturally for 3.0 seconds. This creates a polished, professional loop for LinkedIn autoplay videos.
-
-### Protocol 9: Video Post-Processing & High-Definition (1080p / 4K) Export Standard
-- **Full HD (1080p) & 4K Recording Engine**:
-  - **Full HD (Default)**: Viewport $1920 \times 1080$ paired with **$1.5\times$ High-DPI subpixel density** (`device_scale_factor=1.5`). Text, charts, and 3D WebGL lines render razor-sharp with zero blurriness.
-  - **4K Ultra HD Preset**: Supports $3840 \times 2160$ native canvas recording for maximum broadcast clarity.
-- **Broadcast-Grade Encoding**:
-  - Exported via MoviePy using H.264 (`libx264`) with **Constant Rate Factor (CRF 18)** (visually lossless) and **12 Mbps bitrate** (`VIDEO_BITRATE=12M`).
-  - Standard `yuv420p` pixel format guarantees 100% playback compatibility across LinkedIn web, iOS, and Android clients.
-- **Load Trimming**: Programmatically trims the initial **2.00 seconds** of blank loading / DNS resolution.
-- **Dynamic Speed Optimization**: Applies a mild **1.15x to 1.20x** acceleration factor to keep the presentation snappy and engaging without rushing complex plots.
+| **Codec** | `libx264` | Universal social video compatibility |
+| **Pixel Format** | `yuv420p` | Guaranteed playback on iOS, Android, and LinkedIn web players |
+| **Bitrate** | `12M` (12 Mbps) | Eliminates compression artifacts, macroblocking, and gradient banding |
+| **Constant Rate Factor** | `-crf 18` | Visually lossless master archive quality |
+| **Preset** | `medium` | Optimal balance between H.264 entropy encoding and render speed |
+| **FPS** | `25.0` or `30.0` | Smooth, cinematic motion cadence |
+| **Trim Start** | `2.00s` | Programmatically strips initial blank browser initialization and DNS delay |
+| **Speed Factor** | `1.15x – 1.20x` | Crisp, energetic social media pacing without rushing plots |
 
 ---
 
-## 3. Standard Configuration Schema (`projects_config.json`)
+## 7. Universal Framework Selectors Matrix
 
-To configure any new Data Science or AI project for the pipeline, use this standardized schema:
+When onboarding new projects, use these battle-tested selectors for common web frameworks:
 
+| Framework | Navigation Tabs | Action / Inference Buttons | Sliders & Controls | Scroll Container |
+| :--- | :--- | :--- | :--- | :--- |
+| **Next.js / React** | `button[data-tab]`, `nav a`, `[role="tab"]` | `button:has-text('Run')`, `button.primary` | `input[type='range']`, `.slider` | `window`, `main`, `.overflow-y-auto` |
+| **Streamlit** | `.stTabs [data-baseweb="tab"]`, `[data-testid="stSidebarNav"] li` | `button[kind="primary"]`, `button:has-text('Predict')` | `[data-testid="stSlider"] input`, `input[type="range"]` | `[data-testid="stAppViewContainer"]` |
+| **Gradio** | `button.tab-nav`, `.tabs button` | `button.primary`, `button:has-text('Submit')` | `input[type='range']` | `window`, `.gradio-container` |
+| **FastAPI / Swagger** | `.opblock-tag-section`, `.opblock-summary` | `button.try-out__btn`, `button.execute` | Inputs within `.parameters` | `window` |
+| **Dash / Plotly** | `.tab`, `button.nav-link` | `button#btn-submit`, `button:has-text('Analyze')` | `.rc-slider`, `input[type="range"]` | `window` |
+| **Three.js / WebGL** | Custom tab switching to 3D | `button:has-text('Isometric')`, `#btn-cam-iso` | `#slider-height-scale`, `input[type='range']` | Target canvas parent container |
+
+---
+
+## 8. Standard Configuration Schema (`projects_config.json`)
+
+To onboard any future project into the pipeline, add an entry matching this standard specification:
+
+### 8.1 For Local Projects (Running on User's Machine)
 ```json
 {
-  "name": "project_identifier",
-  "title": "Full Formal Title of the AI Platform",
-  "live_url": "https://your-project.vercel.app",
+  "name": "my_new_ai_platform_local",
+  "title": "Autonomous Medical Diagnosis & X-Ray Segmentation Platform",
+  "folder_path": "C:/Projects/Medical-AI-Platform",
+  "start_command": ".\\venv\\Scripts\\python.exe -m uvicorn app.main:app --port 8505",
+  "url": "http://127.0.0.1:8505",
+  "port": 8505,
+  "wait_timeout_seconds": 60,
+  "readme_path": "README.md",
+  "main_script_path": "app/main.py",
   "trim_start_sec": 2.0,
   "speed_factor": 1.18,
   "interactions": [
-    { "action": "hover", "selector": "header, .brand", "wait_ms": 2500, "description": "1. Highlight Header & Problem Framing" },
-    { "action": "click", "selector": "button[data-tab='tab_id']", "wait_ms": 3000, "description": "2. Navigate to Feature Tab" },
-    { "action": "click", "selector": "button:has-text('Run Inference')", "wait_ms": 4000, "description": "3. Execute Neural Model" },
-    { "action": "slider", "selector": "input[type='range']", "value": "45", "wait_ms": 3000, "description": "4. Adjust Interactive Parameter" },
-    { "action": "scroll", "delta_y": 400, "wait_ms": 3500, "description": "5. Inspect Convergence Curves & Metrics" },
-    { "action": "scroll", "delta_y": -400, "wait_ms": 1000, "description": "6. Return to Tab Header" },
-    { "action": "click", "selector": "button[data-tab='overview']", "wait_ms": 3000, "description": "7. Conclude on Hero Overview" }
+    { "action": "hover", "selector": "header, .brand", "wait_ms": 2500, "description": "1. Overview: Highlight Platform Header & Architecture" },
+    { "action": "scroll", "delta_y": 350, "wait_ms": 3000, "description": "2. Overview: Inspect Clinical Problem Framing & Pipeline Diagram" },
+    { "action": "scroll", "delta_y": -350, "wait_ms": 1000, "description": "3. Overview: Return to Navigation" },
+    { "action": "click", "selector": "button[data-tab='inference']", "wait_ms": 3000, "description": "4. Model Tab: Switch to Neural Inference" },
+    { "action": "click", "selector": "button:has-text('Run Segmentation')", "wait_ms": 4500, "description": "5. Model Tab: Execute Deep Learning Inference" },
+    { "action": "click", "selector": "button:has-text('Grad-CAM Heatmap')", "wait_ms": 3500, "description": "6. Model Tab: Inspect Model Interpretability Heatmap" },
+    { "action": "click", "selector": "button[data-tab='3d-volume']", "wait_ms": 3500, "description": "7. 3D Tab: Switch to 3D Volumetric Mesh" },
+    { "action": "scroll", "delta_y": 380, "wait_ms": 2500, "description": "8. 3D Tab: Center 3D Mesh in Viewport" },
+    { "action": "click", "selector": "button:has-text('Isometric')", "wait_ms": 3000, "description": "9. 3D Tab: Toggle Isometric Elevation Perspective" },
+    { "action": "slider", "selector": "input[type='range']", "value": "2.0", "wait_ms": 3500, "description": "10. 3D Tab: Scale Slice Extrusion Height to 2.0x" },
+    { "action": "scroll", "delta_y": -380, "wait_ms": 1000, "description": "11. 3D Tab: Return to Navigation" },
+    { "action": "click", "selector": "button[data-tab='analytics']", "wait_ms": 3000, "description": "12. Analytics: Switch to Validation Metrics & ROC Curves" },
+    { "action": "scroll", "delta_y": 400, "wait_ms": 3500, "description": "13. Analytics: Review Confusion Matrix & F1 Scores" },
+    { "action": "scroll", "delta_y": -400, "wait_ms": 1000, "description": "14. Analytics: Return to Navigation" },
+    { "action": "click", "selector": "button[data-tab='overview']", "wait_ms": 3000, "description": "15. Wrap-Up: Return to Main Overview Dashboard" }
+  ]
+}
+```
+
+### 8.2 For Cloud Deployed Projects (Vercel, AWS, Cloudflare, HuggingFace)
+```json
+{
+  "name": "my_cloud_platform",
+  "title": "Real-Time Financial Sentiment & Transformer Forecast Platform",
+  "live_url": "https://financial-transformer.vercel.app",
+  "url": "https://financial-transformer.vercel.app",
+  "trim_start_sec": 2.0,
+  "speed_factor": 1.18,
+  "interactions": [
+    ...
   ]
 }
 ```
 
 ---
 
-## 4. Automatic Discovery Fallback (When Custom Interactions are Omitted)
+## 9. Fallback Autonomous Discovery Rules (Zero-Config Mode)
 
-If a project in `projects_config.json` does not specify an explicit `interactions` array:
-1. **Gemini Multimodal Vision Director** analyzes the initial screenshot and designs an initial visual exploration roadmap.
-2. **Deep DOM Feature Explorer (`_explore_remaining_features`)** automatically:
-   - Scans for all navigation tabs (`button[data-tab]`, `nav button`, `.stTabs [data-baseweb="tab"]`, `[role="tab"]`).
-   - Clicks through each tab sequentially with 3.0s dwell.
-   - Detects and triggers action buttons (`"Run"`, `"Predict"`, `"Simulate"`, `"Calculate"`).
-   - Adjusts any visible sliders.
-   - Performs a complete vertical page scroll through all charts, tables, and architectural diagrams.
-   - Gracefully returns to the top hero section.
+If a new project does not specify an explicit `interactions` array:
+1. **Multimodal Vision Analysis**: The pipeline uses Gemini Multimodal Vision to inspect the initial hero screenshot and identify the primary functional components.
+2. **Deep DOM Feature Explorer**:
+   - Detects all navigation tabs (`button[data-tab]`, `[role="tab"]`, `.stTabs button`).
+   - Visits every tab sequentially with a 3.0s dwell.
+   - Detects and triggers any action buttons (`"Run"`, `"Predict"`, `"Compute"`, `"Simulate"`, `"Analyze"`).
+   - Detects any range sliders, moving them to $60\%–80\%$ of their max span.
+   - Performs a full smooth vertical scroll cycle ($+400\text{px}$ down, hold 3.5s, $-400\text{px}$ up).
+   - Navigates back to the first tab / hero view for a clean finish.
 
 ---
 
-## 5. Quality Assurance Verification Checklist
+## 10. Pre-Flight Quality Assurance Checklist
 
-Before publishing any project showcase to LinkedIn:
-- [x] **All Tabs Visited**: No video is stuck on the overview page; every single tab option is opened and showcased.
-- [x] **Models Executed**: All inference buttons are clicked and their visual output (masks, overlays, heatmaps, gauges) is clearly recorded.
-- [x] **Interactive Reaction**: Sliders and dropdowns visibly alter parameters and trigger dynamic recalculation.
-- [x] **Animated Pointer**: Cursor is clearly visible, moves smoothly, and pulses green on each click.
-- [x] **Clean Loop**: The video starts after DNS load and concludes back on the clean overview dashboard.
-- [x] **Standard Encoding**: 1080p or 720p H.264 `yuv420p` MP4 ready for LinkedIn upload.
+Before any output video is finalized:
+- [x] **Local Server Clean Boot**: Backend started without pipe buffer deadlocks; logs written to `logs/server_<name>.log`.
+- [x] **All Tabs Explored**: Zero videos confined to the overview screen; 100% of feature tabs are opened.
+- [x] **Live Inference Demonstrated**: Model execution buttons are clicked, with output masks/heatmaps clearly visible.
+- [x] **Dynamic Parameter Modulation**: Sliders/dropdowns visibly adjust parameters and trigger reactive UI changes.
+- [x] **3D Viewport Centered**: 3D canvases are scrolled into the focal center of the 1080p frame before interaction.
+- [x] **Cinematic Cursor**: Smooth Bézier curves with expanding green click pulses confirm every action.
+- [x] **Broadcast 1080p Export**: Encoded in H.264 `yuv420p` with CRF 18 and 12 Mbps bitrate, trimmed and paced at 1.15x–1.20x.
+- [x] **Seamless Looping**: Video begins post-load and concludes on the clean hero dashboard.
