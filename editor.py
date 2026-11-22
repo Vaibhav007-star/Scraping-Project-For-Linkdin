@@ -4,6 +4,7 @@ Trims blank loading screens, speeds up clips for social media pacing,
 and exports high-quality, LinkedIn-compatible H.264 MP4 videos.
 """
 
+import os
 import logging
 from pathlib import Path
 from typing import Optional
