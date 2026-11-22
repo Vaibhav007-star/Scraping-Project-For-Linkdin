@@ -251,18 +251,29 @@ class ProjectRecorder:
         logger.info(f"Starting local server in '{project_folder}': `{start_cmd}`")
         creationflags = subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0
 
+        logs_dir = Path("logs")
+        logs_dir.mkdir(parents=True, exist_ok=True)
+        server_log_path = logs_dir / f"server_{project_config.get('name', 'app')}.log"
+        self._server_log_file = open(server_log_path, "w", encoding="utf-8", errors="replace")
+
         return subprocess.Popen(
             start_cmd,
             shell=True,
             cwd=str(project_folder),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
+            stdout=self._server_log_file,
+            stderr=self._server_log_file,
             creationflags=creationflags
         )
 
     def stop_server(self, process: Optional[subprocess.Popen]):
         """Cleanly terminate server and all its child processes."""
+        if hasattr(self, "_server_log_file") and self._server_log_file and not self._server_log_file.closed:
+            try:
+                self._server_log_file.flush()
+                self._server_log_file.close()
+            except Exception:
+                pass
+
         if process is None:
             return
 

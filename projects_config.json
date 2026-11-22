@@ -45,7 +45,7 @@
       "start_command": ".\\venv\\Scripts\\python.exe -m uvicorn web_app.server:app --port 8000",
       "url": "http://127.0.0.1:8000",
       "port": 8000,
-      "wait_timeout_seconds": 45,
+      "wait_timeout_seconds": 60,
       "readme_path": "README.md",
       "main_script_path": "web_app/server.py",
       "trim_start_sec": 2.0,
