@@ -204,6 +204,126 @@ class ProjectRecorder:
 
         page.wait_for_timeout(wait_ms)
 
+    def _smooth_orbit_3d(
+        self,
+        page,
+        selector: Optional[str] = None,
+        radius_x: int = 300,
+        radius_y: int = 50,
+        wait_ms: int = 3500
+    ):
+        """
+        Executes a cinematic, mouse-driven 3D camera orbit on a WebGL/Three.js canvas.
+        Grabs the canvas, executes a smooth sinusoidal two-way orbit arc with damping,
+        and releases cleanly, capturing multi-angle 3D elevation, building heights, and depth.
+        """
+        # 1. Determine canvas center coordinates
+        cx, cy = 960.0, 540.0
+        target_selectors = [selector] if selector else []
+        target_selectors.extend([
+            "#view3d-canvas-container canvas",
+            "canvas#view3d",
+            ".threejs-container canvas",
+            "canvas:visible",
+            "canvas"
+        ])
+
+        for sel in target_selectors:
+            if not sel:
+                continue
+            try:
+                el = page.query_selector(sel)
+                if el:
+                    box = el.bounding_box()
+                    if box and box["width"] > 100 and box["height"] > 100:
+                        cx = box["x"] + box["width"] * 0.5
+                        cy = box["y"] + box["height"] * 0.5
+                        break
+            except Exception:
+                pass
+
+        logger.info(f"Executing cinematic mouse 3D orbit around canvas center ({cx:.1f}, {cy:.1f})...")
+
+        # 2. Smoothly glide cursor to canvas center
+        self._smooth_mouse_move(page, cx, cy)
+        page.wait_for_timeout(350)
+
+        # 3. Press down left mouse button to initiate orbit controls grab
+        page.mouse.down(button="left")
+        page.wait_for_timeout(100)
+
+        # 4. Cinematic Sweep 1: Smooth arc to the left/up (rotating scene to show western/isometric profile)
+        steps_1 = 45
+        for i in range(1, steps_1 + 1):
+            t = i / float(steps_1)
+            eased_t = 0.5 * (1.0 - math.cos(math.pi * t))
+            cur_x = cx - (radius_x * eased_t)
+            cur_y = cy - (radius_y * math.sin(math.pi * t))
+            page.mouse.move(cur_x, cur_y)
+            page.wait_for_timeout(26)
+
+        page.wait_for_timeout(350)
+
+        # 5. Cinematic Sweep 2: Wide smooth counter-orbit arc to the right (revealing eastern/opposite angle)
+        steps_2 = 55
+        start_x = cx - radius_x
+        target_x = cx + (radius_x * 0.85)
+        for i in range(1, steps_2 + 1):
+            t = i / float(steps_2)
+            eased_t = 0.5 * (1.0 - math.cos(math.pi * t))
+            cur_x = start_x + (target_x - start_x) * eased_t
+            cur_y = cy + (radius_y * 0.8 * math.sin(math.pi * t))
+            page.mouse.move(cur_x, cur_y)
+            page.wait_for_timeout(26)
+
+        page.wait_for_timeout(300)
+
+        # 6. Cinematic Sweep 3: Gentle settling back to resting focal position
+        steps_3 = 28
+        for i in range(1, steps_3 + 1):
+            t = i / float(steps_3)
+            eased_t = 0.5 * (1.0 - math.cos(math.pi * t))
+            cur_x = target_x + (cx - target_x) * eased_t
+            cur_y = cy
+            page.mouse.move(cur_x, cur_y)
+            page.wait_for_timeout(24)
+
+        page.wait_for_timeout(150)
+
+        # 7. Release mouse button cleanly
+        page.mouse.up(button="left")
+        self._mouse_pos = (cx, cy)
+        page.wait_for_timeout(wait_ms)
+
+    def _smooth_mouse_drag(
+        self,
+        page,
+        start_x: float,
+        start_y: float,
+        delta_x: float,
+        delta_y: float,
+        steps: int = 35,
+        wait_ms: int = 1500
+    ):
+        """Smoothly drags the mouse from (start_x, start_y) by (delta_x, delta_y)."""
+        self._smooth_mouse_move(page, start_x, start_y)
+        page.wait_for_timeout(200)
+        page.mouse.down(button="left")
+        page.wait_for_timeout(80)
+
+        for i in range(1, steps + 1):
+            t = i / float(steps)
+            eased_t = 0.5 * (1.0 - math.cos(math.pi * t))
+            cur_x = start_x + delta_x * eased_t
+            cur_y = start_y + delta_y * eased_t
+            page.mouse.move(cur_x, cur_y)
+            page.wait_for_timeout(25)
+
+        page.wait_for_timeout(100)
+        page.mouse.up(button="left")
+        self._mouse_pos = (start_x + delta_x, start_y + delta_y)
+        page.wait_for_timeout(wait_ms)
+
     def is_live_url(self, url: str) -> bool:
         """Check if URL points to an external cloud deployment (e.g. Vercel) rather than local."""
         return not ("localhost" in url.lower() or "127.0.0.1" in url)
@@ -535,6 +655,28 @@ class ProjectRecorder:
                             delta = step.get("delta_y", 350)
                             self._smooth_scroll(page, delta, wait_ms=wait_ms)
 
+                        elif action in ("orbit_3d", "orbit", "3d_orbit"):
+                            rx = step.get("radius_x", 300)
+                            ry = step.get("radius_y", 50)
+                            self._smooth_orbit_3d(page, selector=selector, radius_x=rx, radius_y=ry, wait_ms=wait_ms)
+
+                        elif action in ("drag", "mouse_drag"):
+                            start_x, start_y = self._mouse_pos
+                            if selector:
+                                try:
+                                    el = page.query_selector(selector)
+                                    if el:
+                                        box = el.bounding_box()
+                                        if box:
+                                            start_x = box["x"] + box["width"] / 2.0
+                                            start_y = box["y"] + box["height"] / 2.0
+                                except Exception:
+                                    pass
+                            dx = step.get("delta_x", 200)
+                            dy = step.get("delta_y", 0)
+                            steps_cnt = step.get("steps", 35)
+                            self._smooth_mouse_drag(page, start_x, start_y, dx, dy, steps=steps_cnt, wait_ms=wait_ms)
+
                     logger.info(f"All {len(custom_interactions)} interactions completed. Total recording elapsed: {time.time() - start_time:.2f}s")
 
                 else:
@@ -658,6 +800,15 @@ class ProjectRecorder:
                                 self._smooth_mouse_move(page, box["x"] + box["width"] * 0.7, box["y"] + box["height"] / 2.0)
                                 page.mouse.click(box["x"] + box["width"] * 0.7, box["y"] + box["height"] / 2.0)
                                 page.wait_for_timeout(2000)
+
+                        # If a 3D canvas is present on this tab, execute smooth cinematic mouse orbit
+                        canvases = page.query_selector_all("canvas:visible")
+                        for cv in canvases:
+                            cbox = cv.bounding_box()
+                            if cbox and cbox["width"] > 250 and cbox["height"] > 200:
+                                logger.info("3D WebGL Canvas detected in tab. Executing cinematic mouse orbit...")
+                                self._smooth_orbit_3d(page, selector="canvas:visible", radius_x=280, radius_y=45, wait_ms=2500)
+                                break
 
                 break
 

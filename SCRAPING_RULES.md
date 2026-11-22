@@ -88,7 +88,7 @@ flowchart LR
 - **Center Canvas**: Execute targeted scroll (`delta_y: 380px`) so the 3D model is vertically centered in the 1080p viewport.
 - **Activate 3D Modes**: Toggle Isometric view, drape satellite imagery, or project heat relief domes.
 - **Scale Extrusion**: Adjust building/terrain height extrusion slider (e.g., 2.3x).
-- **Cinematic Orbit**: Enable auto-rotate or perform a smooth orbital mouse drag across the canvas for 5.0 seconds.
+- **Mandatory Cinematic Mouse Orbit (`orbit_3d`)**: Always explore the 3D view using a dynamic, mouse-driven cinematic camera orbit. The cursor grabs the canvas, smoothly sweeps across multi-axis elevation angles, and captures the 3D structure from multiple perspectives.
 
 ### Phase 6: Quantitative Performance Analytics & Clean Loop (115s – 130s)
 - **Metrics & Benchmarks Tab**: Switch to verification analytics.
@@ -128,10 +128,35 @@ browser = playwright.chromium.launch(
 - Three.js, Babylon.js, and WebGL scenes compile shaders and initialize texture buffers on the first frame.
 - Always provide a **3.5 to 4.5 second dwell time** immediately after switching into a 3D tab before attempting interactions.
 
-### 4.4 3D Manipulation Primitives
+### 4.4 Mandatory Mouse-Driven Cinematic 3D Orbit Protocol
+> **The Universal 3D Law**: When exploring a 3D view of ANY project, **NEVER** rely solely on static views or passive auto-rotation toggles. You must **ALWAYS use a cinematic view and with the help of the mouse move that 3D view and capture it smoothly**.
+
+#### Implementation & Mechanics:
+1. **Target Identification**: Locates the WebGL `<canvas>` element (e.g., `#view3d-canvas-container canvas`, `canvas#view3d`, or `canvas:visible`).
+2. **Smooth Cursor Acquisition**: Glides the animated cursor smoothly to the exact center of the 3D canvas $(c_x, c_y)$.
+3. **Canvas Grab**: Dispatches `page.mouse.down(button="left")`. The cursor activates its emerald green halo ripple to visually communicate that user control has engaged.
+4. **Cinematic 3-Stage Multi-Axis Trajectory**:
+   - **Sweep 1 (Western Elevation & Pitch)**: Smoothly orbits to $(c_x - r_x, c_y - r_y)$ over 45 eased sub-frames (delay 26ms per frame), tilting the camera to display building facades, heights, and shadows.
+   - **Sweep 2 (Eastern Counter-Orbit)**: Sweeps across the entire width of the scene to $(c_x + 0.85 \cdot r_x, c_y + 0.8 \cdot r_y)$ over 55 eased frames, exposing the opposite side of the 3D digital twin.
+   - **Sweep 3 (Focal Return & Settle)**: Gently glides back toward the resting center over 28 frames.
+5. **Clean Release**: Dispatches `page.mouse.up(button="left")` and dwells for 3.5s so Three.js damping inertia smoothly decelerates the scene.
+
+#### Standard Configuration Syntax:
+```json
+{
+  "action": "orbit_3d",
+  "selector": "#view3d-canvas-container canvas, canvas",
+  "radius_x": 320,
+  "radius_y": 55,
+  "wait_ms": 4000,
+  "description": "3D Digital Twin: Cinematic Mouse-Driven 3D Camera Orbit & Multi-Angle Depth Inspection"
+}
+```
+
+### 4.5 3D Manipulation Primitives
 - **Isometric Perspective**: Trigger camera projection toggles (`button:has-text('Isometric')`, `#btn-cam-iso`).
 - **Mesh Extrusion Scaling**: Modulate depth/height scale sliders (`#slider-height-scale`, `input[name='slider-height-scale']`).
-- **Camera Orbit**: Trigger cinematic auto-rotation or dispatch synthetic drag events (`mousedown` $\rightarrow$ arc `mousemove` $\rightarrow$ `mouseup`).
+- **Multi-Angle Orbit**: Execute `orbit_3d` with the mouse to reveal shadows, terrain topography, and volumetric forms.
 
 ---
 
@@ -225,11 +250,12 @@ To onboard any future project into the pipeline, add an entry matching this stan
     { "action": "scroll", "delta_y": 380, "wait_ms": 2500, "description": "8. 3D Tab: Center 3D Mesh in Viewport" },
     { "action": "click", "selector": "button:has-text('Isometric')", "wait_ms": 3000, "description": "9. 3D Tab: Toggle Isometric Elevation Perspective" },
     { "action": "slider", "selector": "input[type='range']", "value": "2.0", "wait_ms": 3500, "description": "10. 3D Tab: Scale Slice Extrusion Height to 2.0x" },
-    { "action": "scroll", "delta_y": -380, "wait_ms": 1000, "description": "11. 3D Tab: Return to Navigation" },
-    { "action": "click", "selector": "button[data-tab='analytics']", "wait_ms": 3000, "description": "12. Analytics: Switch to Validation Metrics & ROC Curves" },
-    { "action": "scroll", "delta_y": 400, "wait_ms": 3500, "description": "13. Analytics: Review Confusion Matrix & F1 Scores" },
-    { "action": "scroll", "delta_y": -400, "wait_ms": 1000, "description": "14. Analytics: Return to Navigation" },
-    { "action": "click", "selector": "button[data-tab='overview']", "wait_ms": 3000, "description": "15. Wrap-Up: Return to Main Overview Dashboard" }
+    { "action": "orbit_3d", "selector": "canvas", "radius_x": 300, "radius_y": 50, "wait_ms": 3500, "description": "11. 3D Tab: Cinematic Mouse-Driven 3D Camera Orbit" },
+    { "action": "scroll", "delta_y": -380, "wait_ms": 1000, "description": "12. 3D Tab: Return to Navigation" },
+    { "action": "click", "selector": "button[data-tab='analytics']", "wait_ms": 3000, "description": "13. Analytics: Switch to Validation Metrics & ROC Curves" },
+    { "action": "scroll", "delta_y": 400, "wait_ms": 3500, "description": "14. Analytics: Review Confusion Matrix & F1 Scores" },
+    { "action": "scroll", "delta_y": -400, "wait_ms": 1000, "description": "15. Analytics: Return to Navigation" },
+    { "action": "click", "selector": "button[data-tab='overview']", "wait_ms": 3000, "description": "16. Wrap-Up: Return to Main Overview Dashboard" }
   ]
 }
 ```
