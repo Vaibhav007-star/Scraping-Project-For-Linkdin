@@ -9,11 +9,13 @@ import os
 import re
 import json
 import time
+import math
+import random
 import socket
 import logging
 import subprocess
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Tuple
 import urllib.request
 import urllib.error
 
@@ -28,45 +30,135 @@ try:
 except ImportError:
     genai = None
 
-# Animated cursor overlay so LinkedIn viewers see mouse tracking and click feedback
+# Enhanced cinematic animated cursor overlay with expanding ripple wave feedback
 CURSOR_INJECTION_SCRIPT = """
 (function() {
     if (document.getElementById('playwright-demo-cursor')) return;
+    
+    // Primary cursor pointer with 3D radial depth and glowing aura
     const cursor = document.createElement('div');
     cursor.id = 'playwright-demo-cursor';
     cursor.style.cssText = `
-        width: 22px;
-        height: 22px;
-        background: rgba(239, 68, 68, 0.85);
-        border: 2px solid #ffffff;
+        width: 20px;
+        height: 20px;
+        background: radial-gradient(circle at 35% 35%, #ff4b4b 0%, #d90429 100%);
+        border: 2.5px solid #ffffff;
         border-radius: 50%;
         position: fixed;
         top: 0;
         left: 0;
         pointer-events: none;
         z-index: 2147483647;
-        transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1), background-color 0.15s ease;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+        transition: transform 0.14s cubic-bezier(0.25, 1, 0.5, 1), background 0.18s ease, box-shadow 0.18s ease;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.4), 0 0 10px rgba(255, 75, 75, 0.5);
         transform: translate(-50%, -50%);
     `;
+    
+    // Expanding click ripple wave
+    const ripple = document.createElement('div');
+    ripple.id = 'playwright-demo-ripple';
+    ripple.style.cssText = `
+        width: 20px;
+        height: 20px;
+        border: 2px solid #10b981;
+        border-radius: 50%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 2147483646;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1);
+        transition: transform 0.45s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.45s ease-out;
+    `;
+    
     document.documentElement.appendChild(cursor);
+    document.documentElement.appendChild(ripple);
 
     window.addEventListener('mousemove', (e) => {
         cursor.style.left = e.clientX + 'px';
         cursor.style.top = e.clientY + 'px';
+        ripple.style.left = e.clientX + 'px';
+        ripple.style.top = e.clientY + 'px';
     }, { passive: true });
 
     window.addEventListener('mousedown', () => {
-        cursor.style.transform = 'translate(-50%, -50%) scale(1.6)';
-        cursor.style.backgroundColor = 'rgba(16, 185, 129, 0.95)';
+        cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+        cursor.style.background = 'radial-gradient(circle at 35% 35%, #34d399 0%, #059669 100%)';
+        cursor.style.boxShadow = '0 0 16px rgba(16, 185, 129, 0.85)';
+        
+        // Trigger ripple pulse
+        ripple.style.transition = 'none';
+        ripple.style.transform = 'translate(-50%, -50%) scale(1)';
+        ripple.style.opacity = '0.9';
+        setTimeout(() => {
+            ripple.style.transition = 'transform 0.45s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.45s ease-out';
+            ripple.style.transform = 'translate(-50%, -50%) scale(2.8)';
+            ripple.style.opacity = '0';
+        }, 15);
     }, { passive: true });
 
     window.addEventListener('mouseup', () => {
         cursor.style.transform = 'translate(-50%, -50%) scale(1.0)';
-        cursor.style.backgroundColor = 'rgba(239, 68, 68, 0.85)';
+        cursor.style.background = 'radial-gradient(circle at 35% 35%, #ff4b4b 0%, #d90429 100%)';
+        cursor.style.boxShadow = '0 3px 12px rgba(0,0,0,0.4), 0 0 10px rgba(255, 75, 75, 0.5)';
     }, { passive: true });
 })();
 """
+
+
+def generate_bezier_trajectory(start: Tuple[float, float], end: Tuple[float, float]) -> List[Tuple[float, float]]:
+    """
+    Computes a natural, human-like Cubic Bézier trajectory between start and end coordinates.
+    Includes perpendicular curvature arcs and sinusoidal ease-in-out velocity profiles.
+    """
+    x0, y0 = start
+    x3, y3 = end
+    dist = math.hypot(x3 - x0, y3 - y0)
+    
+    if dist < 6.0:
+        return [(round(x3, 1), round(y3, 1))]
+    
+    # Calculate perpendicular direction for the arc
+    perp_dx = -(y3 - y0) / (dist + 1e-6)
+    perp_dy = (x3 - x0) / (dist + 1e-6)
+    
+    # Curve factor proportional to distance (capped for realistic reach)
+    curve_factor = min(110.0, max(22.0, dist * 0.22))
+    
+    # Determine side of arc deterministically to avoid erratic flips
+    side = 1.0 if (int(x0 * 10 + y0 * 10)) % 2 == 0 else -1.0
+    dev1 = side * curve_factor * 0.70
+    dev2 = side * curve_factor * 0.35
+    
+    # Control point 1 (1/3 mark + perpendicular offset)
+    x1 = x0 + (x3 - x0) * 0.33 + perp_dx * dev1
+    y1 = y0 + (y3 - y0) * 0.33 + perp_dy * dev1
+    
+    # Control point 2 (2/3 mark + subtle settling offset)
+    x2 = x0 + (x3 - x0) * 0.66 + perp_dx * dev2
+    y2 = y0 + (y3 - y0) * 0.66 + perp_dy * dev2
+    
+    # Dynamic step count scaled to travel distance (~60fps illusion)
+    steps = max(14, min(42, int(dist / 16.0)))
+    points = []
+    
+    for i in range(1, steps + 1):
+        t_linear = i / float(steps)
+        # Cosine ease-in-out easing (slow start, fast mid-flight, gentle settling)
+        t = 0.5 * (1.0 - math.cos(math.pi * t_linear))
+        
+        u = 1.0 - t
+        tt = t * t
+        uu = u * u
+        uuu = uu * u
+        ttt = tt * t
+        
+        px = uuu * x0 + 3.0 * uu * t * x1 + 3.0 * u * tt * x2 + ttt * x3
+        py = uuu * y0 + 3.0 * uu * t * y1 + 3.0 * u * tt * x2 + ttt * y3
+        points.append((round(px, 1), round(py, 1)))
+        
+    return points
 
 
 class ProjectRecorder:
@@ -75,6 +167,7 @@ class ProjectRecorder:
         self.raw_recordings_dir.mkdir(parents=True, exist_ok=True)
         self.gemini_client = None
         self.gemini_model = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
+        self._mouse_pos: Tuple[float, float] = (640.0, 360.0)
 
         gemini_key = os.getenv("GEMINI_API_KEY")
         if gemini_key and genai is not None:
@@ -83,6 +176,33 @@ class ProjectRecorder:
                 logger.info(f"Gemini Vision Director initialized ({self.gemini_model}).")
             except Exception as e:
                 logger.warning(f"Could not initialize Gemini Vision: {e}")
+
+    def _smooth_mouse_move(self, page, target_x: float, target_y: float):
+        """Moves cursor along a natural human-like Cubic Bézier curve with sinusoidal easing."""
+        path = generate_bezier_trajectory(self._mouse_pos, (target_x, target_y))
+        for (px, py) in path:
+            page.mouse.move(px, py)
+            page.wait_for_timeout(14)
+        self._mouse_pos = (target_x, target_y)
+
+    def _smooth_scroll(self, page, delta_y: int, wait_ms: int = 1500):
+        """Executes silky smooth momentum scrolling with native window behavior & eased sub-steps."""
+        try:
+            page.evaluate(f"window.scrollBy({{ top: {delta_y}, left: 0, behavior: 'smooth' }});")
+        except Exception:
+            pass
+
+        steps = 7
+        for i in range(steps):
+            weight = math.sin((i + 1) / float(steps) * math.pi)
+            sub_delta = int((delta_y / float(steps)) * weight * 1.2)
+            try:
+                page.mouse.wheel(0, sub_delta)
+            except Exception:
+                pass
+            page.wait_for_timeout(90)
+
+        page.wait_for_timeout(wait_ms)
 
     def is_live_url(self, url: str) -> bool:
         """Check if URL points to an external cloud deployment (e.g. Vercel) rather than local."""
@@ -288,10 +408,10 @@ class ProjectRecorder:
                                         pass
                                     box = el.bounding_box()
                                     if box:
-                                        cx = box["x"] + box["width"] / 2
-                                        cy = box["y"] + box["height"] / 2
-                                        page.mouse.move(cx, cy, steps=12)
-                                        page.wait_for_timeout(350)
+                                        cx = box["x"] + box["width"] / 2.0
+                                        cy = box["y"] + box["height"] / 2.0
+                                        self._smooth_mouse_move(page, cx, cy)
+                                        page.wait_for_timeout(250)
                                         page.mouse.click(cx, cy)
                                     else:
                                         el.click()
@@ -310,7 +430,7 @@ class ProjectRecorder:
                                         pass
                                     box = el.bounding_box()
                                     if box:
-                                        page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=10)
+                                        self._smooth_mouse_move(page, box["x"] + box["width"] / 2.0, box["y"] + box["height"] / 2.0)
                             except Exception:
                                 pass
                             page.wait_for_timeout(wait_ms)
@@ -327,8 +447,8 @@ class ProjectRecorder:
                                         pass
                                     box = el.bounding_box()
                                     if box:
-                                        page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=12)
-                                        page.wait_for_timeout(250)
+                                        self._smooth_mouse_move(page, box["x"] + box["width"] / 2.0, box["y"] + box["height"] / 2.0)
+                                        page.wait_for_timeout(200)
                                     page.eval_on_selector(
                                         selector,
                                         f"(el) => {{ el.value = '{target_val}'; el.dispatchEvent(new Event('input', {{ bubbles: true }})); el.dispatchEvent(new Event('change', {{ bubbles: true }})); }}"
@@ -349,8 +469,8 @@ class ProjectRecorder:
                                         pass
                                     box = el.bounding_box()
                                     if box:
-                                        page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=10)
-                                        page.wait_for_timeout(250)
+                                        self._smooth_mouse_move(page, box["x"] + box["width"] / 2.0, box["y"] + box["height"] / 2.0)
+                                        page.wait_for_timeout(200)
                                     page.select_option(selector, opt_val)
                             except Exception as se:
                                 logger.debug(f"Select error ({selector}): {se}")
@@ -368,7 +488,7 @@ class ProjectRecorder:
                                         pass
                                     box = el.bounding_box()
                                     if box:
-                                        page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=10)
+                                        self._smooth_mouse_move(page, box["x"] + box["width"] / 2.0, box["y"] + box["height"] / 2.0)
                                         page.wait_for_timeout(200)
                                     el.click()
                                     page.keyboard.press("Control+A")
@@ -380,12 +500,7 @@ class ProjectRecorder:
 
                         elif action == "scroll":
                             delta = step.get("delta_y", 350)
-                            steps_count = 6
-                            sub_delta = delta // steps_count
-                            for _ in range(steps_count):
-                                page.mouse.wheel(0, sub_delta)
-                                page.wait_for_timeout(180)
-                            page.wait_for_timeout(wait_ms)
+                            self._smooth_scroll(page, delta, wait_ms=wait_ms)
 
                     logger.info(f"All {len(custom_interactions)} interactions completed. Total recording elapsed: {time.time() - start_time:.2f}s")
 
@@ -409,19 +524,16 @@ class ProjectRecorder:
                             logger.info(f"AI Vision Action: {desc} (action={action})")
 
                             if action in ("hover", "move"):
-                                page.mouse.move(x, y, steps=10)
+                                self._smooth_mouse_move(page, float(x), float(y))
                                 page.wait_for_timeout(wait_ms)
                             elif action == "click":
-                                page.mouse.move(x, y, steps=10)
-                                page.wait_for_timeout(350)
+                                self._smooth_mouse_move(page, float(x), float(y))
+                                page.wait_for_timeout(250)
                                 page.mouse.click(x, y)
                                 page.wait_for_timeout(wait_ms)
                             elif action == "scroll":
                                 delta = step.get("delta_y", 300)
-                                for _ in range(3):
-                                    page.mouse.wheel(0, delta // 3)
-                                    page.wait_for_timeout(300)
-                                page.wait_for_timeout(wait_ms)
+                                self._smooth_scroll(page, delta, wait_ms=wait_ms)
 
                     # 6. Deep DOM Feature Explorer (Explores all remaining tabs, controls & charts)
                     self._explore_remaining_features(page, project_config, start_time, custom_duration)
@@ -462,9 +574,9 @@ class ProjectRecorder:
             try:
                 box = el.bounding_box()
                 if box and el.is_visible():
-                    cx = box["x"] + box["width"] / 2
-                    cy = box["y"] + box["height"] / 2
-                    page.mouse.move(cx, cy, steps=8)
+                    cx = box["x"] + box["width"] / 2.0
+                    cy = box["y"] + box["height"] / 2.0
+                    self._smooth_mouse_move(page, cx, cy)
                     page.wait_for_timeout(200)
                     el.click()
                     page.wait_for_timeout(1000)
@@ -510,8 +622,8 @@ class ProjectRecorder:
                             sl = sliders[0]
                             box = sl.bounding_box()
                             if box:
-                                page.mouse.move(box["x"] + box["width"] * 0.7, box["y"] + box["height"] / 2, steps=8)
-                                page.mouse.click(box["x"] + box["width"] * 0.7, box["y"] + box["height"] / 2)
+                                self._smooth_mouse_move(page, box["x"] + box["width"] * 0.7, box["y"] + box["height"] / 2.0)
+                                page.mouse.click(box["x"] + box["width"] * 0.7, box["y"] + box["height"] / 2.0)
                                 page.wait_for_timeout(2000)
 
                 break
@@ -543,14 +655,12 @@ class ProjectRecorder:
         # Phase 2: Full Deep Page Scroll Tour (Show lower charts, metrics, and architecture)
         logger.info("Performing comprehensive visual scroll tour across charts & sections...")
         while time.time() - start_time < (total_sec - 8):
-            page.mouse.wheel(0, 350)
-            page.wait_for_timeout(1200)
+            self._smooth_scroll(page, 350, wait_ms=900)
 
         # Phase 3: Smooth return to hero section
         logger.info("Smoothly returning to top dashboard overview...")
         for _ in range(4):
-            page.mouse.wheel(0, -350)
-            page.wait_for_timeout(600)
+            self._smooth_scroll(page, -350, wait_ms=400)
 
         # Fill remaining duration
         elapsed = time.time() - start_time

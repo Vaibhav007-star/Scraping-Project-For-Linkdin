@@ -46,17 +46,19 @@ Every AI capability on screen must be triggered live:
 2. **Cycle Multi-Spectral / Multi-Class Layers**: If the UI offers visual layers (e.g., *Raw Image*, *Predicted Mask*, *Blended Overlay*, *Thermal Heatmap*), click through each layer sequentially so recruiters see the computer vision pipeline in action.
 3. **Multi-Dimensional Views**: When 3D, WebGL, or isometric options exist, activate them (`"3D Digital Twin"`, `"Thermal Heat Dome"`, `"Isometric View"`).
 
-### Protocol 4: In-Depth Scroll Tours per Sub-View
-- For any tab or page with vertical content:
-  - Scroll downward (`delta_y: 350..450`) to display lower metric charts, model architectures, and confusion matrices.
-  - Pause scrolling for at least **3.5 seconds** when a chart or table is in the viewport.
-  - Smoothly scroll back up to the navigation bar before transitioning to the next tab.
+### Protocol 4: Hardware-Accelerated Smooth Momentum Scrolling
+- **Dual-Layer Fluid Movement**: Scrolling never abruptly jumps across the screen. The recorder combines two synchronization layers:
+  1. **Native Window Smooth Behavior**: Dispatches hardware-accelerated `window.scrollBy({ top: delta_y, behavior: 'smooth' })` to trigger CSS momentum easing.
+  2. **Sinusoidal Deceleration Wheel Sub-Steps**: Evaluates a bell-curve deceleration formula ($w_i = \sin\left(\frac{i+1}{\text{steps}} \cdot \pi\right)$) over 7 sub-frames to smoothly drive non-standard scroll containers, canvas elements, and virtual tables.
+- **Dedicated Inspection Dwell**: When charts, maps, confusion matrices, or model architecture diagrams are scrolled into view, pause scrolling for at least **3.5 seconds** so viewers can read labels and metrics.
+- **Graceful Bi-Directional Return**: Before switching to subsequent tabs, smoothly scroll back up to the top navigation header.
 
-### Protocol 5: Visual Animated Cursor Simulation
-- A high-contrast animated cursor (`#playwright-demo-cursor`) is injected into the DOM on page load:
-  - **Neutral State**: 22px vibrant red pointer with a crisp white border and drop-shadow (`rgba(239, 68, 68, 0.85)`).
-  - **Motion**: Interpolated multi-frame movements (8–12 frames) simulate genuine human mouse tracking.
-  - **Click Pulse**: Scales dynamically to 1.6x and turns bright emerald green (`rgba(16, 185, 129, 0.95)`) on click, giving unmistakable visual cues to video viewers.
+### Protocol 5: Cinematic Cubic Bézier Cursor & Click Ripple Physics
+- **Humanized Trajectory Math**: Mouse movements strictly avoid mechanical straight lines. Every trajectory is computed via a **Cubic Bézier Curve**:
+  $$\mathbf{B}(t) = (1-t)^3 \mathbf{P}_0 + 3(1-t)^2 t \mathbf{P}_1 + 3(1-t) t^2 \mathbf{P}_2 + t^3 \mathbf{P}_3, \quad t \in [0, 1]$$
+  where control points $\mathbf{P}_1$ and $\mathbf{P}_2$ introduce a natural perpendicular arc proportional to travel distance, driven by sinusoidal ease-in-out velocity (slow acceleration, fast mid-flight, gentle deceleration).
+- **Radial 3D Cursor Design**: A 20px pointer styled with radial gradient depth (`#ff4b4b` $\rightarrow$ `#d90429`), crisp 2.5px white border, and glowing drop-shadow aura (`#playwright-demo-cursor`).
+- **Expanding Click Wave Ripple**: On every click, an expanding circular ripple wave (`#playwright-demo-ripple`) smoothly expands from $1.0\times$ to $2.8\times$ scale with emerald green feedback (`#10b981`), providing unmistakable visual confirmation of user interaction.
 
 ### Protocol 6: Heavy Canvas, WebGL & Plotly Rendering Buffers
 - Deep learning visualizers, Mapbox tiles, Leaflet maps, and Three.js scenes require GPU / canvas stabilization.
