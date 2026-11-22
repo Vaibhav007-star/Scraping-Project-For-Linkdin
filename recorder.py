@@ -371,7 +371,13 @@ class ProjectRecorder:
         with sync_playwright() as p:
             browser = p.chromium.launch(
                 headless=True,
-                args=["--start-maximized", "--disable-gpu", "--no-sandbox"]
+                args=[
+                    "--start-maximized",
+                    "--no-sandbox",
+                    "--enable-webgl",
+                    "--ignore-gpu-blocklist",
+                    "--use-gl=angle"
+                ]
             )
 
             context = browser.new_context(
