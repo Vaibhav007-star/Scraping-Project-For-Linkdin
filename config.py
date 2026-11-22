@@ -33,7 +33,14 @@ LINKEDIN_AUTHOR_URN = os.getenv("LINKEDIN_AUTHOR_URN", "")  # e.g., "urn:li:pers
 # Dry Run Mode: if True, do not call LinkedIn upload/post APIs; save files to ready_to_post/
 DRY_RUN = os.getenv("DRY_RUN", "True").strip().lower() in ("true", "1", "yes")
 
-# Default Video Processing Settings
+# Default Video Processing & High-Definition Settings
 DEFAULT_TRIM_START_SEC = float(os.getenv("TRIM_START_SEC", "2.0"))
 DEFAULT_SPEED_FACTOR = float(os.getenv("SPEED_FACTOR", "1.18"))
 DEFAULT_RECORD_DURATION_SEC = int(os.getenv("RECORD_DURATION_SEC", "40"))
+
+# High-Definition / 4K Recording Presets
+# Options: "1080p" (Full HD, 1920x1080), "2k" (2560x1440), "4k" (3840x2160)
+RECORDING_RESOLUTION = os.getenv("RECORDING_RESOLUTION", "1080p").lower()
+RECORDING_DEVICE_SCALE = float(os.getenv("RECORDING_DEVICE_SCALE", "1.5"))
+VIDEO_BITRATE = os.getenv("VIDEO_BITRATE", "12M")
+VIDEO_CRF = int(os.getenv("VIDEO_CRF", "18"))

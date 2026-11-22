@@ -72,10 +72,15 @@ Every AI capability on screen must be triggered live:
 ### Protocol 8: Universal Closing & Hero Wrap-Up
 - Always end every demonstration by navigating back to the main **Overview / Hero** screen, letting the cursor rest naturally for 3.0 seconds. This creates a polished, professional loop for LinkedIn autoplay videos.
 
-### Protocol 9: Video Post-Processing & Export Standard
+### Protocol 9: Video Post-Processing & High-Definition (1080p / 4K) Export Standard
+- **Full HD (1080p) & 4K Recording Engine**:
+  - **Full HD (Default)**: Viewport $1920 \times 1080$ paired with **$1.5\times$ High-DPI subpixel density** (`device_scale_factor=1.5`). Text, charts, and 3D WebGL lines render razor-sharp with zero blurriness.
+  - **4K Ultra HD Preset**: Supports $3840 \times 2160$ native canvas recording for maximum broadcast clarity.
+- **Broadcast-Grade Encoding**:
+  - Exported via MoviePy using H.264 (`libx264`) with **Constant Rate Factor (CRF 18)** (visually lossless) and **12 Mbps bitrate** (`VIDEO_BITRATE=12M`).
+  - Standard `yuv420p` pixel format guarantees 100% playback compatibility across LinkedIn web, iOS, and Android clients.
 - **Load Trimming**: Programmatically trims the initial **2.00 seconds** of blank loading / DNS resolution.
 - **Dynamic Speed Optimization**: Applies a mild **1.15x to 1.20x** acceleration factor to keep the presentation snappy and engaging without rushing complex plots.
-- **Universal Codec**: Rendered via MoviePy with H.264 video codec (`libx264`), `yuv420p` pixel format, and faststart metadata flags to ensure zero playback errors across LinkedIn web, iOS, and Android clients.
 
 ---
 

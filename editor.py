@@ -103,13 +103,16 @@ class VideoEditor:
             has_audio = final_clip.audio is not None
             audio_codec = "aac" if has_audio else None
 
-            logger.info(f"Rendering final MP4 to {target_path} (H.264, yuv420p)...")
+            bitrate = os.getenv("VIDEO_BITRATE", "12M")
+            crf = os.getenv("VIDEO_CRF", "18")
+            logger.info(f"Rendering final MP4 to {target_path} (H.264, yuv420p, CRF {crf}, Bitrate {bitrate})...")
             final_clip.write_videofile(
                 str(target_path),
                 codec="libx264",
                 audio_codec=audio_codec,
-                ffmpeg_params=["-pix_fmt", "yuv420p"],
-                preset="fast",
+                bitrate=bitrate,
+                ffmpeg_params=["-pix_fmt", "yuv420p", "-crf", str(crf)],
+                preset="medium",
                 threads=4,
                 logger=None  # Suppress verbose terminal progress bar
             )

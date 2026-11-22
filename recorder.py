@@ -380,10 +380,26 @@ class ProjectRecorder:
                 ]
             )
 
+            # High-Definition (1080p Full HD / 2K / 4K) & Retina subpixel settings
+            res_mode = str(project_config.get("resolution", os.getenv("RECORDING_RESOLUTION", "1080p"))).lower()
+            if res_mode == "4k":
+                view_w, view_h = 3840, 2160
+                scale_factor = float(project_config.get("device_scale", os.getenv("RECORDING_DEVICE_SCALE", "1.0")))
+            elif res_mode in ("2k", "1440p"):
+                view_w, view_h = 2560, 1440
+                scale_factor = float(project_config.get("device_scale", os.getenv("RECORDING_DEVICE_SCALE", "1.25")))
+            else:
+                # 1080p Full HD standard
+                view_w, view_h = 1920, 1080
+                scale_factor = float(project_config.get("device_scale", os.getenv("RECORDING_DEVICE_SCALE", "1.5")))
+
+            logger.info(f"Capture configuration: {view_w}x{view_h} ({res_mode.upper()}) at {scale_factor}x high-DPI subpixel density.")
+
             context = browser.new_context(
-                viewport={"width": 1280, "height": 720},
+                viewport={"width": view_w, "height": view_h},
+                device_scale_factor=scale_factor,
                 record_video_dir=str(temp_record_dir),
-                record_video_size={"width": 1280, "height": 720}
+                record_video_size={"width": view_w, "height": view_h}
             )
 
             page = context.new_page()
