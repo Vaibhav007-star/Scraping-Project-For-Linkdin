@@ -154,21 +154,19 @@ class VideoEditor:
     ):
         """
         Applies automated professional LinkedIn post-production graphics:
-        1. Top Header Bar: Clean slate banner with project title, tech stack & glowing 'LIVE DEMO' badge.
+        1. Zero-Navbar-Occlusion: Leaves top 100% unobstructed so app navigation tabs are fully visible.
         2. Dynamic Lower-Third Badge: Contextual phase callout that updates with video progress.
         3. Synchronized Closed Captions: Modern subtitle pill rendered during speech.
         4. Animated Progress Bar: Sleek 5px glowing accent bar tracking elapsed playback time.
-        5. Intro Hook Overlay: 3-second floating hero card with smooth alpha fade-out.
+        5. Intro Hook Overlay: 3-second floating hero card at lower-left with smooth alpha fade-out.
         """
-        logger.info("Applying automated LinkedIn post-production graphics with synchronized subtitles...")
+        logger.info("Applying automated LinkedIn post-production graphics with zero-navbar-occlusion...")
         w, h = clip.size
         duration = clip.duration
         branding = self._resolve_project_branding(project_config)
         fonts = self.fonts
         active_subtitles = subtitles or []
 
-        title_str = branding["title"]
-        tech_str = branding["tech_tags"]
         phases = branding["phases"]
         hook_title = branding["hook_title"]
         hook_sub = branding["hook_sub"]
@@ -178,39 +176,16 @@ class VideoEditor:
             img = Image.fromarray(frame)
             draw = ImageDraw.Draw(img, "RGBA")
 
-            # ---------------------------------------------------------
-            # 1. Top Header Bar (Height 44px)
-            # ---------------------------------------------------------
-            draw.rectangle([0, 0, w, 44], fill=(9, 13, 22, 245))
-            draw.line([(0, 44), (w, 44)], fill=(30, 41, 59, 255), width=1)
-
-            # Left: Title & Tech Stack
-            draw.text((24, 12), title_str, fill=(248, 250, 252, 255), font=fonts["title"])
-
-            # Compute offset for tech stack text
-            title_bbox = fonts["title"].getbbox(title_str)
-            title_w = title_bbox[2] - title_bbox[0] if title_bbox else 220
-            tech_x = 24 + title_w + 18
-            draw.text((tech_x, 14), f"•   {tech_str}", fill=(148, 163, 184, 255), font=fonts["sub"])
-
-            # Right: Glowing 'LIVE DEMO' Status Pill
-            pill_x2 = w - 24
-            pill_x1 = pill_x2 - 128
-            draw.rounded_rectangle(
-                [pill_x1, 9, pill_x2, 35],
-                radius=6,
-                fill=(6, 78, 59, 230),
-                outline=(16, 185, 129, 255),
-                width=1
-            )
-            # Emerald glowing dot
-            draw.ellipse([pill_x1 + 10, 18, pill_x1 + 18, 26], fill=(52, 211, 153, 255))
-            draw.text((pill_x1 + 25, 13), "LIVE DEMO", fill=(167, 243, 208, 255), font=fonts["badge"])
-
-            # ---------------------------------------------------------
-            # 2. Dynamic Lower-Third Feature Badge (Bottom-Left)
-            # ---------------------------------------------------------
             ratio = min(1.0, max(0.0, t / (duration + 1e-5)))
+
+            # ---------------------------------------------------------
+            # ZERO TOP OCCLUSION:
+            # The top navigation bar, logo, and tabs remain 100% pristine!
+            # ---------------------------------------------------------
+
+            # ---------------------------------------------------------
+            # 1. Dynamic Lower-Third Feature Badge (Bottom-Left)
+            # ---------------------------------------------------------
             current_badge = phases[-1][1]
             current_color = phases[-1][2]
             for end_r, badge_txt, color in phases:
@@ -219,7 +194,7 @@ class VideoEditor:
                     current_color = color
                     break
 
-            bx1, by1 = 24, h - 50
+            bx1, by1 = 24, h - 46
             badge_bbox = fonts["badge"].getbbox(current_badge)
             badge_text_w = badge_bbox[2] - badge_bbox[0] if badge_bbox else 400
             badge_w = max(420, badge_text_w + 44)
@@ -237,7 +212,7 @@ class VideoEditor:
             draw.text((bx1 + 28, by1 + 7), current_badge, fill=(241, 245, 249, 255), font=fonts["badge"])
 
             # ---------------------------------------------------------
-            # 3. Synchronized Closed Captions / Subtitles (Bottom-Center)
+            # 2. Synchronized Closed Captions / Subtitles (Bottom-Center)
             # ---------------------------------------------------------
             if active_subtitles:
                 current_sub = None
@@ -280,13 +255,13 @@ class VideoEditor:
                         draw.text((lx, ly), line, fill=(254, 240, 138, 255), font=fonts["subtitle"])
 
             # ---------------------------------------------------------
-            # 4. Intro Recruiter Hook Card (First 3.2 seconds)
+            # 3. Intro Recruiter Hook Card (First 3.2 seconds - Lower-Left)
             # ---------------------------------------------------------
             if t <= 3.2:
                 # Alpha fade-out calculation (smooth fade from t=2.3s to 3.2s)
                 alpha = 1.0 if t < 2.3 else max(0.0, 1.0 - ((t - 2.3) / 0.9))
                 if alpha > 0.02:
-                    hx1, hy1 = 24, 60
+                    hx1, hy1 = 24, h - 110
                     hx2, hy2 = hx1 + 470, hy1 + 54
                     fill_alpha = int(240 * alpha)
                     border_alpha = int(255 * alpha)
@@ -314,7 +289,7 @@ class VideoEditor:
                     )
 
             # ---------------------------------------------------------
-            # 5. Animated Bottom Progress Bar (5px)
+            # 4. Animated Bottom Progress Bar (5px)
             # ---------------------------------------------------------
             draw.rectangle([0, h - 5, w, h], fill=(15, 23, 42, 200))
             prog_w = int(w * ratio)

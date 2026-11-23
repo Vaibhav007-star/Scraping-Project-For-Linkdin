@@ -302,29 +302,32 @@ Before any output video is finalized:
 - [x] **Cinematic Cursor**: Smooth Bézier curves with expanding green click pulses confirm every action.
 - [x] **Broadcast 1080p Export**: Encoded in H.264 `yuv420p` with CRF 18 and 12 Mbps bitrate, trimmed and paced at 1.15x–1.20x.
 - [x] **Seamless Looping**: Video begins post-load and concludes on the clean hero dashboard.
-- [x] **Automated LinkedIn Polish (Option C)**: Top header banner, dynamic lower-third feature badges, bottom progress bar, and 3-second hook overlay rendered programmatically.
+- [x] **Zero-Navbar-Occlusion**: Top header region ($y \in [0, 80\text{px}]$) is 100% transparent and unobstructed so application navbar tabs and branding are never covered or mismatched.
+- [x] **Automated LinkedIn Polish (Option C)**: Dynamic lower-third feature badges, bottom progress bar, synchronized voiceover captions, and lower intro hook rendered cleanly in non-destructive zones.
 
 ---
 
 ## 11. Automated Code-Based Post-Production & Polish Standard (Option C)
 
-To ensure every project video commands attention on LinkedIn and presents the candidate as a senior AI engineer without requiring expensive third-party video software, all videos are enhanced through automated code-based post-production (`editor.py` via MoviePy and Pillow):
+To ensure every project video commands attention on LinkedIn and presents the candidate as a senior AI engineer without obscuring native UI options, all videos follow the **Zero-Navbar-Occlusion Hierarchy**:
 
-### 11.1 The Four Visual Overlay Pillars
-1. **Top Header Branding Banner (Height 44px)**:
-   - **Background**: Translucent deep slate (`#090d16` at 96% opacity) with a 1px border (`#1e293b`).
-   - **Title**: Project name in bold white typography (`#f8fafc`).
-   - **Tech Stack**: Subtitle displaying core technical stack (*e.g., `PyTorch U-Net • Three.js 3D WebGL • FastAPI`*).
-   - **Live Telemetry Pill**: Glowing emerald green indicator badge (`🟢 LIVE DEMO`) in the upper-right corner.
-2. **Dynamic Lower-Third Feature Badge (Bottom-Left)**:
-   - Positioned at `x = 24, y = height - 50` with rounded corners (`radius = 6`) and slate background (`#090d16`).
+### 11.1 The Zero-Navbar-Occlusion Rule (Universal UI Hierarchy)
+> **The Sacred Top-Nav Law**: Modern web applications (React, Next.js, Streamlit, Gradio, FastAPI) place their primary brand titles, logos, and navigation tabs at the top ($y \in [0, 80\text{px}]$). The video editor must **NEVER render a full-width header banner or solid overlay across the top**. Doing so causes ugly collisions and occludes navigation buttons. The top of the video must remain **100% transparent and unobstructed**.
+
+### 11.2 Non-Destructive Lower Telemetry Zones
+All automated post-production overlays are strictly partitioned into safe lower zones where web applications have natural padding:
+1. **Dynamic Lower-Third Feature Badge (Bottom-Left)**:
+   - Positioned at `x = 24, y = height - 46` with rounded corners (`radius = 6`) and deep slate background (`#090d16`).
    - Updates dynamically based on the active project phase (*e.g., `[1/6] ARCHITECTURE`, `[2/6] SATELLITE VISION`, `[3/6] 3D DIGITAL TWIN`*).
    - Color-coded glowing indicator dot (Cyan `#38bdf8`, Emerald `#10b981`, Purple `#a855f7`, Amber `#f59e0b`).
+2. **Synchronized Closed Captions / Subtitles (Bottom-Center)**:
+   - Positioned at `y = height - 90` (comfortably above the lower badge) with rounded corners and warm-yellow text (`#fef08a`).
+   - Dynamically appears only when the neural AI narrator is speaking, giving viewers on mobile an effortless reading experience.
 3. **Animated Bottom Progress Bar (Height 5px)**:
-   - Translucent dark track at the very bottom edge.
-   - Smoothly fills from left to right in emerald green (`#10b981`), visually communicating video duration to mobile and web viewers.
-4. **First 3.2-Second Recruiter Hook Overlay Card**:
-   - Floating callout during the first 3.2 seconds: `🚀 LIVE PRODUCTION WALKTHROUGH • Deep Learning Pipeline & Real-Time Interactive Simulation`.
+   - Positioned at the very bottom edge (`y = height - 5` to `height`).
+   - Smoothly fills from left to right in emerald green (`#10b981`), visually communicating video duration to viewers.
+4. **Intro Recruiter Hook Card (First 3.2 Seconds - Lower-Left)**:
+   - Positioned at `x = 24, y = height - 110` (safely below the center content and above the lower badge).
    - Smoothly fades out between $t = 2.3s$ and $t = 3.2s$ via alpha decay.
 
 ---
@@ -339,29 +342,29 @@ When onboarding any new project, you can provide this standardized prompt to an 
 You are tasked with taking the raw screen recording of an AI / Data Science project and applying professional, automated LinkedIn post-production graphics.
 
 Requirements:
-1. **Trim & Pacing**:
+1. **Zero-Navbar-Occlusion**:
+   - The top header region (y in [0, 80px]) must remain 100% clean and unobstructed. Never draw an overlay banner across the top that covers the web application's native tabs, logo, or navigation options.
+2. **Trim & Pacing**:
    - Trim the initial 2.0s of blank loading / DNS resolution.
    - Speed up playback by 1.15x to 1.20x for crisp, engaging social media pacing.
-2. **Top Header Branding Bar (44px height)**:
-   - Display the project title in bold uppercase (e.g., "<PROJECT_TITLE>").
-   - Display the underlying tech stack in cool gray (e.g., "<TECH_STACK>").
-   - Display a glowing live status pill on the far right: "● LIVE DEMO" in emerald green.
-3. **Dynamic Lower-Third Feature Badges**:
-   - Render a sleek rounded pill at the bottom-left displaying the current active feature.
+3. **Dynamic Lower-Third Feature Badges (Bottom-Left)**:
+   - Render a sleek rounded pill at the bottom-left (y = height - 46) displaying the current active feature.
    - Increment the badge sequentially as the video progresses:
      - Phase 1 (0%–15%): "1/5 SYSTEM ARCHITECTURE • Problem Framing & Tech Stack"
      - Phase 2 (15%–40%): "2/5 MODEL INFERENCE • Live AI Pipeline Execution"
      - Phase 3 (40%–65%): "3/5 MULTI-VIEW ANALYSIS • Interactive Visualizations"
      - Phase 4 (65%–85%): "4/5 PARAMETER SIMULATION • Dynamic Sliders & Scenarios"
      - Phase 5 (85%–100%): "5/5 VALIDATION BENCHMARKS • Quantitative Performance"
-4. **Animated Bottom Progress Bar (5px height)**:
-   - Render an emerald green progress bar that fills dynamically from 0% to 100% across the video duration.
-5. **3-Second Recruiter Hook Card**:
-   - Display a floating intro card in the top-left during the first 3.2 seconds:
+4. **Synchronized Closed Captions (Bottom-Center)**:
+   - Render a centered subtitle pill (y = height - 90) with warm-yellow typography synchronized to the neural voiceover narration.
+5. **Animated Bottom Progress Bar (5px height)**:
+   - Render an emerald green progress bar along the very bottom edge that fills dynamically from 0% to 100% across the video duration.
+6. **3-Second Recruiter Hook Card (Lower-Left)**:
+   - Display a floating intro card at the lower-left (y = height - 110) during the first 3.2 seconds:
      "🚀 LIVE PRODUCTION WALKTHROUGH • <ONE_SENTENCE_VALUE_PROP>"
    - Smoothly fade out the card between 2.3s and 3.2s.
-6. **Export Specs**:
-   - Codec: H.264 (libx264), Pixel Format: yuv420p.
+7. **Export Specs**:
+   - Codec: H.264 (libx264), Pixel Format: yuv420p, Audio: AAC stereo.
    - Bitrate: 12 Mbps (VIDEO_BITRATE=12M), Quality: CRF 18 (visually lossless).
    - Viewport: Full HD 1080p (1920x1080) at 25-30 FPS.
 ```
