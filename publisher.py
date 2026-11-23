@@ -157,6 +157,7 @@ class LinkedInPublisher:
 
         # Step 2: Upload Video Binary Chunks
         logger.info(f"Step 2/3: Uploading video binary ({round(file_size / (1024*1024), 2)} MB)...")
+        uploaded_part_ids = []
         with open(video_path, "rb") as f:
             for i, part in enumerate(upload_instructions):
                 upload_url = part.get("uploadUrl")
@@ -174,8 +175,23 @@ class LinkedInPublisher:
                 put_resp = requests.put(upload_url, data=chunk_data, headers=put_headers, timeout=60)
                 if put_resp.status_code not in (200, 201, 204):
                     raise RuntimeError(f"Video chunk upload failed: {put_resp.status_code} - {put_resp.text}")
+                etag = put_resp.headers.get("ETag", "")
+                uploaded_part_ids.append(etag)
 
-        logger.info("Video binary upload completed successfully.")
+        logger.info(f"All {len(uploaded_part_ids)} parts uploaded. Finalizing video upload...")
+
+        # Step 2.1: Finalize Upload with ETags
+        finalize_url = "https://api.linkedin.com/rest/videos?action=finalizeUpload"
+        finalize_payload = {
+            "finalizeUploadRequest": {
+                "video": video_urn,
+                "uploadToken": init_data.get("uploadToken", ""),
+                "uploadedPartIds": uploaded_part_ids
+            }
+        }
+        fin_resp = requests.post(finalize_url, json=finalize_payload, headers=headers, timeout=30)
+        if fin_resp.status_code not in (200, 201):
+            raise RuntimeError(f"Failed to finalize video upload: {fin_resp.status_code} - {fin_resp.text}")
 
         # Step 2.5: Poll video status until AVAILABLE (LinkedIn video processing transcode)
         logger.info("Waiting for LinkedIn to finalize video processing (checking status)...")
@@ -183,7 +199,7 @@ class LinkedInPublisher:
         from urllib.parse import quote
         encoded_urn = quote(video_urn, safe="")
         video_status_url = f"https://api.linkedin.com/rest/videos/{encoded_urn}"
-        max_poll_sec = 60
+        max_poll_sec = 90
         poll_start = time.time()
         is_available = False
 
@@ -203,7 +219,7 @@ class LinkedInPublisher:
             time.sleep(3)
 
         if not is_available:
-            logger.info("Proceeding to create post after wait period...")
+            raise RuntimeError(f"Video {video_urn} failed to transition to AVAILABLE within {max_poll_sec}s.")
 
         # Step 3: Create Post referencing the uploaded Video URN
         logger.info("Step 3/3: Publishing post via LinkedIn Posts API...")
