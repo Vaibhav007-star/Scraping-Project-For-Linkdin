@@ -302,3 +302,66 @@ Before any output video is finalized:
 - [x] **Cinematic Cursor**: Smooth Bézier curves with expanding green click pulses confirm every action.
 - [x] **Broadcast 1080p Export**: Encoded in H.264 `yuv420p` with CRF 18 and 12 Mbps bitrate, trimmed and paced at 1.15x–1.20x.
 - [x] **Seamless Looping**: Video begins post-load and concludes on the clean hero dashboard.
+- [x] **Automated LinkedIn Polish (Option C)**: Top header banner, dynamic lower-third feature badges, bottom progress bar, and 3-second hook overlay rendered programmatically.
+
+---
+
+## 11. Automated Code-Based Post-Production & Polish Standard (Option C)
+
+To ensure every project video commands attention on LinkedIn and presents the candidate as a senior AI engineer without requiring expensive third-party video software, all videos are enhanced through automated code-based post-production (`editor.py` via MoviePy and Pillow):
+
+### 11.1 The Four Visual Overlay Pillars
+1. **Top Header Branding Banner (Height 44px)**:
+   - **Background**: Translucent deep slate (`#090d16` at 96% opacity) with a 1px border (`#1e293b`).
+   - **Title**: Project name in bold white typography (`#f8fafc`).
+   - **Tech Stack**: Subtitle displaying core technical stack (*e.g., `PyTorch U-Net • Three.js 3D WebGL • FastAPI`*).
+   - **Live Telemetry Pill**: Glowing emerald green indicator badge (`🟢 LIVE DEMO`) in the upper-right corner.
+2. **Dynamic Lower-Third Feature Badge (Bottom-Left)**:
+   - Positioned at `x = 24, y = height - 50` with rounded corners (`radius = 6`) and slate background (`#090d16`).
+   - Updates dynamically based on the active project phase (*e.g., `[1/6] ARCHITECTURE`, `[2/6] SATELLITE VISION`, `[3/6] 3D DIGITAL TWIN`*).
+   - Color-coded glowing indicator dot (Cyan `#38bdf8`, Emerald `#10b981`, Purple `#a855f7`, Amber `#f59e0b`).
+3. **Animated Bottom Progress Bar (Height 5px)**:
+   - Translucent dark track at the very bottom edge.
+   - Smoothly fills from left to right in emerald green (`#10b981`), visually communicating video duration to mobile and web viewers.
+4. **First 3.2-Second Recruiter Hook Overlay Card**:
+   - Floating callout during the first 3.2 seconds: `🚀 LIVE PRODUCTION WALKTHROUGH • Deep Learning Pipeline & Real-Time Interactive Simulation`.
+   - Smoothly fades out between $t = 2.3s$ and $t = 3.2s$ via alpha decay.
+
+---
+
+## 12. Universal Prompt Template for Future Video Editing
+
+When onboarding any new project, you can provide this standardized prompt to an AI agent or execute it via `editor.process_video(..., enable_branding=True)`:
+
+```markdown
+### Universal LinkedIn Video Editing & Post-Production Prompt
+
+You are tasked with taking the raw screen recording of an AI / Data Science project and applying professional, automated LinkedIn post-production graphics.
+
+Requirements:
+1. **Trim & Pacing**:
+   - Trim the initial 2.0s of blank loading / DNS resolution.
+   - Speed up playback by 1.15x to 1.20x for crisp, engaging social media pacing.
+2. **Top Header Branding Bar (44px height)**:
+   - Display the project title in bold uppercase (e.g., "<PROJECT_TITLE>").
+   - Display the underlying tech stack in cool gray (e.g., "<TECH_STACK>").
+   - Display a glowing live status pill on the far right: "● LIVE DEMO" in emerald green.
+3. **Dynamic Lower-Third Feature Badges**:
+   - Render a sleek rounded pill at the bottom-left displaying the current active feature.
+   - Increment the badge sequentially as the video progresses:
+     - Phase 1 (0%–15%): "1/5 SYSTEM ARCHITECTURE • Problem Framing & Tech Stack"
+     - Phase 2 (15%–40%): "2/5 MODEL INFERENCE • Live AI Pipeline Execution"
+     - Phase 3 (40%–65%): "3/5 MULTI-VIEW ANALYSIS • Interactive Visualizations"
+     - Phase 4 (65%–85%): "4/5 PARAMETER SIMULATION • Dynamic Sliders & Scenarios"
+     - Phase 5 (85%–100%): "5/5 VALIDATION BENCHMARKS • Quantitative Performance"
+4. **Animated Bottom Progress Bar (5px height)**:
+   - Render an emerald green progress bar that fills dynamically from 0% to 100% across the video duration.
+5. **3-Second Recruiter Hook Card**:
+   - Display a floating intro card in the top-left during the first 3.2 seconds:
+     "🚀 LIVE PRODUCTION WALKTHROUGH • <ONE_SENTENCE_VALUE_PROP>"
+   - Smoothly fade out the card between 2.3s and 3.2s.
+6. **Export Specs**:
+   - Codec: H.264 (libx264), Pixel Format: yuv420p.
+   - Bitrate: 12 Mbps (VIDEO_BITRATE=12M), Quality: CRF 18 (visually lossless).
+   - Viewport: Full HD 1080p (1920x1080) at 25-30 FPS.
+```

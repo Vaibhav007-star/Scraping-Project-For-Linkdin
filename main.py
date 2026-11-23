@@ -113,7 +113,8 @@ def process_single_project(
         raw_video_path=raw_video_path,
         output_filename=f"{project_name}_linkedin.mp4",
         trim_start_sec=trim_sec,
-        speed_factor=speed_factor
+        speed_factor=speed_factor,
+        project_config=project
     )
 
     # Stage 3: Humanized Copywriting via Google Gemini
