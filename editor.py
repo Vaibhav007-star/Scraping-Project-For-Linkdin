@@ -396,7 +396,7 @@ class VideoEditor:
                 codec="libx264",
                 audio_codec=audio_codec,
                 bitrate=bitrate,
-                ffmpeg_params=["-pix_fmt", "yuv420p", "-crf", str(crf)],
+                ffmpeg_params=["-pix_fmt", "yuv420p", "-crf", str(crf), "-movflags", "+faststart"],
                 preset="medium",
                 threads=4,
                 logger=None  # Suppress verbose terminal progress bar

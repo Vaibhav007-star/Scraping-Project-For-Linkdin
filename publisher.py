@@ -221,6 +221,10 @@ class LinkedInPublisher:
         if not is_available:
             raise RuntimeError(f"Video {video_urn} failed to transition to AVAILABLE within {max_poll_sec}s.")
 
+        # Allow 15-second replication buffer for LinkedIn transcoding CDN to finalize media distribution
+        logger.info("Video status is AVAILABLE. Waiting 15s buffer for media distribution CDN to propagate...")
+        time.sleep(15)
+
         # Step 3: Create Post referencing the uploaded Video URN
         logger.info("Step 3/3: Publishing post via LinkedIn Posts API...")
         posts_url = "https://api.linkedin.com/rest/posts"
