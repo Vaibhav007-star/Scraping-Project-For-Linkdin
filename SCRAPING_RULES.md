@@ -199,10 +199,32 @@ Exported via MoviePy with explicit broadcast-grade flags:
 | **Pixel Format** | `yuv420p` | Guaranteed playback on iOS, Android, and LinkedIn web players |
 | **Bitrate** | `12M` (12 Mbps) | Eliminates compression artifacts, macroblocking, and gradient banding |
 | **Constant Rate Factor** | `-crf 18` | Visually lossless master archive quality |
+| **Faststart Atom** | `-movflags +faststart` | **MANDATORY**: Moves index (`moov` atom) to byte 0 for instant web streaming |
 | **Preset** | `medium` | Optimal balance between H.264 entropy encoding and render speed |
 | **FPS** | `25.0` or `30.0` | Smooth, cinematic motion cadence |
 | **Trim Start** | `2.00s` | Programmatically strips initial blank browser initialization and DNS delay |
 | **Speed Factor** | `1.15x – 1.20x` | Crisp, energetic social media pacing without rushing plots |
+
+### Rule 6.3: The Mandatory MP4 Faststart Streaming Standard (`-movflags +faststart`)
+> **The Web Streamability Law**: By default, standard MP4 encoders write video sample frames (`mdat` atom) first and write the metadata index (`moov` atom) at the very end of the file. In a browser or feed player (such as LinkedIn), the client cannot begin playing the video until the entire file is downloaded to read the index. When an MP4 without `+faststart` is uploaded to LinkedIn, the feed transcode and HTML5 web player fail to parse the stream, resulting in the dreaded error: **"Post cannot be displayed. Sorry, we're having issues loading this post"**.
+>
+> **Universal Mandate**: Every video exported by this pipeline must pass `-movflags +faststart` to FFmpeg:
+> ```python
+> final_clip.write_videofile(
+>     str(target_path),
+>     codec="libx264",
+>     audio_codec=audio_codec,
+>     bitrate=bitrate,
+>     ffmpeg_params=["-pix_fmt", "yuv420p", "-crf", str(crf), "-movflags", "+faststart"],
+>     preset="medium",
+>     threads=4
+> )
+> ```
+> **Verification Command**:
+> The `moov` atom must be located immediately after `ftyp` (around byte 32) before `mdat`:
+> ```powershell
+> ffmpeg -y -i input.mp4 -c copy -movflags +faststart output.mp4
+> ```
 
 ---
 
@@ -293,7 +315,7 @@ If a new project does not specify an explicit `interactions` array:
 
 ## 10. Pre-Flight Quality Assurance Checklist
 
-Before any output video is finalized:
+Before any output video or LinkedIn post is finalized:
 - [x] **Local Server Clean Boot**: Backend started without pipe buffer deadlocks; logs written to `logs/server_<name>.log`.
 - [x] **All Tabs Explored**: Zero videos confined to the overview screen; 100% of feature tabs are opened.
 - [x] **Live Inference Demonstrated**: Model execution buttons are clicked, with output masks/heatmaps clearly visible.
@@ -301,9 +323,13 @@ Before any output video is finalized:
 - [x] **3D Viewport Centered**: 3D canvases are scrolled into the focal center of the 1080p frame before interaction.
 - [x] **Cinematic Cursor**: Smooth Bézier curves with expanding green click pulses confirm every action.
 - [x] **Broadcast 1080p Export**: Encoded in H.264 `yuv420p` with CRF 18 and 12 Mbps bitrate, trimmed and paced at 1.15x–1.20x.
+- [x] **Mandatory MP4 Faststart**: Video exported with `-movflags +faststart` ensuring the `moov` index is at byte 0 for zero-crash web streaming.
 - [x] **Seamless Looping**: Video begins post-load and concludes on the clean hero dashboard.
 - [x] **Zero-Navbar-Occlusion**: Top header region ($y \in [0, 80\text{px}]$) is 100% transparent and unobstructed so application navbar tabs and branding are never covered or mismatched.
 - [x] **Automated LinkedIn Polish (Option C)**: Dynamic lower-third feature badges, bottom progress bar, synchronized voiceover captions, and lower intro hook rendered cleanly in non-destructive zones.
+- [x] **LinkedIn Video Transcode Buffer**: Publisher pauses 15 seconds after `AVAILABLE` status to allow LinkedIn CDN replication before creating posts.
+- [x] **Clean Link Verification**: Post text includes verified working URLs for both the live platform (e.g. Vercel) and the open-source GitHub repository.
+- [x] **Stale Entity Cleanup**: Any failed draft or outdated test posts are deleted via `DELETE /rest/posts/{id}` (`204 No Content`) before launching production posts.
 
 ---
 
@@ -366,5 +392,88 @@ Requirements:
 7. **Export Specs**:
    - Codec: H.264 (libx264), Pixel Format: yuv420p, Audio: AAC stereo.
    - Bitrate: 12 Mbps (VIDEO_BITRATE=12M), Quality: CRF 18 (visually lossless).
+   - Faststart: `-movflags +faststart` (moov index at byte 0 for web streaming).
    - Viewport: Full HD 1080p (1920x1080) at 25-30 FPS.
 ```
+
+---
+
+## 13. Official LinkedIn REST API Video Publishing & Ban-Safe Protocol
+
+To eliminate risk of account suspension and ensure 100% video display reliability on LinkedIn feeds:
+
+### 13.1 Multi-Part Binary Upload & ETag Capture
+1. **Initialize Upload**: `POST https://api.linkedin.com/rest/videos?action=initializeUpload`
+   - Set `uploadCaptions: false`, `uploadThumbnail: false`.
+   - Captures `video` asset URN (e.g. `urn:li:video:<ID>`) and `uploadToken`.
+2. **Binary Chunk Transfer**:
+   - Send binary slices via `PUT` to each `uploadUrl`.
+   - **Crucial Requirement**: For each chunk, read and record the `ETag` HTTP response header.
+3. **Finalize Upload**:
+   - `POST https://api.linkedin.com/rest/videos?action=finalizeUpload`
+   - Include `video`, `uploadToken`, and the ordered array of `uploadedPartIds` (the captured ETags).
+
+### 13.2 Transcoding Polling & Mandatory 15-Second Replication Buffer
+- Poll `GET https://api.linkedin.com/rest/videos/{encoded_video_urn}` every 3 seconds until `status == "AVAILABLE"`.
+- **The 15-Second Law**: Once `status == "AVAILABLE"` is reached, **always sleep for 15 seconds** before creating the post. Firing the post creation immediately causes LinkedIn's web feed player to encounter missing CDN chunks, triggering the error: `"Post cannot be displayed. Sorry, we're having issues loading this post"`.
+
+### 13.3 Post Creation Payload Schema
+Send `POST https://api.linkedin.com/rest/posts` with:
+```json
+{
+  "author": "urn:li:person:<PERSON_ID>",
+  "commentary": "<HUMANIZED_POST_COPY>",
+  "visibility": "PUBLIC",
+  "distribution": {
+    "feedDistribution": "MAIN_FEED",
+    "targetEntities": [],
+    "thirdPartyDistributionChannels": []
+  },
+  "content": {
+    "media": {
+      "title": "<PROJECT_TITLE>",
+      "id": "urn:li:video:<VIDEO_ID>"
+    }
+  },
+  "lifecycleState": "PUBLISHED",
+  "isReshareDisabledByAuthor": false
+}
+```
+
+### 13.4 URL Routing & Canonical Link Formats
+- **Never use `urn:li:ugcPost:<ID>` in browser URLs**:
+  - `urn:li:ugcPost` is an internal backend entity URN.
+  - Opening `https://www.linkedin.com/feed/update/urn:li:ugcPost:<ID>/` in a web browser will fail with **"Post not found. This post was deleted or removed"**.
+- **Canonical Web Feed Route**:
+  - The public web feed update route is: `https://www.linkedin.com/feed/update/urn:li:activity:<NUMERIC_ID>/`
+- **Most Reliable Verification Route**:
+  - Direct member recent activity page: `https://www.linkedin.com/in/me/recent-activity/all/`
+
+### 13.5 Clean Deletion Protocol (`DELETE /rest/posts`)
+- The developer scope `w_member_social` grants deletion permissions.
+- To cleanly delete a broken or outdated post:
+  `DELETE https://api.linkedin.com/rest/posts/{url_encoded_post_urn}`
+  - Returns `204 No Content` upon successful removal.
+  - Prevents broken drafts or failed posts from cluttering the user's profile.
+
+---
+
+## 14. Universal Technical Copywriting Standard (`post.txt`)
+
+Every project post generated by the pipeline must adhere to these technical copywriting principles:
+1. **The Provocative Technical Hook**:
+   - Start with an engineering or mathematical question confronting an unsolved problem (*e.g. "Can deep learning predict and mitigate Urban Heat Islands before city capital investments are made?"*).
+   - Zero generic AI buzzwords (*e.g. avoid "In today's fast-paced world", "Game-changer", "Revolutionary"*).
+2. **The Architecture Breakdown**:
+   - Provide concrete numbered highlights with exact model names, loss functions, or layers (*e.g., PyTorch U-Net, Deep ANN, Three.js WebGL, 35% Counterfactual Greening*).
+3. **Structured Tech Stack List**:
+   - Explicitly list libraries and tools categorized into Deep Learning, Backend, 3D/Frontend, and Geospatial/Analytics.
+4. **Verified Live & Open-Source Links**:
+   - Always include the verified live platform link (e.g. Vercel, Streamlit Cloud, AWS).
+   - Always include the public GitHub repository link for recruiter inspection.
+5. **Autoplay Video Callout & Peer Engagement Question**:
+   - Reference the attached demo video walkthrough with neural narration.
+   - End with a targeted technical question prompting senior practitioners and engineering managers to comment.
+6. **Curated Domain Hashtags**:
+   - Include 8–10 precise industry hashtags without cluttering the body text.
+
