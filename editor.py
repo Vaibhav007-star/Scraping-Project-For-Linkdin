@@ -1,16 +1,19 @@
 """
 Automated Video Editor & Post-Production Suite
 Trims blank loading screens, speeds up clips for social media pacing,
-renders professional LinkedIn branding overlays (header banner, dynamic lower-thirds,
-animated progress bar, intro hook), and exports broadcast-grade H.264 MP4 videos.
+generates free neural AI voiceover via edge-tts, renders synchronized subtitles,
+applies professional LinkedIn branding overlays, and exports broadcast-grade H.264 MP4 videos.
 """
 
 import os
 import logging
+import textwrap
 from pathlib import Path
 from typing import Optional, Dict, Any, List, Tuple
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
+
+from voiceover import VoiceoverEngine
 
 logger = logging.getLogger("Pipeline.Editor")
 
@@ -37,6 +40,7 @@ def _load_system_fonts() -> Dict[str, ImageFont.ImageFont]:
                     "badge_sub": ImageFont.truetype(reg_p, 12),
                     "hook_title": ImageFont.truetype(bold_p, 14),
                     "hook_sub": ImageFont.truetype(reg_p, 12),
+                    "subtitle": ImageFont.truetype(bold_p, 15),
                 }
             except Exception:
                 pass
@@ -48,7 +52,8 @@ def _load_system_fonts() -> Dict[str, ImageFont.ImageFont]:
         "badge": def_f,
         "badge_sub": def_f,
         "hook_title": def_f,
-        "hook_sub": def_f
+        "hook_sub": def_f,
+        "subtitle": def_f,
     }
 
 
@@ -57,6 +62,7 @@ class VideoEditor:
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.fonts = _load_system_fonts()
+        self.voiceover_engine = VoiceoverEngine(self.output_dir / "cache")
 
     def _trim_clip(self, clip, trim_start_sec: float):
         """Trim the first N seconds safely."""
@@ -140,19 +146,26 @@ class VideoEditor:
             "hook_sub": "Deep Learning Pipeline & Real-Time Interactive Simulation",
         }
 
-    def _apply_linkedin_branding(self, clip, project_config: Optional[Dict[str, Any]] = None):
+    def _apply_linkedin_branding(
+        self,
+        clip,
+        project_config: Optional[Dict[str, Any]] = None,
+        subtitles: Optional[List[Tuple[float, float, str]]] = None
+    ):
         """
         Applies automated professional LinkedIn post-production graphics:
         1. Top Header Bar: Clean slate banner with project title, tech stack & glowing 'LIVE DEMO' badge.
         2. Dynamic Lower-Third Badge: Contextual phase callout that updates with video progress.
-        3. Animated Progress Bar: Sleek 5px glowing accent bar tracking elapsed playback time.
-        4. Intro Hook Overlay: 3-second floating hero card with smooth alpha fade-out.
+        3. Synchronized Closed Captions: Modern subtitle pill rendered during speech.
+        4. Animated Progress Bar: Sleek 5px glowing accent bar tracking elapsed playback time.
+        5. Intro Hook Overlay: 3-second floating hero card with smooth alpha fade-out.
         """
-        logger.info("Applying automated LinkedIn post-production graphics (Option C)...")
+        logger.info("Applying automated LinkedIn post-production graphics with synchronized subtitles...")
         w, h = clip.size
         duration = clip.duration
         branding = self._resolve_project_branding(project_config)
         fonts = self.fonts
+        active_subtitles = subtitles or []
 
         title_str = branding["title"]
         tech_str = branding["tech_tags"]
@@ -224,7 +237,50 @@ class VideoEditor:
             draw.text((bx1 + 28, by1 + 7), current_badge, fill=(241, 245, 249, 255), font=fonts["badge"])
 
             # ---------------------------------------------------------
-            # 3. Intro Recruiter Hook Card (First 3.2 seconds)
+            # 3. Synchronized Closed Captions / Subtitles (Bottom-Center)
+            # ---------------------------------------------------------
+            if active_subtitles:
+                current_sub = None
+                for s_start, s_end, s_txt in active_subtitles:
+                    if s_start <= t <= s_end:
+                        current_sub = s_txt.strip()
+                        break
+
+                if current_sub:
+                    wrapped_lines = textwrap.wrap(current_sub, width=64)
+                    line_height = 24
+                    sub_h = (len(wrapped_lines) * line_height) + 16
+
+                    max_line_w = 0
+                    for line in wrapped_lines:
+                        lbox = fonts["subtitle"].getbbox(line)
+                        if lbox:
+                            max_line_w = max(max_line_w, lbox[2] - lbox[0])
+                    sub_w = max(380, max_line_w + 36)
+
+                    # Center subtitle horizontally, place comfortably above lower badges
+                    sx1 = int((w - sub_w) / 2.0)
+                    sy1 = h - sub_h - 22
+                    sx2 = sx1 + sub_w
+                    sy2 = sy1 + sub_h
+
+                    draw.rounded_rectangle(
+                        [sx1, sy1, sx2, sy2],
+                        radius=8,
+                        fill=(9, 13, 22, 235),
+                        outline=(51, 65, 85, 255),
+                        width=1
+                    )
+                    for l_idx, line in enumerate(wrapped_lines):
+                        ly = sy1 + 8 + (l_idx * line_height)
+                        lbox = fonts["subtitle"].getbbox(line)
+                        lw = lbox[2] - lbox[0] if lbox else 200
+                        lx = sx1 + int((sub_w - lw) / 2.0)
+                        # Warm bright yellow font for crisp readability
+                        draw.text((lx, ly), line, fill=(254, 240, 138, 255), font=fonts["subtitle"])
+
+            # ---------------------------------------------------------
+            # 4. Intro Recruiter Hook Card (First 3.2 seconds)
             # ---------------------------------------------------------
             if t <= 3.2:
                 # Alpha fade-out calculation (smooth fade from t=2.3s to 3.2s)
@@ -258,7 +314,7 @@ class VideoEditor:
                     )
 
             # ---------------------------------------------------------
-            # 4. Animated Bottom Progress Bar (5px)
+            # 5. Animated Bottom Progress Bar (5px)
             # ---------------------------------------------------------
             draw.rectangle([0, h - 5, w, h], fill=(15, 23, 42, 200))
             prog_w = int(w * ratio)
@@ -280,14 +336,17 @@ class VideoEditor:
         trim_start_sec: float = 2.0,
         speed_factor: float = 1.25,
         project_config: Optional[Dict[str, Any]] = None,
-        enable_branding: bool = True
+        enable_branding: bool = True,
+        enable_voiceover: bool = True
     ) -> Path:
         """
         Process the raw recording with Option C Automated Code-Based Editing:
         1. Trim the initial blank loading buffer
         2. Speed up by speed_factor (e.g. 1.18x)
-        3. Apply automated professional LinkedIn branding overlays
-        4. Export as broadcast-grade LinkedIn-compatible H.264 / AAC MP4 (yuv420p)
+        3. Synthesize neural AI voiceover and sentence boundaries via edge-tts
+        4. Apply professional LinkedIn branding overlays + synchronized captions
+        5. Composite voiceover audio track
+        6. Export as broadcast-grade LinkedIn-compatible H.264 / AAC MP4 (yuv420p)
         """
         raw_video_path = Path(raw_video_path)
         if not raw_video_path.exists():
@@ -302,7 +361,9 @@ class VideoEditor:
         raw_clip = None
         trimmed_clip = None
         sped_clip = None
+        branded_clip = None
         final_clip = None
+        audio_clip = None
 
         try:
             raw_clip = VideoFileClip(str(raw_video_path))
@@ -313,22 +374,48 @@ class VideoEditor:
             # 2. Speed up
             sped_clip = self._speed_up_clip(trimmed_clip, speed_factor)
 
-            # 3. Apply Automated Professional LinkedIn Post-Production Overlays (Option C)
-            if enable_branding:
-                final_clip = self._apply_linkedin_branding(sped_clip, project_config=project_config)
-            else:
-                final_clip = sped_clip
+            # 3. Build Neural AI Voiceover & Subtitles (if enabled)
+            subtitles = []
+            if enable_voiceover and project_config:
+                try:
+                    audio_clip, subtitles = self.voiceover_engine.build_voiceover_and_subtitles(
+                        project_config=project_config,
+                        video_duration=sped_clip.duration
+                    )
+                except Exception as ve:
+                    logger.warning(f"Voiceover generation skipped due to: {ve}")
 
-            # 4. Export with LinkedIn specifications:
+            # 4. Apply Automated Professional LinkedIn Post-Production Overlays & Subtitles
+            if enable_branding:
+                branded_clip = self._apply_linkedin_branding(
+                    sped_clip,
+                    project_config=project_config,
+                    subtitles=subtitles
+                )
+            else:
+                branded_clip = sped_clip
+
+            # 5. Composite audio track
+            if audio_clip is not None:
+                if hasattr(branded_clip, "with_audio"):
+                    final_clip = branded_clip.with_audio(audio_clip)
+                elif hasattr(branded_clip, "set_audio"):
+                    final_clip = branded_clip.set_audio(audio_clip)
+                else:
+                    final_clip = branded_clip
+            else:
+                final_clip = branded_clip
+
+            # 6. Export with LinkedIn specifications:
             # - Codec: libx264 (H.264)
-            # - Pixel format: yuv420p (universally supported by LinkedIn web/mobile)
-            # - Audio: aac (if audio present) or None
+            # - Pixel format: yuv420p
+            # - Audio codec: aac
             has_audio = final_clip.audio is not None
             audio_codec = "aac" if has_audio else None
 
             bitrate = os.getenv("VIDEO_BITRATE", "12M")
             crf = os.getenv("VIDEO_CRF", "18")
-            logger.info(f"Rendering final MP4 to {target_path} (H.264, yuv420p, CRF {crf}, Bitrate {bitrate})...")
+            logger.info(f"Rendering final MP4 to {target_path} (H.264, yuv420p, CRF {crf}, Bitrate {bitrate}, Audio: {audio_codec})...")
             final_clip.write_videofile(
                 str(target_path),
                 codec="libx264",
@@ -345,7 +432,7 @@ class VideoEditor:
 
         finally:
             # Safely release clips and file locks
-            for clip in [final_clip, sped_clip, trimmed_clip, raw_clip]:
+            for clip in [final_clip, branded_clip, sped_clip, trimmed_clip, raw_clip, audio_clip]:
                 if clip is not None:
                     try:
                         clip.close()
