@@ -247,13 +247,17 @@ class LinkedInPublisher:
         if post_resp.status_code not in (200, 201):
             raise RuntimeError(f"Failed to create LinkedIn post: {post_resp.status_code} - {post_resp.text}")
 
-        # LinkedIn returns post URN in 'x-restli-id' header or body
+        # LinkedIn returns post URN in 'x-restli-id' header or body (e.g. urn:li:ugcPost:7530713800535101440)
         post_urn = post_resp.headers.get("x-restli-id") or post_resp.headers.get("Location", "Unknown URN")
+        numeric_id = post_urn.split(":")[-1].split("/")[-1]
+        browser_url = f"https://www.linkedin.com/feed/update/urn:li:activity:{numeric_id}/"
         logger.info(f"Post successfully published to LinkedIn! Post ID: {post_urn}")
+        logger.info(f"Direct Browser URL: {browser_url}")
 
         return {
             "status": "PUBLISHED",
             "video_urn": video_urn,
             "post_urn": post_urn,
+            "browser_url": browser_url,
             "published_at": datetime.now().isoformat()
         }
