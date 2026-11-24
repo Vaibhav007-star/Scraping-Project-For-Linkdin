@@ -99,14 +99,44 @@ class LinkedInCopywriter:
             except Exception as e:
                 logger.warning(f"Could not fetch live context from {live_url}: {e}")
 
+        # 3. Resolve GitHub Repository URL (from config or git remote)
+        github_url = project_config.get("github_url", "")
+        if not github_url and has_local_folder:
+            try:
+                import subprocess
+                res = subprocess.run(
+                    ["git", "remote", "get-url", "origin"],
+                    cwd=str(Path(project_config["folder_path"])),
+                    capture_output=True,
+                    text=True,
+                    timeout=3
+                )
+                if res.returncode == 0 and res.stdout.strip():
+                    url = res.stdout.strip()
+                    if url.endswith(".git"):
+                        url = url[:-4]
+                    if url.startswith("git@github.com:"):
+                        url = "https://github.com/" + url.split(":", 1)[1]
+                    github_url = url
+            except Exception:
+                pass
+
         return {
             "title": project_config.get("title", project_config.get("name", "Data Science Project")),
             "readme": readme_text,
-            "script": script_text
+            "script": script_text,
+            "github_url": github_url,
+            "live_url": live_url or ""
         }
 
-    def _clean_and_validate_copy(self, raw_text: str) -> str:
-        """Sanitize output, remove code fences, and check for banned words."""
+    def _clean_and_validate_copy(
+        self,
+        raw_text: str,
+        github_url: str = "",
+        live_url: str = "",
+        tech_tags: str = ""
+    ) -> str:
+        """Sanitize output, remove code fences, enforce repo links, and ensure valid hashtags."""
         # Strip code fences if model wrapped in markdown
         cleaned = re.sub(r"^```(?:markdown|text)?\s*", "", raw_text.strip(), flags=re.IGNORECASE)
         cleaned = re.sub(r"\s*```$", "", cleaned.strip())
@@ -116,7 +146,6 @@ class LinkedInCopywriter:
         if found_buzzwords:
             logger.warning(f"Warning: Output contained flagged AI buzzwords: {found_buzzwords}")
             for bw in found_buzzwords:
-                # Replace common buzzwords cleanly if found
                 pattern = re.compile(rf"\b{re.escape(bw)}\b", re.IGNORECASE)
                 if "game-changer" in bw:
                     cleaned = pattern.sub("significant milestone", cleaned)
@@ -127,15 +156,39 @@ class LinkedInCopywriter:
                 elif "testament" in bw:
                     cleaned = pattern.sub("proof", cleaned)
 
+        # MANDATORY CHECK 1: Ensure GitHub repository link is present
+        if github_url and github_url not in cleaned:
+            logger.info(f"Injecting mandatory GitHub repository link: {github_url}")
+            links_block = f"\n\nProject Links:\n- GitHub Repository: {github_url}"
+            if live_url and live_url not in cleaned:
+                links_block += f"\n- Live Platform: {live_url}"
+
+            # Insert before hashtags if present, else append
+            hashtag_match = re.search(r"(?:^|\n)(#[A-Za-z0-9_]+(?:\s+#[A-Za-z0-9_]+)*\s*)$", cleaned)
+            if hashtag_match:
+                start_pos = hashtag_match.start()
+                cleaned = cleaned[:start_pos].rstrip() + links_block + "\n\n" + cleaned[start_pos:].lstrip()
+            else:
+                cleaned += links_block
+
+        # MANDATORY CHECK 2: Ensure hashtags are present (minimum 4)
+        hashtags = re.findall(r"#[A-Za-z0-9_]+", cleaned)
+        if len(hashtags) < 4:
+            logger.info("Fewer than 4 hashtags detected. Appending standard domain hashtags...")
+            default_tags = "#ArtificialIntelligence #MachineLearning #SoftwareEngineering #Python #OpenSource"
+            cleaned = cleaned.rstrip() + "\n\n" + default_tags
+
         return cleaned.strip()
 
     def generate_post(self, project_config: Dict[str, Any]) -> str:
         """
         Generate a compelling, humanized LinkedIn post following strict rules:
-        Hook -> Business Problem -> Technical Solution -> Impact -> Tech Stack -> 4-5 Hashtags.
+        Hook -> Business Problem -> Technical Solution -> Impact -> Tech Stack -> Project Links -> Demo Callout -> Hashtags.
         """
         context = self._read_project_context(project_config)
         project_name = context["title"]
+        github_url = context["github_url"]
+        live_url = context["live_url"]
 
         if not self.client:
             logger.warning(f"Gemini API key not configured. Generating standard authentic template for '{project_name}'.")
@@ -148,19 +201,25 @@ class LinkedInCopywriter:
             "1. Hook: 1 punchy, results-oriented opening line (avoid cringe or clickbait).\n"
             "2. Business Problem: Briefly state the real-world operational or analytical bottleneck.\n"
             "3. Technical Solution: Highlight the architectural approach, model selection, or pipeline design.\n"
-            "4. Impact & Results: Concrete quantitative or qualitative improvement (latency, accuracy, cost, or usability).\n"
+            "4. Impact & Results: Concrete quantitative or qualitative improvement.\n"
             "5. Tech Stack: Concise bullet list of tools and libraries used.\n"
-            "6. Hashtags: Exactly 4 to 5 relevant hashtags at the bottom.\n\n"
+            "6. Project Links: You MUST include the GitHub Repository link provided under 'Project Links:'.\n"
+            "7. Demo Video Callout & Peer Question: Mention the attached demo video and ask an engaging technical question.\n"
+            "8. Hashtags: Exactly 5 to 7 high-impact hashtags at the very bottom.\n\n"
             "STRICT RULES:\n"
             "- Tone: Natural, professional, practitioner voice. Do NOT sound like a marketer or ChatGPT.\n"
             "- BANNED WORDS: Never use 'delve', 'testament', 'game-changer', 'realm', 'revolutionize', "
             "'tapestry', 'beacon', 'unleash', 'in today's world', 'thrilled to announce'.\n"
-            "- Do NOT include generic motivational intros or generic sign-offs.\n"
+            "- MANDATORY: You MUST explicitly include the GitHub Repository link in the post body.\n"
+            "- MANDATORY: You MUST explicitly include 5 to 7 hashtags with '#' at the end.\n"
             "- Keep paragraphs short and readable on mobile."
         )
 
         user_prompt = f"""
 Project Title: {project_name}
+
+GitHub Repository: {github_url or 'https://github.com/Vaibhav007-star'}
+Live Platform URL: {live_url or 'None'}
 
 README excerpt:
 {context['readme'] or 'No README provided. Infer from code.'}
@@ -168,7 +227,7 @@ README excerpt:
 Source code excerpt:
 {context['script'] or 'No source code provided.'}
 
-Write the LinkedIn post now following the exact required structure.
+Write the LinkedIn post now following the exact required structure, ensuring the GitHub Repository link and hashtags are prominently included.
 """
 
         try:
@@ -186,7 +245,11 @@ Write the LinkedIn post now following the exact required structure.
                         contents=[system_instruction, user_prompt]
                     )
                     if response and response.text:
-                        post_text = self._clean_and_validate_copy(response.text)
+                        post_text = self._clean_and_validate_copy(
+                            response.text,
+                            github_url=github_url,
+                            live_url=live_url
+                        )
                         logger.info(f"Generated copy for '{project_name}' ({len(post_text)} chars) using {model_name}.")
                         return post_text
                 except Exception as me:
@@ -202,6 +265,8 @@ Write the LinkedIn post now following the exact required structure.
     def _generate_fallback_copy(self, project_config: Dict[str, Any], context: Dict[str, str]) -> str:
         """High-quality fallback template adhering strictly to prompt guidelines when API key is missing."""
         title = context["title"]
+        github_url = context.get("github_url", "")
+        links_section = f"Project Links:\n- GitHub Repository: {github_url}\n\n" if github_url else ""
         return (
             f"Most predictive models fail when moving from Jupyter notebooks to real-time production.\n\n"
             f"Here is how I built and deployed {title} to bridge that gap.\n\n"
@@ -218,6 +283,7 @@ Write the LinkedIn post now following the exact required structure.
             f"• Python / Pandas / Scikit-Learn\n"
             f"• Streamlit / FastAPI\n"
             f"• Playwright / Automated Validation\n\n"
-            f"Check out the demo recording above!\n\n"
-            f"#DataScience #MachineLearning #ArtificialIntelligence #Python #MLOps"
+            f"{links_section}"
+            f"The complete demonstration walkthrough with neural narration is attached below.\n\n"
+            f"#DataScience #MachineLearning #ArtificialIntelligence #Python #MLOps #OpenSource"
         )
