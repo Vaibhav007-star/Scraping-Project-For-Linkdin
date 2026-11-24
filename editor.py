@@ -114,6 +114,8 @@ class VideoEditor:
         if not tech_tags:
             if "urban_heat" in name:
                 tech_tags = "PyTorch U-Net  •  Three.js 3D WebGL  •  FastAPI"
+            elif "homemind" in name:
+                tech_tags = "Multi-Agent Systems  •  Three.js 3D WebGL  •  FastAPI"
             elif "churn" in name:
                 tech_tags = "XGBoost  •  SHAP Explainability  •  Streamlit"
             else:
@@ -129,6 +131,14 @@ class VideoEditor:
                 (0.86, "5/6 MITIGATION SIMULATOR • Counterfactual Greening", (16, 185, 129)),         # Emerald
                 (1.00, "6/6 MODEL ANALYTICS • Convergence Curves & Metrics", (56, 189, 248)),         # Cyan
             ]
+        elif "homemind" in name:
+            phases = [
+                (0.18, "1/5 MULTI-AGENT TEAM • 5 Specialized Autonomous Agents", (56, 189, 248)),    # Cyan
+                (0.38, "2/5 EVENT BUS & MATRIX • Pub-Sub Communication Protocol", (16, 185, 129)),   # Emerald
+                (0.58, "3/5 AUTONOMOUS SCENARIOS • Multi-Agent Conflict Resolution", (168, 85, 247)),# Purple
+                (0.82, "4/5 3D DIGITAL TWIN • WebGL Utility Overlays & Orbit", (245, 158, 11)),       # Amber
+                (1.00, "5/5 EXPLAINABILITY & CHAT • Natural Language Delegation", (16, 185, 129)),    # Emerald
+            ]
         else:
             phases = [
                 (0.15, "1/5 SYSTEM ARCHITECTURE • Problem Framing & Tech Stack", (56, 189, 248)),
@@ -138,12 +148,14 @@ class VideoEditor:
                 (1.00, "5/5 VALIDATION BENCHMARKS • Quantitative Performance", (56, 189, 248)),
             ]
 
+        hook_sub = "Autonomous Multi-Agent AI Ecosystem & 3D Digital Twin" if "homemind" in name else "Deep Learning Pipeline & Real-Time Interactive Simulation"
+
         return {
             "title": short_title.upper(),
             "tech_tags": tech_tags,
             "phases": phases,
             "hook_title": "LIVE PRODUCTION WALKTHROUGH",
-            "hook_sub": "Deep Learning Pipeline & Real-Time Interactive Simulation",
+            "hook_sub": hook_sub,
         }
 
     def _apply_linkedin_branding(

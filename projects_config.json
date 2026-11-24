@@ -1,6 +1,42 @@
 {
   "projects": [
     {
+      "name": "homemind_multi_agent_local",
+      "title": "HomeMind — Autonomous Multi-Agent AI Home Management System & 3D Digital Twin",
+      "folder_path": "C:/Projects/HomeMind — Multi-Agent AI Home Management System",
+      "start_command": ".\\venv\\Scripts\\python.exe run_dashboard.py 8505",
+      "url": "http://127.0.0.1:8505",
+      "port": 8505,
+      "wait_timeout_seconds": 60,
+      "readme_path": "README.md",
+      "main_script_path": "run_dashboard.py",
+      "trim_start_sec": 2.0,
+      "speed_factor": 1.18,
+      "github_url": "https://github.com/Vaibhav007-star/HomeMind-Multi-Agent-AI-Home-Management-System",
+      "tech_stack": "Multi-Agent Systems  •  Three.js 3D WebGL  •  FastAPI",
+      "interactions": [
+        { "action": "hover", "selector": ".brand-block, .top-navbar", "wait_ms": 2500, "description": "1. Overview: Highlight HomeMind Multi-Agent Architecture" },
+        { "action": "hover", "selector": "#home-state-pill", "wait_ms": 1800, "description": "2. State: Inspect Central Home State Indicator" },
+        { "action": "hover", "selector": "#agents-container", "wait_ms": 3500, "description": "3. Multi-Agent Grid: Inspect 5 Specialized Autonomous Agents" },
+        { "action": "scroll", "delta_y": 400, "wait_ms": 3500, "description": "4. Floorplan: Inspect Rooms, 10 Connected Devices & Telemetry" },
+        { "action": "hover", "selector": "#comm-graph-svg", "wait_ms": 3000, "description": "5. Event Bus: Inspect Inter-Agent Communication Matrix & Pub-Sub Graph" },
+        { "action": "scroll", "delta_y": -400, "wait_ms": 1200, "description": "6. Overview: Return to Navigation Bar" },
+        { "action": "click", "selector": "button:has-text('Scen 1: Morning')", "wait_ms": 4500, "description": "7. Scenario 1: Execute Autonomous Morning Wakeup Coordination" },
+        { "action": "hover", "selector": ".modal-content, #scenario-modal", "wait_ms": 3500, "description": "8. Explainability: Inspect Multi-Agent Negotiation Steps & Rationale" },
+        { "action": "click", "selector": "button.modal-close, button:has-text('×')", "wait_ms": 1500, "description": "9. Modal: Close Scenario Playback Window" },
+        { "action": "click", "selector": "span:has-text('Turn into sleep mode'), .prompt-chip", "wait_ms": 3500, "description": "10. Chat Delegation: Dispatch Natural-Language Task to Home Manager" },
+        { "action": "click", "selector": "a[href='/3d'], a:has-text('3D Twin')", "wait_ms": 4500, "description": "11. 3D Twin: Transition into 3D Dollhouse Apartment Mesh" },
+        { "action": "click", "selector": "#btn-preset-iso", "wait_ms": 2500, "description": "12. 3D Twin: Toggle Isometric Camera Projection" },
+        { "action": "click", "selector": "#tab-util-power", "wait_ms": 2500, "description": "13. 3D Twin: Activate Real-Time Electrical Power Utility Heatmap" },
+        { "action": "orbit_3d", "selector": "canvas#twin3d, canvas", "radius_x": 320, "radius_y": 45, "wait_ms": 4000, "description": "14. 3D Twin: Cinematic Mouse-Driven 3D Camera Orbit & Spatial Inspection" },
+        { "action": "click", "selector": "#tab-util-plumbing", "wait_ms": 2500, "description": "15. 3D Twin: Activate Overhead Water Tank & Plumbing Flow Overlay" },
+        { "action": "click", "selector": "#btn-preset-bedroom", "wait_ms": 3000, "description": "16. 3D Twin: Focus Camera on Master Bedroom Suite" },
+        { "action": "click", "selector": "#tab-btn-why", "wait_ms": 3000, "description": "17. Explainability: Inspect Agent Decision Trees & Synthesis Logs" },
+        { "action": "click", "selector": "#tab-btn-comms", "wait_ms": 3000, "description": "18. Telemetry: Review Real-Time Inter-Agent Message Bus Logs" },
+        { "action": "click", "selector": "a[href='/'], a:has-text('HomeMind')", "wait_ms": 2500, "description": "19. Hero Loop: Return to Main Multi-Agent Dashboard for Clean Autoplay Loop" }
+      ]
+    },
+    {
       "name": "fraud_detection_engine",
       "title": "Real-Time Credit Card Fraud Detection Engine",
       "folder_path": "projects/fraud_detection",

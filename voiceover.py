@@ -84,6 +84,29 @@ class VoiceoverEngine:
                     "text": "Comprehensive validation analytics showcase loss convergence, IoU scores, and confusion matrix reliability, bridging geospatial AI with actionable climate resilience."
                 }
             ]
+        elif "homemind" in name:
+            return [
+                {
+                    "start_sec": 1.2,
+                    "text": "HomeMind transforms residential automation into an autonomous multi-agent ecosystem. Five specialized AI agents collaborate within a shared home context to observe, reason, and actuate home systems."
+                },
+                {
+                    "start_sec": 16.0,
+                    "text": "The platform orchestrates Home Manager, Energy Guard, Climate Sentinel, Aqua Guard, and Perimeter Sentry across a distributed event bus, synchronizing real-time telemetry and state changes."
+                },
+                {
+                    "start_sec": 38.0,
+                    "text": "During autonomous scenarios like morning wakeups or water leaks, agents exchange structured messages, resolving conflicting priorities and generating explainable decision rationales."
+                },
+                {
+                    "start_sec": 58.0,
+                    "text": "Transitioning to the 3D dollhouse digital twin powered by Three.js and WebGL. Operators can inspect live electrical and plumbing utility overlays, rotate perspectives, and focus into individual rooms."
+                },
+                {
+                    "start_sec": 82.0,
+                    "text": "Residents can delegate complex tasks through natural language or inspect explainability trees, demonstrating how collaborative agent architectures unlock truly intelligent spatial computing."
+                }
+            ]
         else:
             title = project_config.get("title", name.replace("_", " ").title())
             p1 = f"Welcome to the demonstration of the {title}. This platform integrates modern machine learning architectures into an end-to-end interactive decision environment."
