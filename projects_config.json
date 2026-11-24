@@ -10,7 +10,7 @@
       "wait_timeout_seconds": 60,
       "readme_path": "README.md",
       "main_script_path": "run_dashboard.py",
-      "trim_start_sec": 2.0,
+      "trim_start_sec": 7.65,
       "speed_factor": 1.18,
       "github_url": "https://github.com/Vaibhav007-star/HomeMind-Multi-Agent-AI-Home-Management-System",
       "tech_stack": "Multi-Agent Systems  •  Three.js 3D WebGL  •  FastAPI",

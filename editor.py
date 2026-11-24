@@ -65,19 +65,37 @@ class VideoEditor:
         self.voiceover_engine = VoiceoverEngine(self.output_dir / "cache")
 
     def _trim_clip(self, clip, trim_start_sec: float):
-        """Trim the first N seconds safely."""
+        """Trim the first N seconds safely and automatically bypass blank/white loading screens."""
         duration = clip.duration
-        if duration <= trim_start_sec:
+        effective_trim = max(0.0, trim_start_sec)
+
+        # Automatic blank/white frame bypass: scan forward if still blank
+        try:
+            check_t = effective_trim
+            while check_t < min(duration, 15.0):
+                frame = clip.get_frame(check_t)
+                mean_lum = float(np.mean(frame))
+                if mean_lum > 240.0:  # Pure white blank loading screen
+                    check_t += 0.1
+                else:
+                    break
+            if check_t > effective_trim:
+                logger.info(f"Detected blank/white loading buffer up to {check_t:.2f}s. Adjusting trim point to {check_t:.2f}s.")
+                effective_trim = round(check_t, 2)
+        except Exception as e:
+            logger.debug(f"Blank detection check skipped: {e}")
+
+        if duration <= effective_trim:
             logger.warning(
-                f"Clip duration ({duration:.2f}s) is shorter than or equal to trim duration ({trim_start_sec}s). Keeping entire clip."
+                f"Clip duration ({duration:.2f}s) is shorter than or equal to trim duration ({effective_trim:.2f}s). Keeping entire clip."
             )
             return clip
 
-        logger.info(f"Trimming first {trim_start_sec:.2f}s (Original duration: {duration:.2f}s)...")
+        logger.info(f"Trimming first {effective_trim:.2f}s (Original duration: {duration:.2f}s)...")
         if hasattr(clip, "with_subclip"):
-            return clip.with_subclip(trim_start_sec, duration)
+            return clip.with_subclip(effective_trim, duration)
         elif hasattr(clip, "subclip"):
-            return clip.subclip(trim_start_sec, duration)
+            return clip.subclip(effective_trim, duration)
         else:
             logger.warning("No subclip method found; returning original clip.")
             return clip
