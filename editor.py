@@ -138,6 +138,8 @@ class VideoEditor:
                 tech_tags = "FastAPI  •  OpenCV Computer Vision  •  128-D Biometric Embeddings"
             elif "firecast" in name or "wildfire" in name:
                 tech_tags = "PyTorch PINN  •  Three.js 3D WebGL  •  NASA FIRMS Satellites"
+            elif "supply_chain" in name or "control_tower" in name or "risk" in name:
+                tech_tags = "FastAPI  •  Scikit-Learn Calibrated Pipeline  •  Operations Control Tower"
             elif "churn" in name:
                 tech_tags = "XGBoost  •  SHAP Explainability  •  Streamlit"
             else:
@@ -177,6 +179,14 @@ class VideoEditor:
                 (0.80, "4/5 3D DIGITAL TWIN • Topography Shading & Camera Orbit", (245, 158, 11)),      # Amber
                 (1.00, "5/5 WUI VULNERABILITY • Evacuation & Critical Grid Hazard", (16, 185, 129)),    # Emerald
             ]
+        elif "supply_chain" in name or "control_tower" in name or "risk" in name:
+            phases = [
+                (0.18, "1/5 SYSTEM ARCHITECTURE • Relational SQLite DW & Leak-Free ABT", (56, 189, 248)),   # Cyan
+                (0.38, "2/5 MLOPS BENCHMARK • Calibrated Classifier & 13% Threshold", (16, 185, 129)),      # Emerald
+                (0.58, "3/5 DISPATCH CONTROL TOWER • High-Risk Prioritized Manifest", (168, 85, 247)),       # Purple
+                (0.80, "4/5 WHAT-IF SIMULATION • Warehouse Turnaround Sensitivity", (245, 158, 11)),        # Amber
+                (1.00, "5/5 ROOT-CAUSE ATTRIBUTION • Tree SHAP & ROI Optimization", (16, 185, 129)),         # Emerald
+            ]
         else:
             phases = [
                 (0.15, "1/5 SYSTEM ARCHITECTURE • Problem Framing & Tech Stack", (56, 189, 248)),
@@ -192,6 +202,8 @@ class VideoEditor:
             hook_sub = "Enterprise Facial Biometric Platform & Anti-Spoofing Engine"
         elif "firecast" in name or "wildfire" in name:
             hook_sub = "Physics-Informed Wildfire Intelligence & 3D Digital Twin"
+        elif "supply_chain" in name or "control_tower" in name or "risk" in name:
+            hook_sub = "Supply Chain Risk Control Tower & What-If Logistics Simulator"
         else:
             hook_sub = "Deep Learning Pipeline & Real-Time Interactive Simulation"
 

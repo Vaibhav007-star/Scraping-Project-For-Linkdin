@@ -153,6 +153,29 @@ class VoiceoverEngine:
                     "text": "Monte Carlo dropout maps quantify epistemic uncertainty, while the WUI vulnerability engine pinpoints critical electrical grid, water reservoir, and evacuation route hazards."
                 }
             ]
+        elif "supply_chain" in name or "control_tower" in name or "risk" in name:
+            return [
+                {
+                    "start_sec": 1.2,
+                    "text": "In high-volume e-commerce fulfillment, delivery delays erode customer lifetime value and spike appeasement overhead. Traditional post-mortem analytics identify failures only after packages are already late."
+                },
+                {
+                    "start_sec": 16.0,
+                    "text": "This Supply Chain Operations Control Tower ingests millions of relational records into an Analytical Base Table with zero lookahead bias, engineering Haversine transit distances and expanding Bayesian seller reliability scores."
+                },
+                {
+                    "start_sec": 36.0,
+                    "text": "The prioritized holdout manifest ranks outbound consignments by calibrated delay risk. Dispatch teams filter critical cross-state parcels, targeting warehouse intervention before carrier handoff occurs."
+                },
+                {
+                    "start_sec": 54.0,
+                    "text": "The interactive What-If turnaround simulator models fulfillment acceleration in real time, proving that saving 24 hours of warehouse processing lag slashes customer delivery delay risk by over 45%."
+                },
+                {
+                    "start_sec": 74.0,
+                    "text": "Model governance benchmarks Random Forest and gradient boosters under Platt probability calibration, while Tree SHAP attribution highlights distance and dispatch bottlenecks across an optimal 13% decision threshold."
+                }
+            ]
         else:
             title = project_config.get("title", name.replace("_", " ").title())
             p1 = f"Welcome to the demonstration of the {title}. This platform integrates modern machine learning architectures into an end-to-end interactive decision environment."

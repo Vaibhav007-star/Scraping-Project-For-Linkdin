@@ -1,6 +1,42 @@
 {
   "projects": [
     {
+      "name": "supply_chain_analyst_local",
+      "title": "Supply Chain Operations Control Tower — E-Commerce Delivery Delay & Logistics Risk Predictor",
+      "folder_path": "C:/Projects/Supply Chain Analyst Enginer",
+      "start_command": "\"C:\\Projects\\Divyansh Project\\.venv\\Scripts\\python.exe\" -m uvicorn server:app --port 8510",
+      "url": "http://127.0.0.1:8510",
+      "port": 8510,
+      "wait_timeout_seconds": 60,
+      "readme_path": "README.md",
+      "main_script_path": "server.py",
+      "trim_start_sec": 2.0,
+      "speed_factor": 1.18,
+      "github_url": "https://github.com/Vaibhav007-star/supply-chain-risk-control-tower",
+      "tech_stack": "FastAPI  •  Scikit-Learn Calibrated Pipeline  •  Operations Control Tower",
+      "interactions": [
+        { "action": "hover", "selector": "#tab-btn-kpis, header", "wait_ms": 2500, "description": "1. Overview: Highlight Control Tower Header & Architecture" },
+        { "action": "hover", "selector": ".grid div.p-4, .grid", "wait_ms": 3000, "description": "2. Executive KPIs: Inspect Total Order Volume, OTD Rate & Delay Hotspots" },
+        { "action": "scroll", "delta_y": 420, "wait_ms": 3500, "description": "3. Executive KPIs: Review State-Level OTD Delays & Regional Hotspots" },
+        { "action": "scroll", "delta_y": 420, "wait_ms": 3000, "description": "4. Executive KPIs: Inspect Product Category Risk Breakdown" },
+        { "action": "scroll", "delta_y": -840, "wait_ms": 1200, "description": "5. Overview: Return to Navigation Bar" },
+        { "action": "click", "selector": "#tab-btn-queue", "wait_ms": 3500, "description": "6. Dispatch Queue: Transition to Prioritized Holdout Dispatch Manifest" },
+        { "action": "hover", "selector": "#queue-table-body tr", "wait_ms": 3000, "description": "7. Dispatch Queue: Inspect Ranked High-Risk Outbound Shipments" },
+        { "action": "slider", "selector": "#queue-min-prob, input[type='range']", "value": "0.35", "wait_ms": 3000, "description": "8. Dispatch Queue: Filter Manifest by Operational Risk Threshold" },
+        { "action": "scroll", "delta_y": 380, "wait_ms": 3000, "description": "9. Dispatch Queue: Review Critical Tier Consignments & Carrier Handoff Flags" },
+        { "action": "scroll", "delta_y": -380, "wait_ms": 1000, "description": "10. Dispatch Queue: Return to Top Controls" },
+        { "action": "click", "selector": "#tab-btn-simulator", "wait_ms": 4000, "description": "11. What-If Lab: Open Interactive Dispatch Acceleration Simulator" },
+        { "action": "slider", "selector": "#sim-dispatch, input[type='range']", "value": "18", "wait_ms": 3000, "description": "12. What-If Lab: Accelerate Warehouse Processing Turnaround (-24 Hours)" },
+        { "action": "slider", "selector": "#sim-distance, input[type='range']", "value": "850", "wait_ms": 2500, "description": "13. What-If Lab: Modulate Haversine Transit Distance Vector" },
+        { "action": "hover", "selector": ".bg-slate-900\\/60, .border-slate-800", "wait_ms": 3500, "description": "14. What-If Lab: Review Real-Time Risk Reduction & Local SHAP Tree Attribution" },
+        { "action": "click", "selector": "#tab-btn-governance", "wait_ms": 4000, "description": "15. Governance: Inspect Model Benchmark Leaderboard (RF, XGBoost, LightGBM)" },
+        { "action": "hover", "selector": "#leaderboard-table-body, table", "wait_ms": 3500, "description": "16. Governance: Inspect PR-AUC, ROC-AUC, Brier Score & Probability Calibration" },
+        { "action": "scroll", "delta_y": 380, "wait_ms": 3000, "description": "17. Governance: Review Global SHAP Root-Cause Feature Importance" },
+        { "action": "scroll", "delta_y": -380, "wait_ms": 1000, "description": "18. Governance: Return to Top Navigation" },
+        { "action": "click", "selector": "#tab-btn-kpis", "wait_ms": 3000, "description": "19. Autoplay Loop: Return to Command Overview for Clean Seamless Loop" }
+      ]
+    },
+    {
       "name": "firecast_ai_wildfire_local",
       "title": "FIRECAST AI — Deep Wildfire Progression & Intensity Forecasting System",
       "folder_path": "C:/Projects/Divyansh Project",
