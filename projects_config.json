@@ -17,7 +17,7 @@
       "interactions": [
         { "action": "hover", "selector": ".brand-wrap, header", "wait_ms": 2500, "description": "1. Overview: Highlight FIRECAST AI Deep Spatiotemporal Architecture" },
         { "action": "click", "selector": "#btnOpenFirms", "wait_ms": 3500, "description": "2. Telemetry: Open Real NASA FIRMS Satellite Fire Anomaly Modal" },
-        { "action": "hover", "selector": ".firms-table, .modal-content", "wait_ms": 3000, "description": "3. Telemetry: Inspect MODIS & VIIRS 375m Satellite Telemetry Feeds" },
+        { "action": "hover", "selector": "#firmsModal table, #firmsTableBody, #firmsModal", "wait_ms": 3500, "description": "3. Telemetry: Inspect MODIS & VIIRS 375m Satellite Telemetry Feeds" },
         { "action": "click", "selector": "#btnCloseFirmsModal", "wait_ms": 1200, "description": "4. Telemetry: Close NASA FIRMS Satellite Modal" },
         { "action": "slider", "selector": "#sliderWindSpeed, input[type='range']", "value": "0.7", "wait_ms": 2500, "description": "5. Simulation: Modulate Surface Wind Forcing Vectors" },
         { "action": "click", "selector": "#btnSimulate", "wait_ms": 4500, "description": "6. Physics-Informed Neural Inference: Execute PyTorch PINN Wildfire Forecast" },
