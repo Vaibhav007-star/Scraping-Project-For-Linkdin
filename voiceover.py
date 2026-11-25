@@ -176,6 +176,29 @@ class VoiceoverEngine:
                     "text": "Model governance benchmarks Random Forest and gradient boosters under Platt probability calibration, while Tree SHAP attribution highlights distance and dispatch bottlenecks across an optimal 13% decision threshold."
                 }
             ]
+        elif "schoolmind" in name or "school" in name:
+            return [
+                {
+                    "start_sec": 1.2,
+                    "text": "Modern educational institutions struggle with fragmented administrative silos, late-stage student dropout intervention, and chaotic morning teacher absence coverage."
+                },
+                {
+                    "start_sec": 16.0,
+                    "text": "SchoolMind orchestrates seven specialized autonomous agents over a pub-sub blackboard event bus, synchronizing academic risk, substitute teacher allocation, facility health, and premise security."
+                },
+                {
+                    "start_sec": 36.0,
+                    "text": "Transitioning to the 3D Studio powered by Three.js and WebGL. Administrators can inspect architectural classroom layouts, HVAC load maps, and the 10-agent neural galaxy with smooth camera orbits."
+                },
+                {
+                    "start_sec": 56.0,
+                    "text": "During complex scenarios like the 6AM Crisis, agents autonomously balance substitute teacher credentials, relocate lab classes based on equipment needs, and draft FERPA-compliant communications."
+                },
+                {
+                    "start_sec": 76.0,
+                    "text": "Early warning regression models track attendance decay and grade trends, routing high-impact interventions to human principals through a verifiable, explainable decision tree."
+                }
+            ]
         else:
             title = project_config.get("title", name.replace("_", " ").title())
             p1 = f"Welcome to the demonstration of the {title}. This platform integrates modern machine learning architectures into an end-to-end interactive decision environment."

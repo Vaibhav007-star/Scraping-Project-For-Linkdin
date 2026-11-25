@@ -140,6 +140,8 @@ class VideoEditor:
                 tech_tags = "PyTorch PINN  •  Three.js 3D WebGL  •  NASA FIRMS Satellites"
             elif "supply_chain" in name or "control_tower" in name or "risk" in name:
                 tech_tags = "FastAPI  •  Scikit-Learn Calibrated Pipeline  •  Operations Control Tower"
+            elif "schoolmind" in name or "school" in name:
+                tech_tags = "LangGraph  •  FastAPI  •  Three.js 3D WebGL  •  SQLAlchemy"
             elif "churn" in name:
                 tech_tags = "XGBoost  •  SHAP Explainability  •  Streamlit"
             else:
@@ -187,6 +189,14 @@ class VideoEditor:
                 (0.80, "4/5 WHAT-IF SIMULATION • Warehouse Turnaround Sensitivity", (245, 158, 11)),        # Amber
                 (1.00, "5/5 ROOT-CAUSE ATTRIBUTION • Tree SHAP & ROI Optimization", (16, 185, 129)),         # Emerald
             ]
+        elif "schoolmind" in name or "school" in name:
+            phases = [
+                (0.18, "1/5 MULTI-AGENT ARCHITECTURE • 7 Collaborative AI Agents", (56, 189, 248)),        # Cyan
+                (0.38, "2/5 3D DIGITAL TWIN • Three.js WebGL Campus & Neural Galaxy", (16, 185, 129)),     # Emerald
+                (0.58, "3/5 6AM CRISIS SCENARIO • Autonomous Sub & Room Relocation", (168, 85, 247)),       # Purple
+                (0.80, "4/5 STUDENT INTERVENTION • Early Academic Risk Regression", (245, 158, 11)),        # Amber
+                (1.00, "5/5 CAMPUS SAFETY & HITL • Access Control & FERPA Audit", (16, 185, 129)),          # Emerald
+            ]
         else:
             phases = [
                 (0.15, "1/5 SYSTEM ARCHITECTURE • Problem Framing & Tech Stack", (56, 189, 248)),
@@ -204,6 +214,8 @@ class VideoEditor:
             hook_sub = "Physics-Informed Wildfire Intelligence & 3D Digital Twin"
         elif "supply_chain" in name or "control_tower" in name or "risk" in name:
             hook_sub = "Supply Chain Risk Control Tower & What-If Logistics Simulator"
+        elif "schoolmind" in name or "school" in name:
+            hook_sub = "Autonomous Multi-Agent AI School Management System & 3D Twin"
         else:
             hook_sub = "Deep Learning Pipeline & Real-Time Interactive Simulation"
 

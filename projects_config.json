@@ -1,6 +1,41 @@
 {
   "projects": [
     {
+      "name": "schoolmind_multi_agent_local",
+      "title": "SchoolMind — Autonomous Multi-Agent AI School Management System & 3D Digital Twin",
+      "folder_path": "C:/Projects/SchoolMind-Multi-Agent AI",
+      "start_command": "\"C:\\Projects\\SchoolMind-Multi-Agent AI\\.venv\\Scripts\\python.exe\" -m uvicorn schoolmind.backend.api:app --port 8511",
+      "url": "http://127.0.0.1:8511",
+      "port": 8511,
+      "wait_timeout_seconds": 60,
+      "readme_path": "README.md",
+      "main_script_path": "schoolmind/backend/api.py",
+      "trim_start_sec": 2.0,
+      "speed_factor": 1.18,
+      "github_url": "https://github.com/Vaibhav007-star/SchoolMind-Multi-Agent-AI",
+      "tech_stack": "LangGraph  •  FastAPI  •  Three.js 3D WebGL  •  SQLAlchemy",
+      "interactions": [
+        { "action": "hover", "selector": ".brand, header", "wait_ms": 2500, "description": "1. Overview: Highlight SchoolMind Multi-Agent Header & Operational Status" },
+        { "action": "hover", "selector": "#kpi-grid div.kpi-card, #kpi-grid", "wait_ms": 3000, "description": "2. Executive KPIs: Review Academic Risk, Sub Coverage & Campus Safety" },
+        { "action": "scroll", "delta_y": 420, "wait_ms": 3500, "description": "3. Overview: Inspect Multi-Agent Task Blackboard & Event Stream" },
+        { "action": "scroll", "delta_y": -420, "wait_ms": 1200, "description": "4. Overview: Return to Navigation" },
+        { "action": "click", "selector": "nav [data-view='studio3d'], button[data-view='studio3d']", "wait_ms": 4000, "description": "5. 3D Twin: Transition into Three.js 3D Campus Digital Twin & Studio" },
+        { "action": "click", "selector": "#mode-campus-btn", "wait_ms": 2500, "description": "6. 3D Twin: Activate 3D Architectural Campus Layout" },
+        { "action": "orbit_3d", "selector": "#schoolmind-3d-canvas, canvas", "radius_x": 320, "radius_y": 50, "wait_ms": 4000, "description": "7. 3D Twin: Cinematic Mouse-Driven 3D Camera Orbit of Classrooms & Perimeter" },
+        { "action": "click", "selector": "#mode-neural-btn", "wait_ms": 3000, "description": "8. 3D Twin: Transition into 3D 10-Agent Neural Galaxy Visualization" },
+        { "action": "click", "selector": "#run-crisis-3d", "wait_ms": 4500, "description": "9. Autonomous Scenarios: Trigger 6AM Crisis Multi-Agent Deliberation" },
+        { "action": "click", "selector": "nav [data-view='students'], button[data-view='students']", "wait_ms": 3500, "description": "10. Student Sentinel: Inspect Early Warning Academic & Attendance Risk Roster" },
+        { "action": "hover", "selector": "#students-table tbody tr", "wait_ms": 3000, "description": "11. Student Sentinel: Review Slope Trend Regressions & Intervention Flags" },
+        { "action": "click", "selector": "nav [data-view='teachers'], button[data-view='teachers']", "wait_ms": 3500, "description": "12. Teacher Balancer: Inspect Daily Absence Roster & Sub Allocation" },
+        { "action": "click", "selector": "#find-sub-btn", "wait_ms": 3500, "description": "13. Teacher Balancer: Run Automated Sub Qualification & Workload Scoring" },
+        { "action": "click", "selector": "nav [data-view='campus'], button[data-view='campus']", "wait_ms": 3500, "description": "14. Campus Guardian: Inspect Facility Maintenance & HVAC Equipment Telemetry" },
+        { "action": "click", "selector": "#relocate-lab-btn", "wait_ms": 3500, "description": "15. Campus Guardian: Execute Automated Emergency Room Relocation" },
+        { "action": "click", "selector": "nav [data-view='safety'], button[data-view='safety']", "wait_ms": 3500, "description": "16. Safety Auditor: Review Perimeter Security Logs & Fire Drill Audit Ratings" },
+        { "action": "click", "selector": "nav [data-view='hitl'], button[data-view='hitl']", "wait_ms": 3500, "description": "17. Governance: Review Human-in-the-Loop Principal Escalation Queue" },
+        { "action": "click", "selector": "nav [data-view='overview'], button[data-view='overview']", "wait_ms": 3000, "description": "18. Autoplay Loop: Return to Command Overview for Clean Autoplay Loop" }
+      ]
+    },
+    {
       "name": "supply_chain_analyst_local",
       "title": "Supply Chain Operations Control Tower \u2014 E-Commerce Delivery Delay & Logistics Risk Predictor",
       "folder_path": "C:/Projects/Supply Chain Analyst Enginer",
