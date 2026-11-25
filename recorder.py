@@ -719,10 +719,20 @@ class ProjectRecorder:
             except Exception as e:
                 logger.error(f"Recording interaction error: {e}")
             finally:
-                page.close()
-                context.close()
-                browser.close()
+                try:
+                    page.close()
+                except Exception:
+                    pass
+                try:
+                    context.close()
+                except Exception:
+                    pass
+                try:
+                    browser.close()
+                except Exception:
+                    pass
 
+        time.sleep(1.5)
         recorded_files = list(temp_record_dir.glob("*.webm")) + list(temp_record_dir.glob("*.mp4"))
         if not recorded_files:
             raise FileNotFoundError(f"No video recorded in {temp_record_dir}")
@@ -730,10 +740,21 @@ class ProjectRecorder:
         raw_video = recorded_files[0]
         final_raw_path = self.raw_recordings_dir / f"{project_name}_raw{raw_video.suffix}"
 
-        if final_raw_path.exists():
-            final_raw_path.unlink()
+        import shutil
+        for attempt in range(10):
+            try:
+                if final_raw_path.exists():
+                    try:
+                        final_raw_path.unlink()
+                    except Exception:
+                        pass
+                shutil.move(str(raw_video), str(final_raw_path))
+                break
+            except Exception as e:
+                if attempt == 9:
+                    raise
+                time.sleep(1.0)
 
-        raw_video.rename(final_raw_path)
         try:
             temp_record_dir.rmdir()
         except Exception:

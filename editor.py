@@ -472,16 +472,34 @@ class VideoEditor:
             bitrate = os.getenv("VIDEO_BITRATE", "12M")
             crf = os.getenv("VIDEO_CRF", "18")
             logger.info(f"Rendering final MP4 to {target_path} (H.264, yuv420p, CRF {crf}, Bitrate {bitrate}, Audio: {audio_codec})...")
-            final_clip.write_videofile(
-                str(target_path),
-                codec="libx264",
-                audio_codec=audio_codec,
-                bitrate=bitrate,
-                ffmpeg_params=["-pix_fmt", "yuv420p", "-crf", str(crf), "-movflags", "+faststart"],
-                preset="medium",
-                threads=4,
-                logger=None  # Suppress verbose terminal progress bar
-            )
+            
+            orig_remove = os.remove
+            def safe_remove(p_rem, *args, **kwargs):
+                try:
+                    orig_remove(p_rem, *args, **kwargs)
+                except PermissionError:
+                    time.sleep(0.5)
+                    try:
+                        orig_remove(p_rem, *args, **kwargs)
+                    except Exception:
+                        pass
+                except Exception:
+                    pass
+
+            os.remove = safe_remove
+            try:
+                final_clip.write_videofile(
+                    str(target_path),
+                    codec="libx264",
+                    audio_codec=audio_codec,
+                    bitrate=bitrate,
+                    ffmpeg_params=["-pix_fmt", "yuv420p", "-crf", str(crf), "-movflags", "+faststart"],
+                    preset="medium",
+                    threads=4,
+                    logger=None  # Suppress verbose terminal progress bar
+                )
+            finally:
+                os.remove = orig_remove
 
             logger.info(f"Video exported successfully: {target_path} (Duration: {final_clip.duration:.2f}s)")
             return target_path
