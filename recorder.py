@@ -496,7 +496,9 @@ class ProjectRecorder:
                     "--no-sandbox",
                     "--enable-webgl",
                     "--ignore-gpu-blocklist",
-                    "--use-gl=angle"
+                    "--use-gl=angle",
+                    "--use-fake-ui-for-media-stream",
+                    "--use-fake-device-for-media-stream"
                 ]
             )
 
@@ -519,7 +521,8 @@ class ProjectRecorder:
                 viewport={"width": view_w, "height": view_h},
                 device_scale_factor=scale_factor,
                 record_video_dir=str(temp_record_dir),
-                record_video_size={"width": view_w, "height": view_h}
+                record_video_size={"width": view_w, "height": view_h},
+                permissions=["camera"]
             )
 
             page = context.new_page()

@@ -134,6 +134,8 @@ class VideoEditor:
                 tech_tags = "PyTorch U-Net  •  Three.js 3D WebGL  •  FastAPI"
             elif "homemind" in name:
                 tech_tags = "Multi-Agent Systems  •  Three.js 3D WebGL  •  FastAPI"
+            elif "ai_attendance" in name or "attendance" in name:
+                tech_tags = "FastAPI  •  OpenCV Computer Vision  •  128-D Biometric Embeddings"
             elif "churn" in name:
                 tech_tags = "XGBoost  •  SHAP Explainability  •  Streamlit"
             else:
@@ -157,6 +159,14 @@ class VideoEditor:
                 (0.82, "4/5 3D DIGITAL TWIN • WebGL Utility Overlays & Orbit", (245, 158, 11)),       # Amber
                 (1.00, "5/5 EXPLAINABILITY & CHAT • Natural Language Delegation", (16, 185, 129)),    # Emerald
             ]
+        elif "ai_attendance" in name or "attendance" in name:
+            phases = [
+                (0.18, "1/5 SYSTEM ARCHITECTURE • Enterprise Biometric Platform", (56, 189, 248)),    # Cyan
+                (0.40, "2/5 ATTENDANCE ANALYTICS • Real-Time Velocity & Punctuality", (16, 185, 129)),# Emerald
+                (0.60, "3/5 AUTONOMOUS KIOSK • Multi-Tier Anti-Spoofing & Liveness", (168, 85, 247)), # Purple
+                (0.80, "4/5 128-D EMBEDDINGS • L2 Hypersphere Cosine Matching", (245, 158, 11)),      # Amber
+                (1.00, "5/5 AUDIT & COMPLIANCE • Automated Shift Enforcement", (16, 185, 129)),       # Emerald
+            ]
         else:
             phases = [
                 (0.15, "1/5 SYSTEM ARCHITECTURE • Problem Framing & Tech Stack", (56, 189, 248)),
@@ -166,7 +176,12 @@ class VideoEditor:
                 (1.00, "5/5 VALIDATION BENCHMARKS • Quantitative Performance", (56, 189, 248)),
             ]
 
-        hook_sub = "Autonomous Multi-Agent AI Ecosystem & 3D Digital Twin" if "homemind" in name else "Deep Learning Pipeline & Real-Time Interactive Simulation"
+        if "homemind" in name:
+            hook_sub = "Autonomous Multi-Agent AI Ecosystem & 3D Digital Twin"
+        elif "ai_attendance" in name or "attendance" in name:
+            hook_sub = "Enterprise Facial Biometric Platform & Anti-Spoofing Engine"
+        else:
+            hook_sub = "Deep Learning Pipeline & Real-Time Interactive Simulation"
 
         return {
             "title": short_title.upper(),

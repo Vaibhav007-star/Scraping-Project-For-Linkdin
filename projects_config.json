@@ -1,6 +1,40 @@
 {
   "projects": [
     {
+      "name": "ai_attendance_system_local",
+      "title": "VisionAttend AI — Enterprise Facial Biometric Attendance Platform & Anti-Spoofing Engine",
+      "folder_path": "C:/Projects/AI-Attendance-System",
+      "start_command": ".\\.venv\\Scripts\\python.exe run.py --port 8508",
+      "url": "http://127.0.0.1:8508",
+      "port": 8508,
+      "wait_timeout_seconds": 60,
+      "readme_path": "README.md",
+      "main_script_path": "run.py",
+      "trim_start_sec": 2.0,
+      "speed_factor": 1.18,
+      "github_url": "https://github.com/Vaibhav007-star/AI-Attendance-System",
+      "tech_stack": "FastAPI  •  OpenCV Computer Vision  •  128-D Biometric Embeddings",
+      "interactions": [
+        { "action": "hover", "selector": "header a.group, header", "wait_ms": 2500, "description": "1. Overview: Highlight VisionAttend AI Platform Header & Architecture" },
+        { "action": "scroll", "delta_y": 380, "wait_ms": 3000, "description": "2. Overview: Inspect Enterprise Anti-Spoofing & L2 Hypersphere Architecture" },
+        { "action": "scroll", "delta_y": -380, "wait_ms": 1000, "description": "3. Overview: Return to Navigation Bar" },
+        { "action": "click", "selector": "a[href='/dashboard'], a:has-text('Analytics')", "wait_ms": 4000, "description": "4. Analytics: Transition to Executive Attendance Intelligence Dashboard" },
+        { "action": "hover", "selector": "#stat-total, .glass-card", "wait_ms": 3500, "description": "5. Analytics: Inspect Total Staff, Present Today, and On-Time Velocity Cards" },
+        { "action": "scroll", "delta_y": 450, "wait_ms": 4000, "description": "6. Analytics: Inspect Hourly Check-In Velocity Line Chart & Department Distribution" },
+        { "action": "scroll", "delta_y": 350, "wait_ms": 3000, "description": "7. Analytics: Review Live Verification Stream & Shift Punctuality Telemetry" },
+        { "action": "scroll", "delta_y": -800, "wait_ms": 1200, "description": "8. Analytics: Return to Top Navigation Bar" },
+        { "action": "click", "selector": "a[href='/kiosk'], a:has-text('Live Kiosk')", "wait_ms": 4500, "description": "9. Kiosk: Launch Autonomous Edge Face Biometric Scanner" },
+        { "action": "hover", "selector": "#telemetry-grid, .glass-card", "wait_ms": 3500, "description": "10. Anti-Spoofing: Inspect Laplacian Texture Variance & 2D FFT Moiré Telemetry" },
+        { "action": "click", "selector": "a[href='/employees'], a:has-text('Staff')", "wait_ms": 3500, "description": "11. Staff: Transition to Employee Biometric Directory" },
+        { "action": "hover", "selector": ".grid, .glass-card", "wait_ms": 3500, "description": "12. Staff: Review Enrolled 128-D Biometric Embeddings & Face Profiles" },
+        { "action": "scroll", "delta_y": 350, "wait_ms": 3000, "description": "13. Staff: Browse Departmental Rosters & Registration Timestamps" },
+        { "action": "scroll", "delta_y": -350, "wait_ms": 1000, "description": "14. Staff: Return to Navigation Bar" },
+        { "action": "click", "selector": "a[href='/records'], a:has-text('Logs')", "wait_ms": 4000, "description": "15. Audit Logs: Inspect Verification Records, Liveness Scores & Export" },
+        { "action": "scroll", "delta_y": 400, "wait_ms": 3500, "description": "16. Audit Logs: Review On-Time vs Late Shift Flags & Anti-Passback Status" },
+        { "action": "click", "selector": "a[href='/dashboard'], a:has-text('Analytics')", "wait_ms": 3000, "description": "17. Hero Loop: Return to Executive Dashboard for Clean Autoplay Loop" }
+      ]
+    },
+    {
       "name": "homemind_multi_agent_local",
       "title": "HomeMind — Autonomous Multi-Agent AI Home Management System & 3D Digital Twin",
       "folder_path": "C:/Projects/HomeMind — Multi-Agent AI Home Management System",

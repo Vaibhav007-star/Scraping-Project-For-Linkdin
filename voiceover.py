@@ -107,6 +107,29 @@ class VoiceoverEngine:
                     "text": "Residents can delegate complex tasks through natural language or inspect explainability trees, demonstrating how collaborative agent architectures unlock truly intelligent spatial computing."
                 }
             ]
+        elif "ai_attendance" in name or "attendance" in name:
+            return [
+                {
+                    "start_sec": 1.2,
+                    "text": "VisionAttend AI transforms enterprise workforce management through autonomous facial biometrics, combining high-speed edge computer vision with zero-contact attendance intelligence."
+                },
+                {
+                    "start_sec": 16.0,
+                    "text": "The executive analytics dashboard tracks real-time workforce attendance velocity, shift punctuality curves, and department breakdowns, backed by an SQLite persistence engine."
+                },
+                {
+                    "start_sec": 36.0,
+                    "text": "The autonomous face kiosk continuously scans incoming video feeds. Multi-tier anti-spoofing pairs Laplacian texture variance with 2D FFT frequency analysis to defeat screen and print replay attacks."
+                },
+                {
+                    "start_sec": 54.0,
+                    "text": "Dense 128-dimensional biometric embeddings are normalized onto an L2 hypersphere, executing sub-120 millisecond cosine similarity searches against an in-memory RAM cache."
+                },
+                {
+                    "start_sec": 72.0,
+                    "text": "Comprehensive verification records enforce automated shift schedules and anti-passback cooldowns, delivering audit-ready workforce telemetry with complete biometric integrity."
+                }
+            ]
         else:
             title = project_config.get("title", name.replace("_", " ").title())
             p1 = f"Welcome to the demonstration of the {title}. This platform integrates modern machine learning architectures into an end-to-end interactive decision environment."
