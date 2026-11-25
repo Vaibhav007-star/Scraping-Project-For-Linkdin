@@ -130,6 +130,29 @@ class VoiceoverEngine:
                     "text": "Comprehensive verification records enforce automated shift schedules and anti-passback cooldowns, delivering audit-ready workforce telemetry with complete biometric integrity."
                 }
             ]
+        elif "firecast" in name or "wildfire" in name:
+            return [
+                {
+                    "start_sec": 1.2,
+                    "text": "Wildfires exhibit complex non-linear physical spread driven by wind advection and steep elevation gradients. Conventional empirical models struggle to capture multi-horizon perimeter dynamics in real time."
+                },
+                {
+                    "start_sec": 16.0,
+                    "text": "FIRECAST AI couples Physics-Informed Neural Networks with real NASA satellite telemetry. The architecture enforces 2D advection-diffusion conservation laws alongside Rothermel reaction kinetics on an RTX GPU."
+                },
+                {
+                    "start_sec": 38.0,
+                    "text": "The synchronized horizon view projects 12-hour, 24-hour, and 48-hour fire arrival isochrones across 6 spatiotemporal channels, fusing Sentinel-2 NDVI canopy with digital elevation topography."
+                },
+                {
+                    "start_sec": 58.0,
+                    "text": "Transitioning to the 3D digital twin. Operators inspect procedural topography shading, wireframe mesh contours, and volumetric smoke particles with cinematic mouse-driven camera orbits."
+                },
+                {
+                    "start_sec": 78.0,
+                    "text": "Monte Carlo dropout maps quantify epistemic uncertainty, while the WUI vulnerability engine pinpoints critical electrical grid, water reservoir, and evacuation route hazards."
+                }
+            ]
         else:
             title = project_config.get("title", name.replace("_", " ").title())
             p1 = f"Welcome to the demonstration of the {title}. This platform integrates modern machine learning architectures into an end-to-end interactive decision environment."

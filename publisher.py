@@ -251,17 +251,27 @@ class LinkedInPublisher:
         if post_resp.status_code not in (200, 201):
             raise RuntimeError(f"Failed to create LinkedIn post: {post_resp.status_code} - {post_resp.text}")
 
-        # LinkedIn returns post URN in 'x-restli-id' header or body (e.g. urn:li:ugcPost:7530713800535101440)
+        # LinkedIn returns post URN in 'x-restli-id' header or body (e.g. urn:li:ugcPost:7530713800535101440 or urn:li:share:...)
         post_urn = post_resp.headers.get("x-restli-id") or post_resp.headers.get("Location", "Unknown URN")
-        numeric_id = post_urn.split(":")[-1].split("/")[-1]
-        browser_url = f"https://www.linkedin.com/feed/update/urn:li:activity:{numeric_id}/"
+        
+        # Do NOT convert urn:li:ugcPost to urn:li:activity! LinkedIn's desktop web router natively
+        # resolves the exact entity URN (https://www.linkedin.com/feed/update/{post_urn}/).
+        # Converting it to urn:li:activity creates an invalid activity ID causing 'Post cannot be displayed'.
+        if post_urn.startswith("urn:li:"):
+            browser_url = f"https://www.linkedin.com/feed/update/{post_urn}/"
+        else:
+            browser_url = f"https://www.linkedin.com/feed/update/urn:li:ugcPost:{post_urn}/"
+            
+        recent_activity_url = "https://www.linkedin.com/in/vaibhav-lohchab/recent-activity/all/"
         logger.info(f"Post successfully published to LinkedIn! Post ID: {post_urn}")
         logger.info(f"Direct Browser URL: {browser_url}")
+        logger.info(f"Profile Recent Activity URL: {recent_activity_url}")
 
         return {
             "status": "PUBLISHED",
             "video_urn": video_urn,
             "post_urn": post_urn,
             "browser_url": browser_url,
+            "recent_activity_url": recent_activity_url,
             "published_at": datetime.now().isoformat()
         }

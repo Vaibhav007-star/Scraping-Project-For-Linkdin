@@ -1,6 +1,41 @@
 {
   "projects": [
     {
+      "name": "firecast_ai_wildfire_local",
+      "title": "FIRECAST AI — Deep Wildfire Progression & Intensity Forecasting System",
+      "folder_path": "C:/Projects/Divyansh Project",
+      "start_command": ".\\.venv\\Scripts\\python.exe -m uvicorn server:app --port 8509",
+      "url": "http://127.0.0.1:8509",
+      "port": 8509,
+      "wait_timeout_seconds": 60,
+      "readme_path": "README.md",
+      "main_script_path": "server.py",
+      "trim_start_sec": 2.0,
+      "speed_factor": 1.18,
+      "github_url": "https://github.com/Vaibhav007-star/Deep-Wildfire-Progression-Intensity-Forecasting",
+      "tech_stack": "PyTorch PINN  •  Three.js 3D WebGL  •  NASA FIRMS Satellites",
+      "interactions": [
+        { "action": "hover", "selector": ".brand-wrap, header", "wait_ms": 2500, "description": "1. Overview: Highlight FIRECAST AI Deep Spatiotemporal Architecture" },
+        { "action": "click", "selector": "#btnOpenFirms", "wait_ms": 3500, "description": "2. Telemetry: Open Real NASA FIRMS Satellite Fire Anomaly Modal" },
+        { "action": "hover", "selector": ".firms-table, .modal-content", "wait_ms": 3000, "description": "3. Telemetry: Inspect MODIS & VIIRS 375m Satellite Telemetry Feeds" },
+        { "action": "click", "selector": "#btnCloseFirmsModal", "wait_ms": 1200, "description": "4. Telemetry: Close NASA FIRMS Satellite Modal" },
+        { "action": "slider", "selector": "#sliderWindSpeed, input[type='range']", "value": "0.7", "wait_ms": 2500, "description": "5. Simulation: Modulate Surface Wind Forcing Vectors" },
+        { "action": "click", "selector": "#btnSimulate", "wait_ms": 4500, "description": "6. Physics-Informed Neural Inference: Execute PyTorch PINN Wildfire Forecast" },
+        { "action": "click", "selector": "#tabSync", "wait_ms": 3500, "description": "7. Horizon View: Inspect Synchronized Multi-Horizon Spread (+12h, +24h, +48h)" },
+        { "action": "click", "selector": "#tabChannels", "wait_ms": 3500, "description": "8. Geospatial Channels: Inspect 6-Channel Layers (NDVI Biomass & DEM Topography)" },
+        { "action": "click", "selector": "#tabUncertainty", "wait_ms": 3500, "description": "9. Uncertainty Analysis: Review Monte Carlo Epistemic Uncertainty Distribution" },
+        { "action": "click", "selector": "#tab3D", "wait_ms": 4500, "description": "10. 3D Digital Twin: Transition into Three.js WebGL Topographic Mesh" },
+        { "action": "click", "selector": "#btn3DModeTerrain", "wait_ms": 2500, "description": "11. 3D Twin: Activate Shaded Topographic Elevation Shading" },
+        { "action": "click", "selector": "#btn3DElev2x", "wait_ms": 2000, "description": "12. 3D Twin: Set 2x Vertical Topography Elevation Scaling" },
+        { "action": "orbit_3d", "selector": "#viewport3D canvas, canvas", "radius_x": 320, "radius_y": 50, "wait_ms": 4000, "description": "13. 3D Twin: Cinematic Mouse-Driven 3D Camera Orbit & Ridge Inspection" },
+        { "action": "click", "selector": "#btn3DModeWireframe", "wait_ms": 2500, "description": "14. 3D Twin: Inspect Topographic Wireframe Mesh Contours" },
+        { "action": "click", "selector": "#tabVuln", "wait_ms": 3500, "description": "15. Infrastructure Risk: Inspect Wildland-Urban Interface (WUI) Critical Exposure" },
+        { "action": "scroll", "delta_y": 400, "wait_ms": 3500, "description": "16. Infrastructure Risk: Review Electrical Grid, Water Reservoirs & Evacuation Routes" },
+        { "action": "scroll", "delta_y": -400, "wait_ms": 1200, "description": "17. Infrastructure Risk: Return to Navigation" },
+        { "action": "click", "selector": "#tabMain", "wait_ms": 3000, "description": "18. Hero Loop: Return to Main Interactive Horizon for Clean Autoplay Loop" }
+      ]
+    },
+    {
       "name": "ai_attendance_system_local",
       "title": "VisionAttend AI — Enterprise Facial Biometric Attendance Platform & Anti-Spoofing Engine",
       "folder_path": "C:/Projects/AI-Attendance-System",

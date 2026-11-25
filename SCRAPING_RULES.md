@@ -441,13 +441,12 @@ Send `POST https://api.linkedin.com/rest/posts` with:
 ```
 
 ### 13.4 URL Routing & Canonical Link Formats
-- **Never use `urn:li:ugcPost:<ID>` in browser URLs**:
-  - `urn:li:ugcPost` is an internal backend entity URN.
-  - Opening `https://www.linkedin.com/feed/update/urn:li:ugcPost:<ID>/` in a web browser will fail with **"Post not found. This post was deleted or removed"**.
-- **Canonical Web Feed Route**:
-  - The public web feed update route is: `https://www.linkedin.com/feed/update/urn:li:activity:<NUMERIC_ID>/`
-- **Most Reliable Verification Route**:
-  - Direct member recent activity page: `https://www.linkedin.com/in/me/recent-activity/all/`
+- **Always preserve the exact entity URN (`urn:li:ugcPost:<ID>` or `urn:li:share:<ID>`) in browser URLs**:
+  - The LinkedIn Posts API returns an entity URN in `x-restli-id` (typically `urn:li:ugcPost:<ID>` or `urn:li:share:<ID>`).
+  - **Verified Canonical Route**: `https://www.linkedin.com/feed/update/{post_urn}/` (e.g. `https://www.linkedin.com/feed/update/urn:li:ugcPost:7531011461674848256/`).
+  - **CRITICAL**: Never strip `urn:li:ugcPost:` and forcibly replace it with `urn:li:activity:`. In LinkedIn's backend architecture, `activity` IDs and `ugcPost` IDs are separate entities. Forcing an `ugcPost` numeric ID into `urn:li:activity:<ID>` causes desktop browsers to display **"Post cannot be displayed. Sorry, we're having issues loading this post"**.
+- **Most Reliable Fallback & Audit Route**:
+  - Direct member recent activity page: `https://www.linkedin.com/in/vaibhav-lohchab/recent-activity/all/` (or `https://www.linkedin.com/in/me/recent-activity/all/`).
 
 ### 13.5 Clean Deletion Protocol (`DELETE /rest/posts`)
 - The developer scope `w_member_social` grants deletion permissions.

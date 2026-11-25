@@ -136,6 +136,8 @@ class VideoEditor:
                 tech_tags = "Multi-Agent Systems  •  Three.js 3D WebGL  •  FastAPI"
             elif "ai_attendance" in name or "attendance" in name:
                 tech_tags = "FastAPI  •  OpenCV Computer Vision  •  128-D Biometric Embeddings"
+            elif "firecast" in name or "wildfire" in name:
+                tech_tags = "PyTorch PINN  •  Three.js 3D WebGL  •  NASA FIRMS Satellites"
             elif "churn" in name:
                 tech_tags = "XGBoost  •  SHAP Explainability  •  Streamlit"
             else:
@@ -167,6 +169,14 @@ class VideoEditor:
                 (0.80, "4/5 128-D EMBEDDINGS • L2 Hypersphere Cosine Matching", (245, 158, 11)),      # Amber
                 (1.00, "5/5 AUDIT & COMPLIANCE • Automated Shift Enforcement", (16, 185, 129)),       # Emerald
             ]
+        elif "firecast" in name or "wildfire" in name:
+            phases = [
+                (0.18, "1/5 SYSTEM ARCHITECTURE • Physics-Informed Neural Network", (56, 189, 248)),   # Cyan
+                (0.38, "2/5 SATELLITE TELEMETRY • NASA MODIS & VIIRS 375m Ingestion", (16, 185, 129)), # Emerald
+                (0.58, "3/5 MULTI-HORIZON SPREAD • +12h, +24h, +48h Isochrone Forecasting", (168, 85, 247)),# Purple
+                (0.80, "4/5 3D DIGITAL TWIN • Topography Shading & Camera Orbit", (245, 158, 11)),      # Amber
+                (1.00, "5/5 WUI VULNERABILITY • Evacuation & Critical Grid Hazard", (16, 185, 129)),    # Emerald
+            ]
         else:
             phases = [
                 (0.15, "1/5 SYSTEM ARCHITECTURE • Problem Framing & Tech Stack", (56, 189, 248)),
@@ -180,6 +190,8 @@ class VideoEditor:
             hook_sub = "Autonomous Multi-Agent AI Ecosystem & 3D Digital Twin"
         elif "ai_attendance" in name or "attendance" in name:
             hook_sub = "Enterprise Facial Biometric Platform & Anti-Spoofing Engine"
+        elif "firecast" in name or "wildfire" in name:
+            hook_sub = "Physics-Informed Wildfire Intelligence & 3D Digital Twin"
         else:
             hook_sub = "Deep Learning Pipeline & Real-Time Interactive Simulation"
 
