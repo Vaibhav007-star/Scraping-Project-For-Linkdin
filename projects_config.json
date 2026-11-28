@@ -1,8 +1,1149 @@
 {
   "projects": [
     {
+      "name": "recosphere_ai_local",
+      "title": "RecoSphere AI — Two-Tower Deep Recommendation Engine, Vector Retrieval & A/B Experiment Lab",
+      "folder_path": "C:/Projects/RecoSphere-AI-Two-Tower-Recommendation-Platform",
+      "start_command": "\"C:\\Projects\\RecoSphere-AI-Two-Tower-Recommendation-Platform\\.venv\\Scripts\\python.exe\" -m uvicorn src.api.main:app --host 127.0.0.1 --port 8529",
+      "url": "http://127.0.0.1:8529/",
+      "port": 8529,
+      "wait_timeout_seconds": 60,
+      "readme_path": "README.md",
+      "main_script_path": "src/api/main.py",
+      "trim_start_sec": 1.5,
+      "speed_factor": 1.18,
+      "github_url": "https://github.com/Vaibhav007-star/RecoSphere-AI-Two-Tower-Recommendation-Platform",
+      "tech_stack": "PyTorch Two-Tower  •  FastAPI  •  Cosine Vector Index & MMR  •  Retailrocket",
+      "interactions": [
+        {
+          "action": "hover",
+          "selector": "aside",
+          "wait_ms": 2500,
+          "description": "1. Platform Overview: RecoSphere AI Two-Tower Recommendation Engine"
+        },
+        {
+          "action": "hover",
+          "selector": "#view-executive .grid",
+          "wait_ms": 3000,
+          "description": "2. Executive KPIs: 1.4M Shoppers, 417K Catalog Items, 2.75M Interactions"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 320,
+          "wait_ms": 2500,
+          "description": "3. Funnel & Benchmarks: Scroll to Conversion Funnel & Offline NDCG Charts"
+        },
+        {
+          "action": "click",
+          "selector": "a[data-target='recommendations']",
+          "wait_ms": 3000,
+          "description": "4. Personalized Console: Switch to Live Recommendation Workbench"
+        },
+        {
+          "action": "click",
+          "selector": "#get-recs-btn",
+          "wait_ms": 4000,
+          "description": "5. Sub-5ms Vector Search: Query Two-Tower Embeddings & MMR Re-Ranking"
+        },
+        {
+          "action": "hover",
+          "selector": "#recs-container",
+          "wait_ms": 3500,
+          "description": "6. Attribution: Inspect Score Decomposition & MMR Category Diversification"
+        },
+        {
+          "action": "click",
+          "selector": "a[data-target='similar']",
+          "wait_ms": 3000,
+          "description": "7. Similar Items: Switch to Item-to-Item Vector Similarity Explorer"
+        },
+        {
+          "action": "click",
+          "selector": "#get-similar-btn",
+          "wait_ms": 3500,
+          "description": "8. Item Neighbors: Discover 64D Nearest Products in Shared Embedding Space"
+        },
+        {
+          "action": "click",
+          "selector": "a[data-target='galaxy']",
+          "wait_ms": 3500,
+          "description": "9. Neural Galaxy: 3D PCA Projection of Product Embeddings & Clusters"
+        },
+        {
+          "action": "click",
+          "selector": "a[data-target='ab-testing']",
+          "wait_ms": 3000,
+          "description": "10. A/B Experiment Lab: Switch to Monte-Carlo Experiment Simulator"
+        },
+        {
+          "action": "click",
+          "selector": "#run-sim-btn",
+          "wait_ms": 4000,
+          "description": "11. Hypothesis Testing: Run Simulation with Two-Proportion Z-Test Decisions"
+        },
+        {
+          "action": "click",
+          "selector": "a[data-target='executive']",
+          "wait_ms": 1500,
+          "description": "12. Autoplay Loop: Return to Executive Overview for Seamless Video Loop"
+        }
+      ]
+    },
+    {
+      "name": "insightflow_ai_local",
+      "title": "InsightFlow AI — Multi-Agent Data Analyst (8-Agent NL2SQL, Interactive Recharts & BI Cockpit)",
+      "folder_path": "C:/Projects/InsightFlow-AI-Multi-Agent-Data-Analyst/backend",
+      "start_command": "\"C:\\Users\\Vaibhav\\AppData\\Local\\Programs\\Python\\Python312\\python.exe\" -m uvicorn app.main:app --host 127.0.0.1 --port 8528",
+      "url": "http://127.0.0.1:8528",
+      "port": 8528,
+      "wait_timeout_seconds": 60,
+      "readme_path": "../README.md",
+      "main_script_path": "app/main.py",
+      "trim_start_sec": 1.5,
+      "speed_factor": 1.18,
+      "github_url": "https://github.com/Vaibhav007-star/InsightFlow-AI-Multi-Agent-Data-Analyst",
+      "tech_stack": "FastAPI  •  React 18 & Recharts  •  8-Agent Architecture  •  Gemini 2.5 Flash  •  Kaggle Superstore",
+      "interactions": [
+        {
+          "action": "hover",
+          "selector": "aside",
+          "wait_ms": 2500,
+          "description": "1. Architecture: InsightFlow AI 8-Agent Autonomous Analytics Platform"
+        },
+        {
+          "action": "hover",
+          "selector": "main h2, main input, main .space-y-4",
+          "wait_ms": 2500,
+          "description": "2. Natural Language Workbench: Conversational Analytics Interface"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Which region generated the most revenue'), main .grid button:first-child",
+          "wait_ms": 4000,
+          "description": "3. Multi-Agent Pipeline: Execute Schema Discovery, NL2SQL & Security Guardrails"
+        },
+        {
+          "action": "hover",
+          "selector": ".recharts-responsive-container, [data-testid='chart-container']",
+          "wait_ms": 3500,
+          "description": "4. Visual Analytics: Automated Recharts Regional Revenue Bar & KPI Summary"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 380,
+          "wait_ms": 2500,
+          "description": "5. Code & Security: Scroll to Validated Read-Only SQL & Query Execution Plan"
+        },
+        {
+          "action": "hover",
+          "selector": "pre, code, .font-mono",
+          "wait_ms": 3000,
+          "description": "6. SQL Inspector: Inspect Transparent Query Syntax, Timing & Guardrail Checks"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Executive Overview')",
+          "wait_ms": 3500,
+          "description": "7. Executive Dashboard: Switch to Multi-Metric Superstore Portfolio Overview"
+        },
+        {
+          "action": "hover",
+          "selector": "main .grid",
+          "wait_ms": 3000,
+          "description": "8. Portfolio KPIs: Review $2.67M Total Revenue, Profit Margins & Regional Share"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Data Sources & Schema')",
+          "wait_ms": 3500,
+          "description": "9. Schema Discovery: View Relational Superstore Schema & Data Quality Panel"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Evaluation & Metrics')",
+          "wait_ms": 3500,
+          "description": "10. Model Governance: Inspect 20 Ground-Truth Test Benchmarks & Latency"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Switch to Dark Mode')",
+          "wait_ms": 2500,
+          "description": "11. Theme Switcher: Toggle High-Contrast Dark Analytics Mode"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Ask Your Data')",
+          "wait_ms": 1500,
+          "description": "12. Autoplay Loop: Return to Conversational Workbench for Clean Loop"
+        }
+      ]
+    },
+    {
+      "name": "land_acquisition_delay_predictive_local",
+      "title": "Predictive Analytics System for Early Detection of Land Acquisition Delays — MoRD SIH26017",
+      "folder_path": "C:/Projects/Predictive-Analytics-System-for-Early-Detection-of-Land-Acquisition-Delays",
+      "start_command": "\"C:\\Users\\Vaibhav\\AppData\\Local\\Programs\\Python\\Python312\\python.exe\" -m uvicorn src.api.app:app --host 127.0.0.1 --port 8527",
+      "url": "http://127.0.0.1:8527/app",
+      "port": 8527,
+      "wait_timeout_seconds": 60,
+      "readme_path": "README.md",
+      "main_script_path": "src/api/app.py",
+      "trim_start_sec": 2.0,
+      "speed_factor": 1.18,
+      "github_url": "https://github.com/Vaibhav007-star/Predictive-Analytics-System-for-Early-Detection-of-Land-Acquisition-Delays",
+      "tech_stack": "FastAPI  •  React 19 & Vite  •  Gradient Boosting (0.9425 ROC-AUC)  •  SHAP TreeExplainer  •  Weibull Survival Dynamics  •  MoSPI & PMGSY Open Data",
+      "interactions": [
+        {
+          "action": "hover",
+          "selector": "header",
+          "wait_ms": 2500,
+          "description": "1. MoRD Command: SIH26017 Land Acquisition Delay Early Detection Platform"
+        },
+        {
+          "action": "hover",
+          "selector": "main > div > div:first-child",
+          "wait_ms": 3000,
+          "description": "2. National KPIs: 1,477 Central Sector Projects, High Risk Pipeline & Gestation Delays"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 380,
+          "wait_ms": 2500,
+          "description": "3. Early Warnings: Priority Intervention Queue & Risk Distribution Breakdown"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('GIS Map')",
+          "wait_ms": 3500,
+          "description": "4. GIS Spatial: Pan-India Infrastructure Projects & Land Acquisition Vulnerability Map"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('3D Twin')",
+          "wait_ms": 3500,
+          "description": "5. Digital Twin: 3D Elevation Corridor & Right-of-Way Land Parcel Visualization"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Policy Sandbox')",
+          "wait_ms": 3500,
+          "description": "6. Policy Sandbox: What-If Counterfactual Levers (RoW Possession, Escrow Pre-Funding)"
+        },
+        {
+          "action": "hover",
+          "selector": "input[type='range'], .range, [role='slider']",
+          "wait_ms": 3000,
+          "description": "7. Counterfactual Simulation: Calculate Prevented Delay Months & Saved Capital Escalation"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Corridor Studio')",
+          "wait_ms": 3500,
+          "description": "8. Corridor Studio: Environmental Friction, Forest Diversion & River Crossing Buffers"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Contagion Network')",
+          "wait_ms": 3500,
+          "description": "9. Contagion Graph: Dependency Knowledge Graph & Multi-Project Shock Cascade Engine"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Projects')",
+          "wait_ms": 3000,
+          "description": "10. Project Catalog: Searchable Directory of MoSPI Central Sector Infrastructure Projects"
+        },
+        {
+          "action": "click",
+          "selector": "table tbody tr:first-child, .project-row",
+          "wait_ms": 4000,
+          "description": "11. Project Inspection: SHAP Explainability Drivers & RFCTLARR 2013 Statutory Compliance"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Dashboard')",
+          "wait_ms": 1500,
+          "description": "12. Autoplay Loop: Return to MoRD Command Dashboard for Clean Autoplay Loop"
+        }
+      ]
+    },
+    {
+      "name": "smarttriage_ai_local",
+      "title": "SmartTriage AI — Clinical Decision Web Cockpit (XGBoost GPU, 25-Bed ICU Grid & NEWS2 Score)",
+      "folder_path": "C:/Projects/Smarttriage_ai/frontend",
+      "start_command": "cmd.exe /c npm run preview -- --port 8526 --host 127.0.0.1",
+      "url": "http://127.0.0.1:8526",
+      "port": 8526,
+      "wait_timeout_seconds": 60,
+      "readme_path": "../README.md",
+      "main_script_path": "src/App.tsx",
+      "trim_start_sec": 1.5,
+      "speed_factor": 1.18,
+      "github_url": "https://github.com/Vaibhav007-star/Smarttriage_ai",
+      "tech_stack": "React 19  •  TypeScript  •  Vite  •  XGBoost CUDA Pipeline  •  Hospital Sírio-Libanês Clinical Cohort",
+      "interactions": [
+        {
+          "action": "hover",
+          "selector": "header",
+          "wait_ms": 2500,
+          "description": "1. Header: SmartTriage AI Hospital Sírio-Libanês Emergency ICU Command Web App"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('ICU Dark')",
+          "wait_ms": 2500,
+          "description": "2. ICU Mode: Switch to High-Contrast Night ICU Bedside Telemetry Theme"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Hypoxemic')",
+          "wait_ms": 3000,
+          "description": "3. Clinical Presets: Select Acute Hypoxemic Distress Scenario (SpO2 83%, RR 32)"
+        },
+        {
+          "action": "hover",
+          "selector": "div:has-text('ICU ADMISSION INDICATED')",
+          "wait_ms": 3500,
+          "description": "4. Risk Dial: Calibrated ICU Probability Dial, Acuity Tier & SBAR Clinical Briefing"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 360,
+          "wait_ms": 2500,
+          "description": "5. Biomarkers: Scroll to NEWS2 Acuity Score, Shock Index & Mean Arterial Pressure"
+        },
+        {
+          "action": "hover",
+          "selector": "div:has-text('Shock Index')",
+          "wait_ms": 3500,
+          "description": "6. NEWS2 & Hemodynamics: Real-Time Occult Shock Risk & Mean Arterial Pressure (MAP)"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('ICU Ward Grid')",
+          "wait_ms": 3500,
+          "description": "7. Ward Grid: Switch to 25-Bed Spatial ICU Layout & Bed Telemetry"
+        },
+        {
+          "action": "hover",
+          "selector": "div:has-text('Emergency ICU 25-Bed Spatial Grid')",
+          "wait_ms": 3500,
+          "description": "8. Bed Telemetry: Review Bed Occupancy, Surge Queue & Critical Bed Allocation"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('384 Patient Cohort')",
+          "wait_ms": 3500,
+          "description": "9. Cohort Explorer: Switch to Hospital Sírio-Libanês 384-Patient Clinical Trial Benchmark"
+        },
+        {
+          "action": "hover",
+          "selector": "div:has-text('Hospital Sírio-Libanês Clinical Cohort')",
+          "wait_ms": 3500,
+          "description": "10. Clinical Benchmark: Inspect Real Patient Telemetry, Shock Filter & ICU Ground Truth"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Model Intelligence')",
+          "wait_ms": 3500,
+          "description": "11. Model Architecture: Review XGBoost GPU CUDA Specifications, ROC-AUC 0.8016 & Metrics"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Triage Cockpit')",
+          "wait_ms": 2000,
+          "description": "12. Autoplay Loop: Return to Triage Cockpit for Seamless Autoplay Loop"
+        }
+      ]
+    },
+    {
+      "name": "clinical_copilot_local",
+      "title": "Clinical Copilot \u2014 Multimodal Healthcare AI (DenseNet121 Imaging, Grad-CAM, Kaggle Risk & Guidelines RAG)",
+      "folder_path": "C:/Projects/Clinical-Copilot-Multimodal-Healthcare-AI",
+      "start_command": "\"C:\\Projects\\Linkdin Pipline\\.venv\\Scripts\\python.exe\" -m uvicorn api.server:app --port 8525 --host 127.0.0.1",
+      "url": "http://127.0.0.1:8525",
+      "port": 8525,
+      "wait_timeout_seconds": 60,
+      "readme_path": "README.md",
+      "main_script_path": "api/server.py",
+      "trim_start_sec": 2.0,
+      "speed_factor": 1.18,
+      "github_url": "https://github.com/Vaibhav007-star/Clinical-Copilot-Multimodal-Healthcare-AI",
+      "tech_stack": "FastAPI  \u2022  DenseNet121 & Grad-CAM  \u2022  FAISS Guidelines RAG  \u2022  HL7 FHIR R4",
+      "interactions": [
+        {
+          "action": "hover",
+          "selector": ".brand, .top-bar-left",
+          "wait_ms": 2500,
+          "description": "1. Overview: Highlight Clinical Copilot Brand, Multimodal AI Status & Patient Card"
+        },
+        {
+          "action": "hover",
+          "selector": ".metrics-grid .metric-card",
+          "wait_ms": 3000,
+          "description": "2. Metrics: Review DenseNet121 Imaging, 92.7% Kaggle ROC-AUC & FAISS RAG Capabilities"
+        },
+        {
+          "action": "click",
+          "selector": "#presetsContainer .preset-card, .preset-card",
+          "wait_ms": 2500,
+          "description": "3. Case Selection: Load Preloaded Clinical Demonstration Case"
+        },
+        {
+          "action": "click",
+          "selector": "#btnAutopilotTriage",
+          "wait_ms": 5000,
+          "description": "4. Multimodal Triage: Execute Autonomous Imaging, Risk Assessment & Guidelines Workflow"
+        },
+        {
+          "action": "hover",
+          "selector": "#view-review .card-title, #view-review",
+          "wait_ms": 3500,
+          "description": "5. Unified Synthesis: Inspect Multimodal Patient Case Review & ESI Acuity Rating"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 450,
+          "wait_ms": 3000,
+          "description": "6. Differential Diagnosis: Scroll to AI DDx Engine & 5-Axis Triage Radar"
+        },
+        {
+          "action": "hover",
+          "selector": "#ddxTableContainer, #view-review .table, #view-review .chart-container",
+          "wait_ms": 3500,
+          "description": "7. DDx Findings: Review Primary vs Rival Diagnoses, ICD-10 Codes & STAT Workup Orders"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 450,
+          "wait_ms": 3000,
+          "description": "8. Interoperability: Scroll to HL7 FHIR R4 Document Bundle & Physician Attestation"
+        },
+        {
+          "action": "hover",
+          "selector": "#fhirBundleContainer, .attestation-card, pre",
+          "wait_ms": 3500,
+          "description": "9. Governance: Inspect FHIR R4 EHR Export & Attending Clinician Cryptographic Audit Stamp"
+        },
+        {
+          "action": "scroll",
+          "delta_y": -900,
+          "wait_ms": 1200,
+          "description": "10. Navigation: Return to Top"
+        },
+        {
+          "action": "click",
+          "selector": "button.nav-item[data-view='view-imaging']",
+          "wait_ms": 3500,
+          "description": "11. Imaging Studio: Switch to Frontal Chest X-Ray (CXR) Studio"
+        },
+        {
+          "action": "hover",
+          "selector": "#imageViewerContainer, #imageCanvasWrapper",
+          "wait_ms": 3500,
+          "description": "12. Radiograph Viewer: Inspect CXR Radiograph & Anatomical Grad-CAM Saliency Overlay"
+        },
+        {
+          "action": "slider",
+          "selector": "#heatmapOpacity",
+          "value": "45",
+          "wait_ms": 2500,
+          "description": "13. Heatmap Blending: Adjust Grad-CAM Opacity Slider to 45% for Anatomical Context"
+        },
+        {
+          "action": "click",
+          "selector": ".win-btn[data-win='lung']",
+          "wait_ms": 2500,
+          "description": "14. DICOM Windowing: Activate High-Contrast Lung Window Preset"
+        },
+        {
+          "action": "hover",
+          "selector": "#imagingChart, #imagingFindingsCard",
+          "wait_ms": 3500,
+          "description": "15. Pathology Spectrum: Review 7-Pathology Multi-Label Confidence Distribution Chart"
+        },
+        {
+          "action": "click",
+          "selector": "button.nav-item[data-view='view-risk']",
+          "wait_ms": 3500,
+          "description": "16. Patient Risk: Switch to Calibrated Cardiovascular Risk Engine"
+        },
+        {
+          "action": "hover",
+          "selector": ".risk-gauge-container, .risk-score-card, #riskGauge",
+          "wait_ms": 3500,
+          "description": "17. Dynamic Risk Gauge: Review 918-Patient Trained Model Score & Probability Tier"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 420,
+          "wait_ms": 3000,
+          "description": "18. Counterfactual Engine: Scroll to Interactive What-If Simulator & Multi-Score Panel"
+        },
+        {
+          "action": "hover",
+          "selector": "#counterfactualResults, #multiScorePanel, .counterfactual-card",
+          "wait_ms": 3500,
+          "description": "19. Counterfactual Insights: Review Absolute Risk Reduction (ARR) & NNT Projections"
+        },
+        {
+          "action": "click",
+          "selector": "button.nav-item[data-view='view-guidelines']",
+          "wait_ms": 3500,
+          "description": "20. Guidelines RAG: Switch to Evidence-Based Clinical Assistant"
+        },
+        {
+          "action": "hover",
+          "selector": "#guidelinesResultsContainer, .citation-chip, .guideline-card",
+          "wait_ms": 3500,
+          "description": "21. Traceable Citations: Review Grounded AHA/ACC Recommendations & Safety Contraindications"
+        },
+        {
+          "action": "click",
+          "selector": "button.nav-item[data-view='view-overview']",
+          "wait_ms": 3000,
+          "description": "22. Autoplay Loop: Return to Clinical Overview Cockpit for Seamless Autoplay Loop"
+        }
+      ]
+    },
+    {
+      "name": "supply_chain_twin_local",
+      "title": "Supply Chain Risk & Predictive Maintenance Twin (BCG X Edition) \u2014 AI Decision Cockpit, XAI Attribution & Prescriptive Optimization",
+      "folder_path": "C:/Projects/Supply-Chain-Risk-Predictive-Maintenance-Twin",
+      "start_command": "\"C:\\Projects\\Linkdin Pipline\\.venv\\Scripts\\python.exe\" -m uvicorn server:app --port 8523 --host 127.0.0.1",
+      "url": "http://127.0.0.1:8523",
+      "port": 8523,
+      "wait_timeout_seconds": 60,
+      "readme_path": "README.md",
+      "main_script_path": "server.py",
+      "trim_start_sec": 2.0,
+      "speed_factor": 1.18,
+      "github_url": "https://github.com/Vaibhav007-star/Supply-Chain-Risk-Predictive-Maintenance-Twin",
+      "tech_stack": "FastAPI  \u2022  Scikit-Learn  \u2022  Plotly Interactive Charts  \u2022  Prescriptive Optimization Engine",
+      "interactions": [
+        {
+          "action": "hover",
+          "selector": ".logo-mark, .sidebar-header",
+          "wait_ms": 2500,
+          "description": "1. Overview: Highlight BCG X Digital Twin Logo, Status Pulse & Line 4 Topology"
+        },
+        {
+          "action": "hover",
+          "selector": ".kpi-grid .kpi-card",
+          "wait_ms": 3000,
+          "description": "2. Executive KPIs: Review Facility Health, Value-at-Risk ($VaR), EBITDA Impact & ROI Multiplier"
+        },
+        {
+          "action": "hover",
+          "selector": "#chart-roi-arbitrage",
+          "wait_ms": 3500,
+          "description": "3. Financial Bridge: Inspect Value-at-Risk Waterfall (Reactive Status Quo vs Prescriptive Savings)"
+        },
+        {
+          "action": "hover",
+          "selector": "#chart-health-radar",
+          "wait_ms": 3000,
+          "description": "4. Health Radar: Review 5-Domain Multi-Factor Twin Operational Posture vs Benchmark"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 480,
+          "wait_ms": 3000,
+          "description": "5. Risk Network: Scroll down to End-to-End Digital Twin Risk Propagation Network"
+        },
+        {
+          "action": "hover",
+          "selector": "#chart-twin-sankey",
+          "wait_ms": 3500,
+          "description": "6. Sankey Topology: Inspect Causal Inflow from Suppliers & Components to Shopfloor Assets"
+        },
+        {
+          "action": "scroll",
+          "delta_y": -480,
+          "wait_ms": 1200,
+          "description": "7. Navigation: Return to Top"
+        },
+        {
+          "action": "click",
+          "selector": "button[data-tab='tab-maintenance']",
+          "wait_ms": 3500,
+          "description": "8. Predictive Maintenance: Switch to Machine Asset Telemetry & Physics Diagnostics"
+        },
+        {
+          "action": "hover",
+          "selector": ".telemetry-grid",
+          "wait_ms": 3000,
+          "description": "9. Telemetry Grid: Inspect Spindle Speed, Torque, Tool Wear & Temperature Differential"
+        },
+        {
+          "action": "hover",
+          "selector": "#chart-maint-xai, .chart-container",
+          "wait_ms": 3500,
+          "description": "10. Explainable AI: Review Physics-Grounded Feature Attribution Waterfall"
+        },
+        {
+          "action": "click",
+          "selector": "button[data-tab='tab-supply-chain']",
+          "wait_ms": 3500,
+          "description": "11. Logistics Risk: Switch to Inbound Shipments & Delay Duration Modeling"
+        },
+        {
+          "action": "hover",
+          "selector": "#chart-sc-delay, .table-container",
+          "wait_ms": 3500,
+          "description": "12. Inbound Logistics: Review Delay Probability Distribution & Carrier Risk Factors"
+        },
+        {
+          "action": "click",
+          "selector": "button[data-tab='tab-inventory']",
+          "wait_ms": 3500,
+          "description": "13. Inventory Trajectories: Switch to Deterministic 30-Day Stockout Projections"
+        },
+        {
+          "action": "hover",
+          "selector": "#chart-inventory-trajectory",
+          "wait_ms": 3500,
+          "description": "14. Stockout Engine: Inspect Buffer Trajectory & Projected Stockout Horizon Days"
+        },
+        {
+          "action": "click",
+          "selector": "button[data-tab='tab-prescriptive']",
+          "wait_ms": 3500,
+          "description": "15. Prescriptive Optimizer: Switch to BCG X Stochastic Safety Stock & Maintenance Knapsack"
+        },
+        {
+          "action": "hover",
+          "selector": "#chart-opt-inventory, #chart-opt-maintenance",
+          "wait_ms": 3500,
+          "description": "16. Prescriptive Optimization: Review EOQ / Safety Stock Frontier & Crew Allocation"
+        },
+        {
+          "action": "click",
+          "selector": "button[data-tab='tab-resilience']",
+          "wait_ms": 3500,
+          "description": "17. Resilience Matrix: Switch to Time-to-Survive (TTS) vs Time-to-Recover (TTR)"
+        },
+        {
+          "action": "hover",
+          "selector": "#chart-resilience-scatter, #chart-supplier-hhi",
+          "wait_ms": 3500,
+          "description": "18. Resilience Analytics: Inspect Structural Vulnerability Gap (TTS vs TTR) & Spend HHI"
+        },
+        {
+          "action": "click",
+          "selector": "button[data-tab='tab-simulator']",
+          "wait_ms": 3500,
+          "description": "19. Disruption Simulator: Switch to Multi-Disruption What-If Scenario Sandbox"
+        },
+        {
+          "action": "hover",
+          "selector": ".sim-controls, #chart-sim-impact",
+          "wait_ms": 3500,
+          "description": "20. Scenario Sandbox: Inspect Real-Time Combined Stress Testing & EBITDA Degradation"
+        },
+        {
+          "action": "click",
+          "selector": "button[data-tab='tab-memo']",
+          "wait_ms": 3500,
+          "description": "21. Boardroom Memo: Switch to BCG X Standard Automated Executive Briefing Memo"
+        },
+        {
+          "action": "hover",
+          "selector": "#memo-container, .memo-sheet",
+          "wait_ms": 3500,
+          "description": "22. Boardroom Memo: Review Quantified Executive ROI Summary & Strategic Mitigations"
+        },
+        {
+          "action": "click",
+          "selector": "button[data-tab='tab-overview']",
+          "wait_ms": 3000,
+          "description": "23. Autoplay Loop: Return to Executive Cockpit for Seamless Autoplay Loop"
+        }
+      ]
+    },
+    {
+      "name": "flavorgen_ai_local",
+      "title": "FlavorGen AI \u2014 AI Flavor & Fragrance Synthesis Platform (Chemoinformatics, E-Nose IoT & Microfluidic Robotics)",
+      "folder_path": "C:/Projects/FlavorGen-AI",
+      "start_command": "\"C:\\Projects\\Linkdin Pipline\\.venv\\Scripts\\python.exe\" -m uvicorn backend.app.main:app --port 8522 --host 127.0.0.1",
+      "url": "http://127.0.0.1:8522",
+      "port": 8522,
+      "wait_timeout_seconds": 60,
+      "readme_path": "README.md",
+      "main_script_path": "backend/app/main.py",
+      "trim_start_sec": 2.0,
+      "speed_factor": 1.18,
+      "github_url": "https://github.com/Vaibhav007-star/FlavorGen-AI",
+      "tech_stack": "FastAPI  \u2022  React 18 & Three.js 3D  \u2022  RDKit Cheminformatics  \u2022  IoT E-Nose Hardware",
+      "interactions": [
+        {
+          "action": "hover",
+          "selector": "aside div:has-text('FlavorGen')",
+          "wait_ms": 2500,
+          "description": "1. Overview: Highlight FlavorGen AI Brand, Citrus Emblem & Synthesis Subtitle"
+        },
+        {
+          "action": "hover",
+          "selector": "main svg, main .grid",
+          "wait_ms": 3000,
+          "description": "2. Telemetry: Review Active Compounds (65), Ingredients (15) & Model Accuracy"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 420,
+          "wait_ms": 3000,
+          "description": "3. Architecture: Inspect Forward Mapping vs Inverse Formulation System Pipeline"
+        },
+        {
+          "action": "scroll",
+          "delta_y": -420,
+          "wait_ms": 1200,
+          "description": "4. Navigation: Return to Top"
+        },
+        {
+          "action": "click",
+          "selector": "aside button:has-text('Aroma Analyzer')",
+          "wait_ms": 3500,
+          "description": "5. Aroma Intelligence: Open 12D Receptor Radar & Volatile Profiler"
+        },
+        {
+          "action": "hover",
+          "selector": "main svg, main canvas, main .grid",
+          "wait_ms": 3500,
+          "description": "6. Aroma Vectors: Inspect 12D Olfactory Profile (Fruity, Floral, Woody, Sweet, Citrus)"
+        },
+        {
+          "action": "click",
+          "selector": "aside button:has-text('Flavor Analyzer')",
+          "wait_ms": 3500,
+          "description": "7. Flavor Intelligence: Open 10D Gustatory & Chemesthesis Engine"
+        },
+        {
+          "action": "hover",
+          "selector": "main svg, main canvas, main .grid",
+          "wait_ms": 3500,
+          "description": "8. Flavor Vectors: Review Taste Modalities (Sweetness, Acidity, Umami, Mouthfeel, Cooling)"
+        },
+        {
+          "action": "click",
+          "selector": "aside button:has-text('Formulation Studio')",
+          "wait_ms": 3500,
+          "description": "9. Generative Studio: Open Multi-Ingredient Formulation Engine"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Citrus Menthol Cooler')",
+          "wait_ms": 3000,
+          "description": "10. Generative Synthesis: Select 'Citrus Menthol Cooler' Natural Language Sensory Target"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Generate Formulation'), button:has-text('Synthesize')",
+          "wait_ms": 4500,
+          "description": "11. Optimization: Execute Hybrid Inversion (Genetic Algorithm + SLSQP)"
+        },
+        {
+          "action": "hover",
+          "selector": "main div.space-y-4, main .grid",
+          "wait_ms": 3500,
+          "description": "12. Formulation Verdict: Inspect Optimized Ingredient Ratios & Sensory Fit"
+        },
+        {
+          "action": "click",
+          "selector": "aside button:has-text('Flavor Space')",
+          "wait_ms": 4000,
+          "description": "13. 3D Manifold: Transition into 64D SVD Latent Sensory Embedding Space"
+        },
+        {
+          "action": "orbit_3d",
+          "selector": "canvas, #flavor-space-canvas",
+          "radius_x": 300,
+          "radius_y": 60,
+          "wait_ms": 4000,
+          "description": "14. 3D Manifold: Cinematic Mouse-Driven 3D Camera Orbit of Molecular Clusters"
+        },
+        {
+          "action": "click",
+          "selector": "aside button:has-text('IoT Hardware Hub')",
+          "wait_ms": 3500,
+          "description": "15. IoT Hardware: Open E-Nose Multi-Gas Telemetry & Microfluidic Dispenser Rack"
+        },
+        {
+          "action": "hover",
+          "selector": "main .grid, main div.space-y-6",
+          "wait_ms": 3500,
+          "description": "16. E-Nose Telemetry: Review MQ-3, MQ-135, MQ-138 & BME688 MOX Gas Resistance Curves"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Roasted Espresso Headspace')",
+          "wait_ms": 3000,
+          "description": "17. E-Nose Simulation: Inject 'Roasted Espresso Headspace' Volatile Telemetry"
+        },
+        {
+          "action": "hover",
+          "selector": "main div.border.border-white, main .space-y-4",
+          "wait_ms": 3500,
+          "description": "18. Microfluidic Actuation: Inspect 12-Channel Peristaltic Pump & Ultrasonic Atomizer Rack"
+        },
+        {
+          "action": "click",
+          "selector": "aside button:has-text('Dashboard')",
+          "wait_ms": 3000,
+          "description": "19. Autoplay Loop: Return to Command Dashboard for Clean Autoplay Loop"
+        }
+      ]
+    },
+    {
+      "name": "agrivision_agent_local",
+      "title": "AgriVision Agent \u2014 Precision Agricultural Intelligence, Crop Disease Detection & Autonomous Agronomic Advisory",
+      "folder_path": "C:/Projects/AgriVision Agent",
+      "start_command": "\"C:\\Projects\\AgriVision Agent\\.venv\\Scripts\\python.exe\" app/server.py --port 8521",
+      "url": "http://127.0.0.1:8521",
+      "port": 8521,
+      "wait_timeout_seconds": 60,
+      "readme_path": "README.md",
+      "main_script_path": "app/server.py",
+      "trim_start_sec": 2.0,
+      "speed_factor": 1.18,
+      "github_url": "https://github.com/Vaibhav007-star/AgriVision-Agent",
+      "tech_stack": "FastAPI  \u2022  MobileNetV2 CNN  \u2022  LangGraph State Machine  \u2022  FAISS RAG  \u2022  Leaflet GIS",
+      "interactions": [
+        {
+          "action": "hover",
+          "selector": "header a[href='#home']",
+          "wait_ms": 2500,
+          "description": "1. Overview: Highlight AgriVision Agent Brand, Zenze Theme & Autonomous Agri Status"
+        },
+        {
+          "action": "hover",
+          "selector": "#home .insights-badge",
+          "wait_ms": 3000,
+          "description": "2. Telemetry: Inspect Live Farm Insights, Soil Moisture, Ambient Temp & Spore Inoculum Risk"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 550,
+          "wait_ms": 3500,
+          "description": "3. Metrics: Review 25K+ Leaves, 94.8% Top-1 CNN Accuracy & Class Defense Suite"
+        },
+        {
+          "action": "click",
+          "selector": "header nav a[href='#solutions']",
+          "wait_ms": 3000,
+          "description": "4. Solutions: Navigate to Intelligent Solutions for Every Farm"
+        },
+        {
+          "action": "hover",
+          "selector": "#solutions .zenze-card",
+          "wait_ms": 3500,
+          "description": "5. Solutions: Review MobileNetV2 Vision, Microclimate Weather, LangGraph AI & Knapsack Tank Dosage"
+        },
+        {
+          "action": "click",
+          "selector": "header nav a[href='#scanner']",
+          "wait_ms": 3500,
+          "description": "6. Workbench: Transition into Live Neural Network Diagnostic Engine Workbench"
+        },
+        {
+          "action": "hover",
+          "selector": "#voice-advisor-card",
+          "wait_ms": 3000,
+          "description": "7. Vernacular Voice AI: Inspect Haryanvi & Hindi Speech-to-Diagnosis Assistant"
+        },
+        {
+          "action": "click",
+          "selector": "#voice-advisor-card button[onclick*='\u0915\u0928\u0915']",
+          "wait_ms": 3500,
+          "description": "8. Vernacular Voice AI: Select One-Click Prompt Chip '\u0915\u0928\u0915 \u092e\u0947\u0902 \u092a\u0940\u0932\u093e \u0930\u0924\u0941\u0906' (Wheat Stripe Rust)"
+        },
+        {
+          "action": "hover",
+          "selector": "#voice-response-panel, #voice-advisor-card",
+          "wait_ms": 3000,
+          "description": "9. Vernacular Voice AI: Review Spoken Haryanvi Dialect Audio Script & CCS HAU Remedy"
+        },
+        {
+          "action": "click",
+          "selector": "#samples-container button",
+          "wait_ms": 3000,
+          "description": "10. Benchmark Suite: Select Target Leaf Sample"
+        },
+        {
+          "action": "slider",
+          "selector": "#acres-slider, input[type='range']",
+          "value": "2.5",
+          "wait_ms": 2500,
+          "description": "11. Field Parameters: Modulate Farm Acreage to 2.50 Acres"
+        },
+        {
+          "action": "click",
+          "selector": "#run-diagnosis-btn",
+          "wait_ms": 5000,
+          "description": "12. Neural Inference: Execute MobileNetV2 Diagnostic Engine & Grad-CAM XAI"
+        },
+        {
+          "action": "hover",
+          "selector": "#diagnosis-banner",
+          "wait_ms": 3500,
+          "description": "13. Diagnosis Verdict: Inspect Neural Condition, Probability & Confidence Rating"
+        },
+        {
+          "action": "hover",
+          "selector": "#grid-view-container",
+          "wait_ms": 3500,
+          "description": "14. Explainability: Inspect 3-Way Grid (Original RGB, CLAHE Enhanced & Grad-CAM Heatmap)"
+        },
+        {
+          "action": "click",
+          "selector": "#view-mode-split",
+          "wait_ms": 3000,
+          "description": "15. Explainability: Switch to Interactive Split-Lens Visual Slider"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 500,
+          "wait_ms": 3000,
+          "description": "16. Field Dosage: Scroll to Knapsack Fluid Tank Simulator & Digital LCC Nitrogen Card"
+        },
+        {
+          "action": "hover",
+          "selector": "#dosage-card",
+          "wait_ms": 3500,
+          "description": "17. Field Dosage: Inspect Animated Knapsack Fluid Tank, Spray Water Volume & Cost Savings"
+        },
+        {
+          "action": "hover",
+          "selector": "#lcc-card",
+          "wait_ms": 3500,
+          "description": "18. Digital LCC: Review 5-Panel IRRI Scale, Chlorophyll Health & Urea Guidance"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 500,
+          "wait_ms": 3000,
+          "description": "19. Outbreak Forecasting: Scroll to Climate-Smart Spray Window & Disease Triangle"
+        },
+        {
+          "action": "hover",
+          "selector": "#climate-spray-card",
+          "wait_ms": 3500,
+          "description": "20. Climate-Smart Spray: Review Morning Window, 48h Spore Risk & Wash-Off Guard"
+        },
+        {
+          "action": "hover",
+          "selector": "#disease-triangle-card",
+          "wait_ms": 3500,
+          "description": "21. Disease Triangle: Inspect 5-Day Outbreak Trajectory & Host-Pathogen Dynamics"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 500,
+          "wait_ms": 3000,
+          "description": "22. Economics: Scroll to N-P-K Fertilizer Calculator & APMC Mandi Market Intelligence"
+        },
+        {
+          "action": "hover",
+          "selector": "#npk-calculator-card",
+          "wait_ms": 3500,
+          "description": "23. Soil Nutrition: Review CCS HAU Hisar Approved Urea, DAP & MOP Bag Counts"
+        },
+        {
+          "action": "hover",
+          "selector": "#mandi-market-card",
+          "wait_ms": 3500,
+          "description": "24. APMC Market: Inspect Local vs Highest Regional Mandi Rate, Arbitrage & Net Crop Profit"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 500,
+          "wait_ms": 3000,
+          "description": "25. GIS Surveillance: Scroll to Haryana Agricultural GIS Outbreak Heatmap"
+        },
+        {
+          "action": "hover",
+          "selector": "#gis-outbreak-card",
+          "wait_ms": 4000,
+          "description": "26. GIS Heatmap: Inspect 22 Haryana Districts Live Pathological Surveillance Map"
+        },
+        {
+          "action": "scroll",
+          "delta_y": -2500,
+          "wait_ms": 1500,
+          "description": "27. Navigation: Return to Hero Header for Clean Autoplay Loop"
+        }
+      ]
+    },
+    {
+      "name": "non_constant_variance_local",
+      "title": "Econometrix Cockpit \u2014 Non-Constant Variance & Serial Correlation Diagnostics & Remedies Platform",
+      "folder_path": "C:/Projects/Non-constant-Variance-and-Serial-Correlation-Diagnostics-and-Remedies",
+      "start_command": "\"C:\\Projects\\Linkdin Pipline\\.venv\\Scripts\\python.exe\" -m uvicorn app.server:app --port 8520",
+      "url": "http://127.0.0.1:8520",
+      "port": 8520,
+      "wait_timeout_seconds": 60,
+      "readme_path": "README.md",
+      "main_script_path": "app/server.py",
+      "trim_start_sec": 2.0,
+      "speed_factor": 1.18,
+      "github_url": "https://github.com/Vaibhav007-star/Non-constant-Variance-and-Serial-Correlation-Diagnostics-and-Remedies",
+      "tech_stack": "FastAPI  \u2022  Statsmodels  \u2022  Plotly Interactive Charts  \u2022  Econometric Audit Engine",
+      "interactions": [
+        {
+          "action": "hover",
+          "selector": ".brand-section, header",
+          "wait_ms": 2500,
+          "description": "1. Overview: Highlight Econometrix Cockpit Brand & FastAPI Engine Status"
+        },
+        {
+          "action": "hover",
+          "selector": ".kpi-grid .kpi-card, .kpi-grid",
+          "wait_ms": 3000,
+          "description": "2. KPIs: Inspect Observations, R\u00b2, Adjusted R\u00b2, Residual Std Error, F-Statistic & Durbin-Watson"
+        },
+        {
+          "action": "hover",
+          "selector": "#banner-het, .banner-grid",
+          "wait_ms": 3000,
+          "description": "3. Diagnostics: Review Heteroscedasticity & Serial Correlation Detection Banners"
+        },
+        {
+          "action": "click",
+          "selector": ".tab-btn[data-tab='tab-visuals']",
+          "wait_ms": 3500,
+          "description": "4. Visualizations: Open Interactive Plotly Diagnostic Chart Gallery"
+        },
+        {
+          "action": "hover",
+          "selector": "#chart-residuals",
+          "wait_ms": 3500,
+          "description": "5. Visualizations: Inspect Residuals vs Fitted Values with LOWESS Curve (Fan-Shaped Heteroscedasticity)"
+        },
+        {
+          "action": "hover",
+          "selector": "#chart-scale-location",
+          "wait_ms": 3000,
+          "description": "6. Visualizations: Review Scale-Location Plot (\u221a|Standardized Residuals|)"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 420,
+          "wait_ms": 2500,
+          "description": "7. Visualizations: Scroll to ACF & Lag Scatter Charts"
+        },
+        {
+          "action": "hover",
+          "selector": "#chart-acf",
+          "wait_ms": 3500,
+          "description": "8. Visualizations: Inspect Autocorrelation Function (ACF) with 95% Bartlett Confidence Bands"
+        },
+        {
+          "action": "hover",
+          "selector": "#chart-lag-scatter",
+          "wait_ms": 3000,
+          "description": "9. Visualizations: Review Residual Lag Scatter (e\u209c vs e\u209c\u208b\u2081) for AR(1) Persistence"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 420,
+          "wait_ms": 2500,
+          "description": "10. Visualizations: Scroll to Q-Q Plot & Error Distribution"
+        },
+        {
+          "action": "hover",
+          "selector": "#chart-qq",
+          "wait_ms": 3000,
+          "description": "11. Visualizations: Inspect Normal Q-Q Plot for Residual Normality Assessment"
+        },
+        {
+          "action": "hover",
+          "selector": "#chart-se-compare",
+          "wait_ms": 3500,
+          "description": "12. Visualizations: Review Standard Error Comparison (OLS vs HC3 vs HAC vs FGLS)"
+        },
+        {
+          "action": "scroll",
+          "delta_y": -840,
+          "wait_ms": 1200,
+          "description": "13. Navigation: Return to Top"
+        },
+        {
+          "action": "click",
+          "selector": ".tab-btn[data-tab='tab-tests']",
+          "wait_ms": 3500,
+          "description": "14. Hypothesis Tests: Open Formal Econometric Diagnostic Test Suite"
+        },
+        {
+          "action": "hover",
+          "selector": "#tests-container",
+          "wait_ms": 3500,
+          "description": "15. Hypothesis Tests: Inspect Breusch-Pagan, White, Goldfeld-Quandt & Durbin-Watson Results"
+        },
+        {
+          "action": "click",
+          "selector": ".tab-btn[data-tab='tab-remedies']",
+          "wait_ms": 3500,
+          "description": "16. Remedies: Open Robust Standard Error Comparative Scorecard"
+        },
+        {
+          "action": "hover",
+          "selector": "#scorecard-tbody, .data-table",
+          "wait_ms": 3500,
+          "description": "17. Remedies: Inspect OLS vs HC3 vs HAC vs FGLS Standard Error Corrections"
+        },
+        {
+          "action": "scroll",
+          "delta_y": 420,
+          "wait_ms": 3000,
+          "description": "18. Remedies: Review Prais-Winsten AR(1) & Box-Cox Variance Stabilization"
+        },
+        {
+          "action": "scroll",
+          "delta_y": -420,
+          "wait_ms": 1200,
+          "description": "19. Navigation: Return to Tabs"
+        },
+        {
+          "action": "click",
+          "selector": ".tab-btn[data-tab='tab-summary']",
+          "wait_ms": 3500,
+          "description": "20. Executive: Review Audit Verdict & Prescribed Econometric Actions"
+        },
+        {
+          "action": "click",
+          "selector": ".tab-btn[data-tab='tab-data']",
+          "wait_ms": 3500,
+          "description": "21. Data Explorer: Inspect Descriptive Statistics & Dataset Preview"
+        },
+        {
+          "action": "click",
+          "selector": ".tab-btn[data-tab='tab-theory']",
+          "wait_ms": 3500,
+          "description": "22. Theory: Review Gauss-Markov Foundations, Sandwich Estimators & Newey-West HAC"
+        },
+        {
+          "action": "click",
+          "selector": ".preset-card[data-id='housing']",
+          "wait_ms": 4500,
+          "description": "23. Dataset Switch: Load Housing Prices Cross-Section (Fan Heteroscedasticity)"
+        },
+        {
+          "action": "click",
+          "selector": ".tab-btn[data-tab='tab-visuals']",
+          "wait_ms": 3500,
+          "description": "24. Visualizations: Inspect Housing Dataset Diagnostic Charts (Classic Fan Shape)"
+        },
+        {
+          "action": "click",
+          "selector": ".tab-btn[data-tab='tab-baseline']",
+          "wait_ms": 3000,
+          "description": "25. Autoplay Loop: Return to Baseline OLS for Clean Loop"
+        }
+      ]
+    },
+    {
       "name": "schoolmind_multi_agent_local",
-      "title": "SchoolMind — Autonomous Multi-Agent AI School Management System & 3D Digital Twin",
+      "title": "SchoolMind \u2014 Autonomous Multi-Agent AI School Management System & 3D Digital Twin",
       "folder_path": "C:/Projects/SchoolMind-Multi-Agent AI",
       "start_command": "\"C:\\Projects\\SchoolMind-Multi-Agent AI\\.venv\\Scripts\\python.exe\" -m uvicorn schoolmind.backend.api:app --port 8511",
       "url": "http://127.0.0.1:8511",
@@ -13,159 +1154,117 @@
       "trim_start_sec": 2.0,
       "speed_factor": 1.18,
       "github_url": "https://github.com/Vaibhav007-star/SchoolMind-Multi-Agent-AI",
-      "tech_stack": "LangGraph  •  FastAPI  •  Three.js 3D WebGL  •  SQLAlchemy",
-      "interactions": [
-        { "action": "hover", "selector": ".brand, header", "wait_ms": 2500, "description": "1. Overview: Highlight SchoolMind Multi-Agent Header & Operational Status" },
-        { "action": "hover", "selector": "#kpi-grid div.kpi-card, #kpi-grid", "wait_ms": 3000, "description": "2. Executive KPIs: Review Academic Risk, Sub Coverage & Campus Safety" },
-        { "action": "scroll", "delta_y": 420, "wait_ms": 3500, "description": "3. Overview: Inspect Multi-Agent Task Blackboard & Event Stream" },
-        { "action": "scroll", "delta_y": -420, "wait_ms": 1200, "description": "4. Overview: Return to Navigation" },
-        { "action": "click", "selector": "nav [data-view='studio3d'], button[data-view='studio3d']", "wait_ms": 4000, "description": "5. 3D Twin: Transition into Three.js 3D Campus Digital Twin & Studio" },
-        { "action": "click", "selector": "#mode-campus-btn", "wait_ms": 2500, "description": "6. 3D Twin: Activate 3D Architectural Campus Layout" },
-        { "action": "orbit_3d", "selector": "#schoolmind-3d-canvas, canvas", "radius_x": 320, "radius_y": 50, "wait_ms": 4000, "description": "7. 3D Twin: Cinematic Mouse-Driven 3D Camera Orbit of Classrooms & Perimeter" },
-        { "action": "click", "selector": "#mode-neural-btn", "wait_ms": 3000, "description": "8. 3D Twin: Transition into 3D 10-Agent Neural Galaxy Visualization" },
-        { "action": "click", "selector": "#run-crisis-3d", "wait_ms": 4500, "description": "9. Autonomous Scenarios: Trigger 6AM Crisis Multi-Agent Deliberation" },
-        { "action": "click", "selector": "nav [data-view='students'], button[data-view='students']", "wait_ms": 3500, "description": "10. Student Sentinel: Inspect Early Warning Academic & Attendance Risk Roster" },
-        { "action": "hover", "selector": "#students-table tbody tr", "wait_ms": 3000, "description": "11. Student Sentinel: Review Slope Trend Regressions & Intervention Flags" },
-        { "action": "click", "selector": "nav [data-view='teachers'], button[data-view='teachers']", "wait_ms": 3500, "description": "12. Teacher Balancer: Inspect Daily Absence Roster & Sub Allocation" },
-        { "action": "click", "selector": "#find-sub-btn", "wait_ms": 3500, "description": "13. Teacher Balancer: Run Automated Sub Qualification & Workload Scoring" },
-        { "action": "click", "selector": "nav [data-view='campus'], button[data-view='campus']", "wait_ms": 3500, "description": "14. Campus Guardian: Inspect Facility Maintenance & HVAC Equipment Telemetry" },
-        { "action": "click", "selector": "#relocate-lab-btn", "wait_ms": 3500, "description": "15. Campus Guardian: Execute Automated Emergency Room Relocation" },
-        { "action": "click", "selector": "nav [data-view='safety'], button[data-view='safety']", "wait_ms": 3500, "description": "16. Safety Auditor: Review Perimeter Security Logs & Fire Drill Audit Ratings" },
-        { "action": "click", "selector": "nav [data-view='hitl'], button[data-view='hitl']", "wait_ms": 3500, "description": "17. Governance: Review Human-in-the-Loop Principal Escalation Queue" },
-        { "action": "click", "selector": "nav [data-view='overview'], button[data-view='overview']", "wait_ms": 3000, "description": "18. Autoplay Loop: Return to Command Overview for Clean Autoplay Loop" }
-      ]
-    },
-    {
-      "name": "supply_chain_analyst_local",
-      "title": "Supply Chain Operations Control Tower \u2014 E-Commerce Delivery Delay & Logistics Risk Predictor",
-      "folder_path": "C:/Projects/Supply Chain Analyst Enginer",
-      "start_command": "\"C:\\Projects\\Divyansh Project\\.venv\\Scripts\\python.exe\" -m uvicorn server:app --port 8510",
-      "url": "http://127.0.0.1:8510",
-      "port": 8510,
-      "wait_timeout_seconds": 60,
-      "readme_path": "README.md",
-      "main_script_path": "server.py",
-      "trim_start_sec": 2.0,
-      "speed_factor": 1.18,
-      "github_url": "https://github.com/Vaibhav007-star/supply-chain-risk-control-tower",
-      "tech_stack": "FastAPI  \u2022  Scikit-Learn Calibrated Pipeline  \u2022  Operations Control Tower",
+      "tech_stack": "LangGraph  \u2022  FastAPI  \u2022  Three.js 3D WebGL  \u2022  SQLAlchemy",
       "interactions": [
         {
           "action": "hover",
-          "selector": "#tab-btn-kpis, header",
+          "selector": ".brand, header",
           "wait_ms": 2500,
-          "description": "1. Overview: Highlight Control Tower Header & Architecture"
+          "description": "1. Overview: Highlight SchoolMind Multi-Agent Header & Operational Status"
         },
         {
           "action": "hover",
-          "selector": ".grid div.p-4, .grid",
+          "selector": "#kpi-grid div.kpi-card, #kpi-grid",
           "wait_ms": 3000,
-          "description": "2. Executive KPIs: Inspect Total Order Volume, OTD Rate & Delay Hotspots"
+          "description": "2. Executive KPIs: Review Academic Risk, Sub Coverage & Campus Safety"
         },
         {
           "action": "scroll",
           "delta_y": 420,
           "wait_ms": 3500,
-          "description": "3. Executive KPIs: Review State-Level OTD Delays & Regional Hotspots"
+          "description": "3. Overview: Inspect Multi-Agent Task Blackboard & Event Stream"
         },
         {
           "action": "scroll",
-          "delta_y": 420,
-          "wait_ms": 3000,
-          "description": "4. Executive KPIs: Inspect Product Category Risk Breakdown"
-        },
-        {
-          "action": "scroll",
-          "delta_y": -840,
+          "delta_y": -420,
           "wait_ms": 1200,
-          "description": "5. Overview: Return to Navigation Bar"
+          "description": "4. Overview: Return to Navigation"
         },
         {
           "action": "click",
-          "selector": "#tab-btn-queue",
-          "wait_ms": 3500,
-          "description": "6. Dispatch Queue: Transition to Prioritized Holdout Dispatch Manifest"
-        },
-        {
-          "action": "hover",
-          "selector": "#queue-table-body tr",
-          "wait_ms": 3000,
-          "description": "7. Dispatch Queue: Inspect Ranked High-Risk Outbound Shipments"
-        },
-        {
-          "action": "slider",
-          "selector": "#queue-min-prob, input[type='range']",
-          "value": "0.35",
-          "wait_ms": 3000,
-          "description": "8. Dispatch Queue: Filter Manifest by Operational Risk Threshold"
-        },
-        {
-          "action": "scroll",
-          "delta_y": 380,
-          "wait_ms": 3000,
-          "description": "9. Dispatch Queue: Review Critical Tier Consignments & Carrier Handoff Flags"
-        },
-        {
-          "action": "scroll",
-          "delta_y": -380,
-          "wait_ms": 1000,
-          "description": "10. Dispatch Queue: Return to Top Controls"
-        },
-        {
-          "action": "click",
-          "selector": "#tab-btn-simulator",
+          "selector": "nav [data-view='studio3d'], button[data-view='studio3d']",
           "wait_ms": 4000,
-          "description": "11. What-If Lab: Open Interactive Dispatch Acceleration Simulator"
+          "description": "5. 3D Twin: Transition into Three.js 3D Campus Digital Twin & Studio"
         },
         {
-          "action": "slider",
-          "selector": "#sim-dispatch, input[type='range']",
-          "value": "18",
-          "wait_ms": 3000,
-          "description": "12. What-If Lab: Accelerate Warehouse Processing Turnaround (-24 Hours)"
-        },
-        {
-          "action": "slider",
-          "selector": "#sim-distance, input[type='range']",
-          "value": "850",
+          "action": "click",
+          "selector": "#mode-campus-btn",
           "wait_ms": 2500,
-          "description": "13. What-If Lab: Modulate Haversine Transit Distance Vector"
+          "description": "6. 3D Twin: Activate 3D Architectural Campus Layout"
         },
         {
-          "action": "hover",
-          "selector": ".bg-slate-900\\/60, .border-slate-800",
-          "wait_ms": 3500,
-          "description": "14. What-If Lab: Review Real-Time Risk Reduction & Local SHAP Tree Attribution"
-        },
-        {
-          "action": "click",
-          "selector": "#tab-btn-governance",
+          "action": "orbit_3d",
+          "selector": "#schoolmind-3d-canvas, canvas",
+          "radius_x": 320,
+          "radius_y": 50,
           "wait_ms": 4000,
-          "description": "15. Governance: Inspect Model Benchmark Leaderboard (RF, XGBoost, LightGBM)"
-        },
-        {
-          "action": "hover",
-          "selector": "#leaderboard-table-body, table",
-          "wait_ms": 3500,
-          "description": "16. Governance: Inspect PR-AUC, ROC-AUC, Brier Score & Probability Calibration"
-        },
-        {
-          "action": "scroll",
-          "delta_y": 380,
-          "wait_ms": 3000,
-          "description": "17. Governance: Review Global SHAP Root-Cause Feature Importance"
-        },
-        {
-          "action": "scroll",
-          "delta_y": -380,
-          "wait_ms": 1000,
-          "description": "18. Governance: Return to Top Navigation"
+          "description": "7. 3D Twin: Cinematic Mouse-Driven 3D Camera Orbit of Classrooms & Perimeter"
         },
         {
           "action": "click",
-          "selector": "#tab-btn-kpis",
+          "selector": "#mode-neural-btn",
           "wait_ms": 3000,
-          "description": "19. Autoplay Loop: Return to Command Overview for Clean Seamless Loop"
+          "description": "8. 3D Twin: Transition into 3D 10-Agent Neural Galaxy Visualization"
+        },
+        {
+          "action": "click",
+          "selector": "#run-crisis-3d",
+          "wait_ms": 4500,
+          "description": "9. Autonomous Scenarios: Trigger 6AM Crisis Multi-Agent Deliberation"
+        },
+        {
+          "action": "click",
+          "selector": "nav [data-view='students'], button[data-view='students']",
+          "wait_ms": 3500,
+          "description": "10. Student Sentinel: Inspect Early Warning Academic & Attendance Risk Roster"
+        },
+        {
+          "action": "hover",
+          "selector": "#students-table tbody tr",
+          "wait_ms": 3000,
+          "description": "11. Student Sentinel: Review Slope Trend Regressions & Intervention Flags"
+        },
+        {
+          "action": "click",
+          "selector": "nav [data-view='teachers'], button[data-view='teachers']",
+          "wait_ms": 3500,
+          "description": "12. Teacher Balancer: Inspect Daily Absence Roster & Sub Allocation"
+        },
+        {
+          "action": "click",
+          "selector": "#find-sub-btn",
+          "wait_ms": 3500,
+          "description": "13. Teacher Balancer: Run Automated Sub Qualification & Workload Scoring"
+        },
+        {
+          "action": "click",
+          "selector": "nav [data-view='campus'], button[data-view='campus']",
+          "wait_ms": 3500,
+          "description": "14. Campus Guardian: Inspect Facility Maintenance & HVAC Equipment Telemetry"
+        },
+        {
+          "action": "click",
+          "selector": "#relocate-lab-btn",
+          "wait_ms": 3500,
+          "description": "15. Campus Guardian: Execute Automated Emergency Room Relocation"
+        },
+        {
+          "action": "click",
+          "selector": "nav [data-view='safety'], button[data-view='safety']",
+          "wait_ms": 3500,
+          "description": "16. Safety Auditor: Review Perimeter Security Logs & Fire Drill Audit Ratings"
+        },
+        {
+          "action": "click",
+          "selector": "nav [data-view='hitl'], button[data-view='hitl']",
+          "wait_ms": 3500,
+          "description": "17. Governance: Review Human-in-the-Loop Principal Escalation Queue"
+        },
+        {
+          "action": "click",
+          "selector": "nav [data-view='overview'], button[data-view='overview']",
+          "wait_ms": 3000,
+          "description": "18. Autoplay Loop: Return to Command Overview for Clean Autoplay Loop"
         }
       ]
     },

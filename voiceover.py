@@ -199,12 +199,72 @@ class VoiceoverEngine:
                     "text": "Early warning regression models track attendance decay and grade trends, routing high-impact interventions to human principals through a verifiable, explainable decision tree."
                 }
             ]
+        elif "recosphere" in name or "two_tower" in name:
+            return [
+                {
+                    "start_sec": 1.5,
+                    "text": "RecoSphere AI is a production two-tower deep recommendation platform trained on 2.75 million Retailrocket e-commerce interactions."
+                },
+                {
+                    "start_sec": 12.0,
+                    "text": "Separate user and item deep neural towers project shoppers and catalog products into a shared 64-dimensional metric space for sub-5 millisecond vector retrieval."
+                },
+                {
+                    "start_sec": 23.0,
+                    "text": "The multi-signal re-ranking engine balances semantic relevance, popularity bias, and category affinity with Maximal Marginal Relevance diversification."
+                },
+                {
+                    "start_sec": 34.0,
+                    "text": "A built-in Monte-Carlo A/B testing simulator executes two-proportion Z-tests and bootstrap confidence intervals to validate statistical uplift."
+                }
+            ]
+        elif "insightflow" in name or "insight_flow" in name:
+            return [
+                {
+                    "start_sec": 1.5,
+                    "text": "InsightFlow AI is a multi-agent data analyst platform that converts natural language business questions into verified SQL and interactive visualizations."
+                },
+                {
+                    "start_sec": 12.0,
+                    "text": "Eight specialized autonomous agents collaborate from schema discovery and query intent to read-only SQL compilation and security guardrail validation."
+                },
+                {
+                    "start_sec": 22.5,
+                    "text": "The platform analyzes over 1,200 Kaggle Superstore transactions, generating Recharts visual encodings alongside real-time statistical anomaly detection."
+                },
+                {
+                    "start_sec": 33.0,
+                    "text": "Business leaders can inspect execution plans, run what-if scenario simulations, and review comprehensive model evaluation benchmarks."
+                }
+            ]
+        elif "land_acquisition" in name:
+            return [
+                {
+                    "start_sec": 1.5,
+                    "text": "The Ministry of Rural Development platform predicts land acquisition bottlenecks across India's central infrastructure portfolio."
+                },
+                {
+                    "start_sec": 11.5,
+                    "text": "Calibrated gradient boosting achieves point 94 ROC-AUC on 1,477 authentic MoSPI and PMGSY project records."
+                },
+                {
+                    "start_sec": 21.5,
+                    "text": "Interactive geospatial maps, 3D corridor twins, and policy sandboxes model right-of-way friction and counterfactual intervention."
+                },
+                {
+                    "start_sec": 31.5,
+                    "text": "Contagion networks and automated RFCTLARR 2013 statutory tracking prevent cascading delay shocks and legal lapses."
+                }
+            ]
         else:
-            title = project_config.get("title", name.replace("_", " ").title())
-            p1 = f"Welcome to the demonstration of the {title}. This platform integrates modern machine learning architectures into an end-to-end interactive decision environment."
-            p2 = "The neural pipeline executes real-time inference across incoming data streams, extracting latent features and high-dimensional predictions."
-            p3 = "Interactive controls and visualizations allow engineers to stress-test parameters, observe model sensitivity, and review counterfactual scenario outcomes."
-            p4 = "Rigorous validation benchmarks and telemetry demonstrate training convergence, precision, and operational reliability."
+            raw_title = project_config.get("title", name.replace("_", " ").title())
+            title = raw_title.split("—")[0].split("(")[0].strip()
+            if len(title) > 35:
+                title = title[:32] + "..."
+            p1 = f"Welcome to the demonstration of {title}, an interactive decision-support and machine learning system."
+            p2 = "The AI pipeline executes real-time inference across incoming data streams, extracting latent features and risk predictions."
+            p3 = "Interactive controls allow engineers to stress-test parameters, observe model sensitivity, and review counterfactual scenario outcomes."
+            p4 = "Rigorous validation benchmarks and telemetry demonstrate quantitative reliability and operational performance."
 
             # Evenly space 4 paragraphs across the video duration
             gap = total_duration / 4.0
@@ -223,6 +283,7 @@ class VoiceoverEngine:
         """
         Synthesizes all audio sections, composites them at precise timestamps,
         and returns the CompositeAudioClip along with global subtitle timestamps.
+        Guarantees strict zero-collision spacing between audio clips.
         """
         sections = self._get_project_script_sections(project_config, video_duration)
         project_name = project_config.get("name", "project")
@@ -231,33 +292,45 @@ class VoiceoverEngine:
 
         audio_clips = []
         global_subtitles = []
+        current_cursor = 0.0
+        min_silence_gap = 1.0  # Guarantee at least 1.0s silence between spoken thoughts
 
         logger.info(f"Generating neural voiceover ({self.voice}) across {len(sections)} sections...")
 
         for idx, sec in enumerate(sections):
-            start_t = sec["start_sec"]
+            requested_start_t = sec["start_sec"]
             text = sec["text"]
             mp3_path = audio_dir / f"section_{idx + 1}.mp3"
 
             # Synthesize via edge-tts
             try:
                 local_subs = asyncio.run(self._synthesize_clip(text, mp3_path))
-                logger.info(f"  [Voiceover {idx + 1}/{len(sections)}] Start: {start_t:.1f}s -> {mp3_path.name}")
-
-                # Load as AudioFileClip and position at start_t
                 aclip = AudioFileClip(str(mp3_path))
+                dur = aclip.duration
+
+                # Enforce no collision: clip must not start before previous clip ends + min_silence_gap
+                actual_start_t = max(requested_start_t, current_cursor + min_silence_gap)
+
+                # Ensure clip doesn't overflow past video duration
+                if actual_start_t + dur > video_duration:
+                    actual_start_t = max(current_cursor + 0.4, min(actual_start_t, max(0.0, video_duration - dur - 0.3)))
+
+                logger.info(f"  [Voiceover {idx + 1}/{len(sections)}] Requested: {requested_start_t:.1f}s -> Actual: {actual_start_t:.1f}s (dur: {dur:.2f}s) -> {mp3_path.name}")
+
                 if hasattr(aclip, "with_start"):
-                    positioned_clip = aclip.with_start(start_t)
+                    positioned_clip = aclip.with_start(actual_start_t)
                 elif hasattr(aclip, "set_start"):
-                    positioned_clip = aclip.set_start(start_t)
+                    positioned_clip = aclip.set_start(actual_start_t)
                 else:
                     positioned_clip = aclip
 
                 audio_clips.append(positioned_clip)
 
-                # Offset local subtitle timestamps to global video timestamps
+                # Offset local subtitle timestamps to actual global video timestamps
                 for s_start, s_end, s_text in local_subs:
-                    global_subtitles.append((start_t + s_start, start_t + s_end, s_text))
+                    global_subtitles.append((actual_start_t + s_start, actual_start_t + s_end, s_text))
+
+                current_cursor = actual_start_t + dur
 
             except Exception as e:
                 logger.warning(f"Could not generate voiceover for section {idx + 1}: {e}")
@@ -268,6 +341,9 @@ class VoiceoverEngine:
         try:
             composite = CompositeAudioClip(audio_clips)
             return composite, global_subtitles
+        except Exception as e:
+            logger.error(f"Failed to composite audio clips: {e}")
+            return None, global_subtitles
         except Exception as e:
             logger.error(f"Failed to composite audio clips: {e}")
             return None, global_subtitles

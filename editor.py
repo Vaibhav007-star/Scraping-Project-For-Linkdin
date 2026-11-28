@@ -6,6 +6,7 @@ applies professional LinkedIn branding overlays, and exports broadcast-grade H.2
 """
 
 import os
+import time
 import logging
 import textwrap
 from pathlib import Path
@@ -75,7 +76,9 @@ class VideoEditor:
             while check_t < min(duration, 15.0):
                 frame = clip.get_frame(check_t)
                 mean_lum = float(np.mean(frame))
-                if mean_lum > 240.0:  # Pure white blank loading screen
+                std_lum = float(np.std(frame))
+                # Only bypass if truly uniform blank screen (high brightness AND near-zero variance)
+                if (mean_lum > 245.0 and std_lum < 4.0) or (mean_lum < 10.0 and std_lum < 2.0):
                     check_t += 0.1
                 else:
                     break
@@ -138,7 +141,13 @@ class VideoEditor:
                 tech_tags = "FastAPI  •  OpenCV Computer Vision  •  128-D Biometric Embeddings"
             elif "firecast" in name or "wildfire" in name:
                 tech_tags = "PyTorch PINN  •  Three.js 3D WebGL  •  NASA FIRMS Satellites"
-            elif "supply_chain" in name or "control_tower" in name or "risk" in name:
+            elif "recosphere" in name or "two_tower" in name:
+                tech_tags = "PyTorch Two-Tower  •  FastAPI  •  Cosine Vector Index & MMR  •  Retailrocket"
+            elif "insightflow" in name or "insight_flow" in name:
+                tech_tags = "FastAPI  •  React 18 & Recharts  •  8-Agent Architecture  •  Gemini 2.5 Flash"
+            elif "land_acquisition" in name:
+                tech_tags = "FastAPI  •  React 19 & Vite  •  Gradient Boosting & SHAP  •  MoSPI & PMGSY Open Data"
+            elif "supply_chain" in name or "control_tower" in name:
                 tech_tags = "FastAPI  •  Scikit-Learn Calibrated Pipeline  •  Operations Control Tower"
             elif "schoolmind" in name or "school" in name:
                 tech_tags = "LangGraph  •  FastAPI  •  Three.js 3D WebGL  •  SQLAlchemy"
@@ -181,7 +190,31 @@ class VideoEditor:
                 (0.80, "4/5 3D DIGITAL TWIN • Topography Shading & Camera Orbit", (245, 158, 11)),      # Amber
                 (1.00, "5/5 WUI VULNERABILITY • Evacuation & Critical Grid Hazard", (16, 185, 129)),    # Emerald
             ]
-        elif "supply_chain" in name or "control_tower" in name or "risk" in name:
+        elif "recosphere" in name or "two_tower" in name:
+            phases = [
+                (0.18, "1/5 TWO-TOWER ARCHITECTURE • 64-D Metric Embedding Space", (56, 189, 248)),
+                (0.38, "2/5 REAL-TIME RETRIEVAL • Sub-5ms Vector Candidate Search", (16, 185, 129)),
+                (0.58, "3/5 3D EMBEDDING GALAXY • PCA Item Clustering & Vectors", (168, 85, 247)),
+                (0.80, "4/5 MULTI-SIGNAL RE-RANKING • MMR Category Diversification", (245, 158, 11)),
+                (1.00, "5/5 A/B TESTING LAB • Monte-Carlo Statistical Significance", (16, 185, 129)),
+            ]
+        elif "insightflow" in name or "insight_flow" in name:
+            phases = [
+                (0.18, "1/5 8-AGENT ARCHITECTURE • NL2SQL Orchestration Platform", (56, 189, 248)),
+                (0.38, "2/5 INTERACTIVE QUERY • Multi-Agent Pipeline & Execution", (16, 185, 129)),
+                (0.58, "3/5 VISUAL ANALYTICS • Recharts Encodings & Superstore Data", (168, 85, 247)),
+                (0.80, "4/5 EXECUTIVE OVERVIEW • KPI Cards & Data Quality Guardrails", (245, 158, 11)),
+                (1.00, "5/5 EVALUATION SUITE • 20 Ground-Truth Test Benchmarks", (16, 185, 129)),
+            ]
+        elif "land_acquisition" in name:
+            phases = [
+                (0.18, "1/5 MoRD COMMAND • SIH26017 Early Detection Architecture", (56, 189, 248)),
+                (0.38, "2/5 GIS & SPATIAL • Pan-India Infrastructure Alignment Map", (16, 185, 129)),
+                (0.58, "3/5 DIGITAL TWIN & SANDBOX • 3D Corridor & Policy Levers", (168, 85, 247)),
+                (0.80, "4/5 CONTAGION NETWORK • Dependency Shock Cascade Modeling", (245, 158, 11)),
+                (1.00, "5/5 STATUTORY COMPLIANCE • RFCTLARR 2013 & SHAP Attribution", (16, 185, 129)),
+            ]
+        elif "supply_chain" in name or "control_tower" in name:
             phases = [
                 (0.18, "1/5 SYSTEM ARCHITECTURE • Relational SQLite DW & Leak-Free ABT", (56, 189, 248)),   # Cyan
                 (0.38, "2/5 MLOPS BENCHMARK • Calibrated Classifier & 13% Threshold", (16, 185, 129)),      # Emerald
@@ -212,7 +245,13 @@ class VideoEditor:
             hook_sub = "Enterprise Facial Biometric Platform & Anti-Spoofing Engine"
         elif "firecast" in name or "wildfire" in name:
             hook_sub = "Physics-Informed Wildfire Intelligence & 3D Digital Twin"
-        elif "supply_chain" in name or "control_tower" in name or "risk" in name:
+        elif "recosphere" in name or "two_tower" in name:
+            hook_sub = "Two-Tower Deep Recommendation Platform & Vector Retrieval"
+        elif "insightflow" in name or "insight_flow" in name:
+            hook_sub = "Multi-Agent NL2SQL Analytics Platform & Interactive BI Cockpit"
+        elif "land_acquisition" in name:
+            hook_sub = "MoRD SIH26017 Land Acquisition Delay Predictive Intelligence"
+        elif "supply_chain" in name or "control_tower" in name:
             hook_sub = "Supply Chain Risk Control Tower & What-If Logistics Simulator"
         elif "schoolmind" in name or "school" in name:
             hook_sub = "Autonomous Multi-Agent AI School Management System & 3D Twin"
